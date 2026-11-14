@@ -6,23 +6,27 @@ No payments, no wallets, no accounts. The scanner is adapted from Litter Spotter
 
 ## How it plays
 
-1. The player picks a **nickname** and an **avatar**. Both stay on their phone.
-2. They take a photo of one object. **Spark**, the robot, says whether it's trash, what type it is, and which bin it goes in.
-3. Trash = 10 points. If it's dangerous (broken glass, needles, something sharp, chemicals), Spark says **"Don't touch it! Call an adult"** and still gives the points.
-4. Photos of screens or with people in the foreground don't count: Spark asks for another photo.
-5. Missions (`missions.json`) give badges and open stories (`stories.json`).
+1. **Begin.** The player picks English, Spanish or Portuguese and hears the opening story, *96 bags on the Moon* (a narrator can read every story aloud).
+2. The player picks a **nickname** and an **avatar**. Both stay on their phone.
+3. Before the first photo, a safety screen: gloves, a grown-up, never touch glass, needles or anything sharp.
+4. They take a photo of one object. **Spark**, the robot, says whether it's litter, what type it is, and which bin it goes in, in the player's language.
+5. Every piece of litter unlocks the next of **13 chapters**: machines people left on the Moon, Mars and beyond, from Surveyor 3 (1967) to Ingenuity (2021). Each has a badge, a story, a "Did you know?" fact and its source.
+6. Dangerous litter (broken glass, needles, sharp things, chemicals): Spark says **"Don't touch it! Call a grown-up"** and it still counts. Photos of screens or with people don't count.
+7. After the 13th piece: the **finale**, with the count, all 13 badges and a map of the 13 resting places.
+8. **Missions** keeps every unlocked chapter, the map and the finale. Progress is never lost: the player can close the app and come back.
+
+Add `?demo` to the address to try it without the AI: Spark pretends, and the page says so.
 
 ## Files
 
 | File | What it is |
 |---|---|
-| `index.html`, `style.css`, `game.js` | The page: robot, points, missions, stories and log |
-| `missions.json` | Missions. Each has a goal (item type, count, all-time or in one day) and the story it opens |
-| `stories.json` | 6 story slots: `title`, `text`, `image`, `source`, `place`. While `title` is empty the game shows "Story on its way" |
-| `img/stories/` | Story images go here (e.g. `img/stories/1.jpg`) |
-| `netlify/functions/scan.mjs` | `POST /api/scan`: sends the photo to Claude and returns the result. The photo is never stored |
+| `index.html`, `style.css`, `game.js` | The page: opening, robot, scanner, missions, map, chapters, finale and log, in 3 languages |
+| `content.json` | The story: opening, 13 chapters and finale, each in `en`, `es` and `pt`. Each chapter has an `image` field for a NASA picture (empty = a drawing) |
+| `img/chapters/` | NASA pictures for the chapters go here (e.g. `img/chapters/1.jpg`) |
+| `netlify/functions/scan.mjs` | `POST /api/scan {image, lang}`: sends the photo to Claude and returns the result. The photo is never stored |
 | `netlify/functions/counter.mjs` | `GET /api/counter`: how many items all players have picked up |
-| `netlify/lib/scanner.mjs` | The scanner (Claude Haiku with vision). Returns `is_trash` (yes / no / unsure), `type`, `bin`, `dangerous`, `message` and `photo_problem` |
+| `netlify/lib/scanner.mjs` | The scanner (Claude Haiku with vision). Returns `is_trash` (yes / no / unsure), `type`, `bin`, `dangerous`, `message` (in the player's language) and `photo_problem` |
 | `netlify/lib/common.mjs` | Photo limits, storage (Netlify Blobs) and helpers |
 
 ## Privacy
@@ -45,6 +49,7 @@ The game uses Colombia's colour code (Resolución 2184 de 2019): **white** for r
 ## Tested
 
 - Server, with a fake Claude: trash, dangerous, screen, people, not trash, unsure, AI refusal, bad photo, limits, counter, and that the photo is never stored.
-- Whole page with Playwright (iPhone 13, 320 px, desktop): profile, robot states, points, missions, queued awards, log, empty and filled stories, unsafe links blocked, no sideways scroll, buttons at least 44 px.
+- Whole page with Playwright (iPhone 13, 320 px, desktop): opening and language switch, profile, safety screen before the first photo only, all 13 unlocks, chapters, finale, map, missions after a reload (nothing lost, nothing replayed), demo mode, no sideways scroll, buttons at least 44 px.
+- Server: messages in Spanish and Portuguese, and the prompt asks Claude for the player's language.
 - Functions bundle with `@netlify/zip-it-and-ship-it` and load without `require(esm)`.
-- **Not yet**: the real Claude key with real photos.
+- **Not yet**: the real Claude key with real photos, the narrator voice on real phones, and the NASA pictures (still to choose).
