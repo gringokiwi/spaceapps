@@ -19,7 +19,7 @@ export const ScanSchema = z.object({
   type: z.enum(TYPES).describe("Type of the main object; 'none' if there is no object or it is not trash"),
   bin: z.enum(BINS).describe("Where it goes: white (clean plastic, cans, paper, cardboard, glass), green (food scraps, peels), black (dirty napkins, dirty wrappers, cigarette butts), special_dropoff (batteries, electronics, chemicals, needles, broken glass), none if it is not trash"),
   dangerous: z.boolean().describe("true if a child must not touch it: broken glass, needles or syringes, sharp objects, chemicals, broken or leaking batteries"),
-  message: z.string().describe("One short, kind sentence for a child aged 7 to 12, in the language asked for, at most 20 words")
+  message: z.string().describe("One short, kind sentence for a child aged 7 to 12, in English, at most 20 words")
 });
 
 const SYSTEM = `You are Spark, a friendly robot in a game for children aged 7 to 12 who clean up their neighbourhood.
@@ -32,9 +32,7 @@ Rules:
 - If you can't tell whether it is trash, use is_trash = "unsure".
 - dangerous = true for broken glass, needles or syringes, blades or sharp objects, chemicals or poison bottles, broken batteries. An unbroken glass bottle is not dangerous.
 - Bins (Colombia's colour code): white for clean, dry plastic, cans, paper, cardboard and glass; green for food scraps and peels; black for dirty or non-recyclable things (used napkins, cigarette butts, wrappers with food); special_dropoff for batteries, electronics, chemicals, needles and broken glass.
-- message: one short, cheerful, simple sentence for a child, in the language the user asks for. No hard words. If it is dangerous, say not to touch it and to call an adult.`;
-
-export const LANGS = { en: "English", es: "Spanish (Latin American)", pt: "Brazilian Portuguese" };
+- message: one short, cheerful, simple sentence in English for a child. No hard words. If it is dangerous, say not to touch it and to call an adult.`;
 
 let client = null;
 export function setClaudeClient(c) { client = c; }
@@ -45,8 +43,7 @@ function getClient() {
   return (client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY, timeout: 9000, maxRetries: 0 }));
 }
 
-export async function scan(base64, mediaType, lang = "en") {
-  const language = LANGS[lang] || LANGS.en;
+export async function scan(base64, mediaType) {
   const response = await getClient().messages.parse({
     model: MODEL,
     max_tokens: 1000,
@@ -54,7 +51,7 @@ export async function scan(base64, mediaType, lang = "en") {
     output_config: { effort: "low", format: zodOutputFormat(ScanSchema) },
     messages: [{ role: "user", content: [
       { type: "image", source: { type: "base64", media_type: mediaType, data: base64 } },
-      { type: "text", text: `Photo from a child who is cleaning up. What is it, and is it trash? Write the message in ${language}.` }
+      { type: "text", text: "Photo from a child who is cleaning up. What is it, and is it trash?" }
     ] }]
   });
   if (response.stop_reason === "refusal") throw Object.assign(new Error("The AI declined to look at this photo"), { code: "refusal" });

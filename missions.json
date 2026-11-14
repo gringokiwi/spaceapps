@@ -1,0 +1,11 @@
+{
+  "note": "Game missions. goal.type = item type (plastic, can, paper_cardboard, glass, organic, batteries_electronics, chemicals, sharp_object, other) or null for any. goal.period = 'total' (all time) or 'day' (on a single day). story = id in stories.json that this mission unlocks.",
+  "missions": [
+    { "id": "first-item", "title": "First step", "text": "Pick up 1 item", "badge": "🌱", "goal": { "type": null, "count": 1, "period": "total" }, "story": "story-1" },
+    { "id": "three-plastics", "title": "Plastic hunter", "text": "Pick up 3 plastics", "badge": "♻️", "goal": { "type": "plastic", "count": 3, "period": "total" }, "story": "story-2" },
+    { "id": "one-can", "title": "Can catcher", "text": "Pick up 1 can", "badge": "🥫", "goal": { "type": "can", "count": 1, "period": "total" }, "story": "story-3" },
+    { "id": "five-in-a-day", "title": "Cleanup day", "text": "Pick up 5 items in one day", "badge": "⭐", "goal": { "type": null, "count": 5, "period": "day" }, "story": "story-4" },
+    { "id": "three-papers", "title": "Paper pal", "text": "Pick up 3 paper or cardboard items", "badge": "📦", "goal": { "type": "paper_cardboard", "count": 3, "period": "total" }, "story": "story-5" },
+    { "id": "fifteen-items", "title": "Planet guardian", "text": "Pick up 15 items", "badge": "🚀", "goal": { "type": null, "count": 15, "period": "total" }, "story": "story-6" }
+  ]
+}
