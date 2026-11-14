@@ -2,7 +2,13 @@
   "name": "patrulla-planeta",
   "private": true,
   "type": "module",
-  "description": "Juego para niños: limpia la Tierra y desbloquea historias de las máquinas que dejamos en la Luna y Marte",
+  "description": "debris: kids pick up litter on Earth and unlock the stories of the machines we left on the Moon, Mars and beyond",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "engines": {
+    "node": "22"
+  },
   "dependencies": {
     "@anthropic-ai/sdk": "1.3.0",
     "@netlify/blobs": "11.1.7",

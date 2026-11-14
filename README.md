@@ -33,23 +33,43 @@ Add `?demo` to the address to show the app without the scanner: Eagle pretends t
 | `content.json` | The story in English, Spanish and Portuguese: opening scene, 13 chapters, finale. English is the storyboard word for word. `links` are the storyboard's sources; `image` can hold a NASA picture per chapter |
 | `docs/abandoned-but-not-forgotten-storyboard.md` | The team's storyboard, exported from the team's doc |
 | `img/chapters/` | NASA images for the chapters go here (e.g. `img/chapters/1.jpg`, then set `"image": "img/chapters/1.jpg"` in `content.json`). Until then each chapter shows its patch |
+| `server.mjs` | The app as one Node server, for Railway or any host that runs `npm start`: serves the app's files (and nothing else from the repo) and the `/api` routes below, plus `GET /api/health`. Counters go in a file on a volume |
 | `netlify/functions/scan.mjs` | `POST /api/scan` `{image, lang}`: sends the photo to Claude and answers in the player's language. The photo is never stored |
 | `netlify/functions/counter.mjs` | `GET /api/counter`: how many pieces of litter all players have found |
 | `netlify/lib/scanner.mjs` | The scanner (Claude Haiku with vision). Returns `is_trash` (yes / no / unsure), `type`, `bin`, `dangerous`, `item` (a short name, like "Plastic wrapper"), `message` and `photo_problem` |
-| `netlify/lib/common.mjs` | Photo limits, storage (Netlify Blobs) and helpers |
+| `netlify/lib/common.mjs` | Photo limits, storage (Netlify Blobs on Netlify; a JSON file or memory with `server.mjs`) and helpers |
 
 ## Privacy
 
 - Photos are never saved: the phone shrinks them, the server sends them once to Claude and forgets them. The camera stops as soon as the child leaves the scan screen.
 - No names, emails or personal data. The profile is a nickname and a crew buddy in `localStorage`.
 - Progress, patches and the cleanup log (date and type of each piece) live on the phone.
-- The server only keeps counters: pieces found, and photos analysed per day. The per-player limit uses a sha256 of the IP and the day; the IP itself is never stored.
+- The server only keeps counters: pieces found, and photos analysed per day (in Netlify Blobs, or in a small file on the Railway volume). The per-player limit uses a sha256 of the IP and the day; the IP itself is never stored or logged.
 
 ## Bins
 
 The game uses Colombia's colour code (Resolución 2184 de 2019): **white** for recyclables (clean plastic, cans, paper, cardboard, glass), **green** for food scraps, **black** for everything else. Batteries, electronics, chemicals and dangerous items go to a **special drop-off**, with an adult. For another country, change `BINS` and the prompt in `netlify/lib/scanner.mjs`, and the bin words in `game.js`.
 
-## Deploy on Netlify
+## Deploy on Railway
+
+Railway runs `server.mjs` (`npm start`, Node 22, both read from `package.json`).
+
+1. **New Project → Deploy from GitHub repo**, and pick this repo. Railway builds it and deploys each push to `master`.
+2. **Variables:** add `ANTHROPIC_API_KEY` (your Anthropic API key; it stays on the server). Optional: `PHOTOS_PER_DAY` (300) and `PHOTOS_PER_PLAYER_PER_DAY` (30) to protect the AI bill.
+3. **Volume** (so the shared counter and the daily limits survive redeploys): add a volume to the service with mount path `/data`. The server finds it by itself through `RAILWAY_VOLUME_MOUNT_PATH`. Without a volume the app still works, but the counters start from zero after each deploy.
+4. **Settings → Networking → Generate Domain** for the public address. Railway gives the app its port in `PORT`; the deploy log says `debris is running on port …`.
+5. Optional: **Settings → Healthcheck path** `/api/health`.
+
+## Run it on your computer
+
+```bash
+npm install
+ANTHROPIC_API_KEY=… npm start
+```
+
+Then open http://localhost:3000 (or http://localhost:3000/?demo without a key).
+
+## Deploy on Netlify (the other option)
 
 1. Create a new Netlify site from this repo. The publish folder is the root (`netlify.toml` already says so).
 2. In **Site configuration → Environment variables** add `ANTHROPIC_API_KEY` (secret, server only).
@@ -59,4 +79,5 @@ The game uses Colombia's colour code (Resolución 2184 de 2019): **white** for r
 
 - Server, with a fake Claude: Spanish and Portuguese answers, the new `item` field, a person in the photo (no name kept), sharp things marked dangerous, unknown language, AI failure, bad photo, per-player limit, scanner switched off, counter, and that the photo is never stored.
 - Whole app in Chromium with a fake camera (phone 390 × 844, 320 × 640 in Spanish, desktop): onboarding, a full round, chapters 1, 2 and 13 checked against the storyboard, danger, retake, not litter, server error, save for later across a reload, jacket, cleanup log, Spanish and Portuguese, special drop-off, the finale and a 14th piece, no camera (file picker), demo mode with no server, the back button, no sideways scroll, and buttons at least 44 px.
+- `server.mjs`: the app's files are served and everything else is hidden (server code, `node_modules`, `.git`, `..` tricks), the API routes, the 2 MB body limit, security headers, and counters kept across a restart. The whole browser test above also passes behind it.
 - **Not yet**: the real Claude key with real photos, and NASA pictures for the chapters.
