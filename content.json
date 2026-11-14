@@ -1,0 +1,1693 @@
+{
+ "note": "Story content for debris: the team's storyboard 'Abandoned but Not Forgotten' (docs/abandoned-but-not-forgotten-storyboard.md), in English (en), Spanish (es) and Portuguese (pt). The English text is the storyboard word for word. Each piece of litter a child bins earns the next chapter's patch. 'body' places the chapter on the finale map (moon, mars, deep, eros, sun, ceres). 'image': optional NASA image per chapter, a path such as img/chapters/1.jpg or an https URL; empty shows the chapter's patch instead. 'links': the storyboard's sources for that chapter.",
+ "intro": {
+  "en": {
+   "title": "96 bags on the Moon",
+   "script": [
+    "Between 1969 and 1972, twelve astronauts walked on the Moon. To fly home, their spaceship had to be as light as possible, and they wanted room for Moon rocks. So they threw things out: over 90 bags of poop, pee and sick! They are still sitting on the Moon today.",
+    "But not everything left in space is rubbish. Some of the machines we left behind are still helping scientists right now. Each time you pick up a piece of litter, you unlock one of those machines."
+   ],
+   "hook": "Scientists would love to go back and check those bags. They want to know if any germs could survive 50 years on the Moon!",
+   "pickup": "The astronauts couldn't take their trash home, but you can take care of ours. Find your first piece of litter to unlock the first spacecraft!",
+   "safety": "Put on gloves and bring a grown-up with you. Never touch glass, needles or anything sharp. If you see one, tell a grown-up."
+  },
+  "es": {
+   "title": "96 bolsas en la Luna",
+   "script": [
+    "Entre 1969 y 1972, doce astronautas caminaron sobre la Luna. Para volver a casa, su nave tenía que ser lo más liviana posible, y querían espacio para traer rocas lunares. Así que tiraron cosas: ¡más de 90 bolsas de caca, pipí y vómito! Todavía siguen en la Luna.",
+    "Pero no todo lo que dejamos en el espacio es basura. Algunas de las máquinas que dejamos allá siguen ayudando a los científicos ahora mismo. Cada vez que recoges un pedazo de basura, desbloqueas una de esas máquinas."
+   ],
+   "hook": "A los científicos les encantaría volver y revisar esas bolsas. ¡Quieren saber si algún germen pudo sobrevivir 50 años en la Luna!",
+   "pickup": "Los astronautas no pudieron llevarse su basura a casa, pero tú sí puedes cuidar la nuestra. ¡Encuentra tu primer pedazo de basura para desbloquear la primera nave!",
+   "safety": "Ponte guantes y ve con un adulto. Nunca toques vidrio, agujas ni nada cortante. Si ves algo así, avísale a un adulto."
+  },
+  "pt": {
+   "title": "96 sacos na Lua",
+   "script": [
+    "Entre 1969 e 1972, doze astronautas andaram na Lua. Para voltar para casa, a nave precisava ser o mais leve possível, e eles queriam espaço para as rochas lunares. Então jogaram coisas fora: mais de 90 sacos de cocô, xixi e vômito! Eles continuam na Lua até hoje.",
+    "Mas nem tudo o que deixamos no espaço é lixo. Algumas das máquinas que deixamos lá ainda ajudam os cientistas agora mesmo. Cada vez que você recolhe um lixo, desbloqueia uma dessas máquinas."
+   ],
+   "hook": "Os cientistas adorariam voltar e examinar esses sacos. Eles querem saber se algum germe conseguiu sobreviver 50 anos na Lua!",
+   "pickup": "Os astronautas não puderam levar o lixo deles para casa, mas você pode cuidar do nosso. Encontre o seu primeiro lixo para desbloquear a primeira nave!",
+   "safety": "Coloque luvas e leve um adulto com você. Nunca toque em vidro, agulhas ou qualquer coisa cortante. Se vir algo assim, avise um adulto."
+  }
+ },
+ "chapters": [
+  {
+   "n": 1,
+   "body": "moon",
+   "image": "",
+   "links": [
+    {
+     "name": "NASA Science, Surveyor 3",
+     "url": "https://science.nasa.gov/mission/surveyor-3/"
+    }
+   ],
+   "en": {
+    "title": "Surveyor 3, the robot that tested the ground",
+    "short": "Surveyor 3",
+    "tag": "Moon, 1967",
+    "place": "Moon, Ocean of Storms",
+    "summary": "Parts brought home show how machines age on the Moon",
+    "sections": [
+     {
+      "k": "where",
+      "t": "The Ocean of Storms on the Moon. (It isn't a real ocean. It's a huge, flat, dusty plain!) It landed on 20 April 1967."
+     },
+     {
+      "k": "was",
+      "t": "A robot with a TV camera and a little scoop on an arm. Its job was to check if the Moon's ground was safe for astronauts to land on."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Sent more than 6,000 photos back to Earth.",
+       "Dug four little trenches with its scoop, a bit like digging at the beach.",
+       "Found that Moon soil is a lot like wet sand, and strong enough to hold up a spaceship with astronauts inside."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "It was never meant to come home. When the long, cold Moon night began, it went quiet. The last message from it came on 4 May 1967."
+     },
+     {
+      "k": "help",
+      "t": "Two and a half years later, astronauts landed right next to it! They took its scoop and camera back to Earth, so scientists could see what the Moon does to a machine."
+     }
+    ],
+    "hook": "Surveyor 3 didn't land on its first try. It bounced! Its engine stayed on too long, so it hopped twice, once as high as a three-storey building.",
+    "pickup": "Surveyor 3 checked the ground was safe. Pick up another piece to meet the first astronauts on the Moon!",
+    "source": "NASA Science, Surveyor 3"
+   },
+   "es": {
+    "title": "Surveyor 3, el robot que probó el suelo",
+    "short": "Surveyor 3",
+    "tag": "Luna, 1967",
+    "place": "Luna, Océano de las Tormentas",
+    "summary": "Sus piezas traídas a la Tierra muestran cómo envejecen las máquinas en la Luna",
+    "sections": [
+     {
+      "k": "where",
+      "t": "El Océano de las Tormentas, en la Luna. (No es un océano de verdad. ¡Es una llanura enorme, plana y llena de polvo!) Aterrizó el 20 de abril de 1967."
+     },
+     {
+      "k": "was",
+      "t": "Un robot con una cámara de TV y una palita en un brazo. Su trabajo era revisar si el suelo de la Luna era seguro para que aterrizaran astronautas."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Envió más de 6.000 fotos a la Tierra.",
+       "Cavó cuatro zanjitas con su palita, un poco como cuando cavas en la playa.",
+       "Descubrió que el suelo de la Luna se parece mucho a la arena mojada, y que es lo bastante firme para sostener una nave con astronautas adentro."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "Nunca fue hecho para volver. Cuando empezó la larga y fría noche lunar, se quedó en silencio. Su último mensaje llegó el 4 de mayo de 1967."
+     },
+     {
+      "k": "help",
+      "t": "¡Dos años y medio después, unos astronautas aterrizaron justo a su lado! Se llevaron su palita y su cámara a la Tierra, para que los científicos vieran lo que la Luna le hace a una máquina."
+     }
+    ],
+    "hook": "Surveyor 3 no aterrizó al primer intento. ¡Rebotó! Su motor se quedó encendido demasiado tiempo, así que dio dos saltos, uno tan alto como un edificio de tres pisos.",
+    "pickup": "Surveyor 3 revisó que el suelo fuera seguro. ¡Recoge otro pedazo para conocer a los primeros astronautas en la Luna!",
+    "source": "NASA Science, Surveyor 3"
+   },
+   "pt": {
+    "title": "Surveyor 3, o robô que testou o solo",
+    "short": "Surveyor 3",
+    "tag": "Lua, 1967",
+    "place": "Lua, Oceano das Tempestades",
+    "summary": "Peças trazidas para a Terra mostram como as máquinas envelhecem na Lua",
+    "sections": [
+     {
+      "k": "where",
+      "t": "O Oceano das Tempestades, na Lua. (Não é um oceano de verdade. É uma planície enorme, plana e cheia de poeira!) Pousou em 20 de abril de 1967."
+     },
+     {
+      "k": "was",
+      "t": "Um robô com uma câmera de TV e uma pazinha num braço. O trabalho dele era ver se o solo da Lua era seguro para astronautas pousarem."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Enviou mais de 6.000 fotos para a Terra.",
+       "Cavou quatro valetas pequenas com a pazinha, um pouco como cavar na praia.",
+       "Descobriu que o solo da Lua parece muito com areia molhada, e é firme o bastante para segurar uma nave com astronautas dentro."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "Ele nunca foi feito para voltar. Quando começou a longa e fria noite lunar, ele ficou em silêncio. A última mensagem dele chegou em 4 de maio de 1967."
+     },
+     {
+      "k": "help",
+      "t": "Dois anos e meio depois, astronautas pousaram bem ao lado dele! Eles levaram a pazinha e a câmera para a Terra, para os cientistas verem o que a Lua faz com uma máquina."
+     }
+    ],
+    "hook": "O Surveyor 3 não pousou na primeira tentativa. Ele quicou! O motor ficou ligado tempo demais, então ele deu dois pulos, um tão alto quanto um prédio de três andares.",
+    "pickup": "O Surveyor 3 conferiu que o solo era seguro. Recolha outro lixo para conhecer os primeiros astronautas na Lua!",
+    "source": "NASA Science, Surveyor 3"
+   }
+  },
+  {
+   "n": 2,
+   "body": "moon",
+   "image": "",
+   "links": [
+    {
+     "name": "NASA NSSDCA, Apollo 11 Lunar Module/EASEP",
+     "url": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059C"
+    },
+    {
+     "name": "Apollo 11 and Fundamental Science (arXiv)",
+     "url": "https://arxiv.org/pdf/2005.09332"
+    },
+    {
+     "name": "IEEE Spectrum",
+     "url": "https://spectrum.ieee.org/amp/one-apollo-11-experiment-is-still-going-50-years-later-2650278911"
+    }
+   ],
+   "en": {
+    "title": "Apollo 11 Eagle and the Moon mirror",
+    "short": "Apollo 11 Eagle",
+    "tag": "Moon, 1969",
+    "place": "Moon, Sea of Tranquility",
+    "summary": "Laser mirror still measures the Earth–Moon distance",
+    "sections": [
+     {
+      "k": "where",
+      "t": "The Sea of Tranquility on the Moon. The astronauts called their landing spot Tranquility Base. They landed on 20 July 1969."
+     },
+     {
+      "k": "was",
+      "t": "Eagle, the first spaceship to land people on the Moon. Inside were Neil Armstrong and Buzz Aldrin."
+     },
+     {
+      "k": "left",
+      "t": "Eagle's bottom half with a sign (a plaque) on it, a flag, a machine that could feel moonquakes, and a special mirror."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Neil Armstrong became the first person ever to step onto the Moon.",
+       "The astronauts brought home about 22 kg of Moon rocks and dust, about as heavy as a 7-year-old.",
+       "Their moonquake detector listened to the Moon for more than a month."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "Leaving the heavy bottom half behind made the top half light enough to fly the astronauts back up. The plaque on it says: \"We came in peace for all mankind.\""
+     },
+     {
+      "k": "help",
+      "t": "Scientists on Earth still shine lasers at the mirror and time how long the light takes to bounce back. That tells them how far away the Moon is, to less than 1 cm!"
+     }
+    ],
+    "hook": "The mirror showed that the Moon is slowly drifting away from Earth, about 4 cm every year. That's about how fast your fingernails grow!",
+    "pickup": "Eagle left a mirror we still use today! Pick up another piece to see who visited Surveyor 3.",
+    "source": "NASA NSSDCA, Apollo 11 Lunar Module/EASEP; laser ranging figures from Apollo 11 and Fundamental Science (arXiv) and IEEE Spectrum, not from a NASA page."
+   },
+   "es": {
+    "title": "Apollo 11 Eagle y el espejo de la Luna",
+    "short": "Apollo 11 Eagle",
+    "tag": "Luna, 1969",
+    "place": "Luna, Mar de la Tranquilidad",
+    "summary": "Su espejo láser todavía mide la distancia entre la Tierra y la Luna",
+    "sections": [
+     {
+      "k": "where",
+      "t": "El Mar de la Tranquilidad, en la Luna. Los astronautas llamaron a su lugar de aterrizaje Base Tranquilidad. Aterrizaron el 20 de julio de 1969."
+     },
+     {
+      "k": "was",
+      "t": "Eagle, la primera nave que llevó personas a la Luna. Adentro iban Neil Armstrong y Buzz Aldrin."
+     },
+     {
+      "k": "left",
+      "t": "La mitad de abajo de Eagle con un letrero (una placa), una bandera, una máquina que podía sentir los temblores de la Luna y un espejo especial."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Neil Armstrong fue la primera persona en pisar la Luna.",
+       "Los astronautas trajeron unos 22 kg de rocas y polvo lunar, más o menos lo que pesa un niño de 7 años.",
+       "Su detector de temblores escuchó a la Luna durante más de un mes."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "Dejar la pesada mitad de abajo hizo que la mitad de arriba fuera lo bastante liviana para llevar a los astronautas de regreso. La placa dice: \"Vinimos en paz en nombre de toda la humanidad\"."
+     },
+     {
+      "k": "help",
+      "t": "Los científicos en la Tierra todavía apuntan láseres al espejo y miden cuánto tarda la luz en volver. ¡Así saben a qué distancia está la Luna, con menos de 1 cm de error!"
+     }
+    ],
+    "hook": "El espejo mostró que la Luna se aleja de la Tierra muy despacio, unos 4 cm cada año. ¡Más o menos lo que crecen tus uñas!",
+    "pickup": "¡Eagle dejó un espejo que todavía usamos! Recoge otro pedazo para ver quién visitó a Surveyor 3.",
+    "source": "NASA NSSDCA, Apollo 11 Lunar Module/EASEP; datos del láser de Apollo 11 and Fundamental Science (arXiv) y de IEEE Spectrum, no de una página de la NASA."
+   },
+   "pt": {
+    "title": "Apollo 11 Eagle e o espelho da Lua",
+    "short": "Apollo 11 Eagle",
+    "tag": "Lua, 1969",
+    "place": "Lua, Mar da Tranquilidade",
+    "summary": "O espelho a laser ainda mede a distância entre a Terra e a Lua",
+    "sections": [
+     {
+      "k": "where",
+      "t": "O Mar da Tranquilidade, na Lua. Os astronautas chamaram o local de pouso de Base da Tranquilidade. Pousaram em 20 de julho de 1969."
+     },
+     {
+      "k": "was",
+      "t": "Eagle, a primeira nave a levar pessoas até a Lua. Dentro estavam Neil Armstrong e Buzz Aldrin."
+     },
+     {
+      "k": "left",
+      "t": "A metade de baixo da Eagle com uma placa, uma bandeira, uma máquina que sentia os tremores da Lua e um espelho especial."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Neil Armstrong foi a primeira pessoa a pisar na Lua.",
+       "Os astronautas trouxeram cerca de 22 kg de rochas e poeira lunar, mais ou menos o peso de uma criança de 7 anos.",
+       "O detector de tremores ouviu a Lua por mais de um mês."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "Deixar a pesada metade de baixo fez a metade de cima ficar leve o bastante para levar os astronautas de volta. A placa diz: \"Viemos em paz por toda a humanidade\"."
+     },
+     {
+      "k": "help",
+      "t": "Cientistas na Terra ainda apontam lasers para o espelho e medem quanto tempo a luz leva para voltar. Assim eles sabem a distância até a Lua, com erro de menos de 1 cm!"
+     }
+    ],
+    "hook": "O espelho mostrou que a Lua está se afastando da Terra bem devagar, cerca de 4 cm por ano. É mais ou menos o quanto suas unhas crescem!",
+    "pickup": "A Eagle deixou um espelho que usamos até hoje! Recolha outro lixo para ver quem visitou o Surveyor 3.",
+    "source": "NASA NSSDCA, Apollo 11 Lunar Module/EASEP; dados do laser de Apollo 11 and Fundamental Science (arXiv) e IEEE Spectrum, não de uma página da NASA."
+   }
+  },
+  {
+   "n": 3,
+   "body": "moon",
+   "image": "",
+   "links": [
+    {
+     "name": "NASA NSSDCA, Apollo 12 Lunar Module/ALSEP",
+     "url": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-099C"
+    }
+   ],
+   "en": {
+    "title": "Apollo 12 Intrepid, the visit to an old robot",
+    "short": "Apollo 12 Intrepid",
+    "tag": "Moon, 1969",
+    "place": "Moon, Ocean of Storms",
+    "summary": "Recorded the first moonquake made by people",
+    "sections": [
+     {
+      "k": "where",
+      "t": "The Ocean of Storms on the Moon, just a short walk (180 m) from Surveyor 3. It landed on 19 November 1969."
+     },
+     {
+      "k": "was",
+      "t": "Intrepid, the second spaceship to land people on the Moon. Inside were Pete Conrad and Alan Bean."
+     },
+     {
+      "k": "left",
+      "t": "Intrepid's bottom half and a science station. The station had tools to feel moonquakes, measure magnetism, and catch the \"solar wind\" (tiny bits that stream out from the Sun). A small nuclear battery kept it running."
+     },
+     {
+      "k": "did",
+      "list": [
+       "The astronauts walked over to Surveyor 3 and took some of its parts home.",
+       "They collected about 34 kg of Moon rocks and soil.",
+       "Their science station kept sending messages to Earth for almost eight years, until 1977."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "The science station was meant to stay and keep listening after the astronauts flew home."
+     },
+     {
+      "k": "help",
+      "t": "After the astronauts left, NASA crashed Intrepid's empty top half into the Moon on purpose. The science station felt it: the first moonquake ever made by people!"
+     }
+    ],
+    "hook": "The astronauts' TV camera broke on the very first day. Someone pointed it at the Sun by mistake!",
+    "pickup": "Intrepid made the Moon shake! Pick up another piece to meet the Moon's first car.",
+    "source": "NASA NSSDCA, Apollo 12 Lunar Module/ALSEP"
+   },
+   "es": {
+    "title": "Apollo 12 Intrepid, la visita a un robot viejo",
+    "short": "Apollo 12 Intrepid",
+    "tag": "Luna, 1969",
+    "place": "Luna, Océano de las Tormentas",
+    "summary": "Registró el primer temblor lunar hecho por personas",
+    "sections": [
+     {
+      "k": "where",
+      "t": "El Océano de las Tormentas, en la Luna, a una caminata corta (180 m) de Surveyor 3. Aterrizó el 19 de noviembre de 1969."
+     },
+     {
+      "k": "was",
+      "t": "Intrepid, la segunda nave que llevó personas a la Luna. Adentro iban Pete Conrad y Alan Bean."
+     },
+     {
+      "k": "left",
+      "t": "La mitad de abajo de Intrepid y una estación científica. La estación tenía herramientas para sentir temblores lunares, medir el magnetismo y atrapar el \"viento solar\" (partículas diminutas que salen del Sol). Una pequeña batería nuclear la mantenía funcionando."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Los astronautas caminaron hasta Surveyor 3 y se llevaron algunas de sus piezas a casa.",
+       "Recogieron unos 34 kg de rocas y suelo lunar.",
+       "Su estación científica siguió enviando mensajes a la Tierra durante casi ocho años, hasta 1977."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "La estación científica estaba hecha para quedarse y seguir escuchando después de que los astronautas volvieran a casa."
+     },
+     {
+      "k": "help",
+      "t": "Cuando los astronautas se fueron, la NASA estrelló a propósito la mitad de arriba de Intrepid, ya vacía, contra la Luna. La estación científica lo sintió: ¡el primer temblor lunar hecho por personas!"
+     }
+    ],
+    "hook": "La cámara de TV de los astronautas se dañó el primer día. ¡Alguien la apuntó al Sol sin querer!",
+    "pickup": "¡Intrepid hizo temblar la Luna! Recoge otro pedazo para conocer el primer carro de la Luna.",
+    "source": "NASA NSSDCA, Apollo 12 Lunar Module/ALSEP"
+   },
+   "pt": {
+    "title": "Apollo 12 Intrepid, a visita a um robô antigo",
+    "short": "Apollo 12 Intrepid",
+    "tag": "Lua, 1969",
+    "place": "Lua, Oceano das Tempestades",
+    "summary": "Registrou o primeiro tremor lunar feito por pessoas",
+    "sections": [
+     {
+      "k": "where",
+      "t": "O Oceano das Tempestades, na Lua, a uma caminhada curta (180 m) do Surveyor 3. Pousou em 19 de novembro de 1969."
+     },
+     {
+      "k": "was",
+      "t": "Intrepid, a segunda nave a levar pessoas até a Lua. Dentro estavam Pete Conrad e Alan Bean."
+     },
+     {
+      "k": "left",
+      "t": "A metade de baixo da Intrepid e uma estação científica. A estação tinha ferramentas para sentir tremores lunares, medir o magnetismo e capturar o \"vento solar\" (pedacinhos minúsculos que saem do Sol). Uma pequena bateria nuclear a mantinha funcionando."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Os astronautas caminharam até o Surveyor 3 e levaram algumas peças dele para casa.",
+       "Eles coletaram cerca de 34 kg de rochas e solo lunar.",
+       "A estação científica continuou mandando mensagens para a Terra por quase oito anos, até 1977."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "A estação científica foi feita para ficar e continuar ouvindo depois que os astronautas voltaram para casa."
+     },
+     {
+      "k": "help",
+      "t": "Depois que os astronautas foram embora, a NASA jogou de propósito a metade de cima da Intrepid, já vazia, contra a Lua. A estação científica sentiu: o primeiro tremor lunar feito por pessoas!"
+     }
+    ],
+    "hook": "A câmera de TV dos astronautas quebrou logo no primeiro dia. Alguém apontou para o Sol sem querer!",
+    "pickup": "A Intrepid fez a Lua tremer! Recolha outro lixo para conhecer o primeiro carro da Lua.",
+    "source": "NASA NSSDCA, Apollo 12 Lunar Module/ALSEP"
+   }
+  },
+  {
+   "n": 4,
+   "body": "moon",
+   "image": "",
+   "links": [
+    {
+     "name": "NASA NSSDCA, Apollo 15 Lunar Module/ALSEP",
+     "url": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1971-063C"
+    },
+    {
+     "name": "Apollo 11 and Fundamental Science (arXiv)",
+     "url": "https://arxiv.org/pdf/2005.09332"
+    }
+   ],
+   "en": {
+    "title": "Apollo 15 Falcon and the first Moon car",
+    "short": "Apollo 15 Falcon",
+    "tag": "Moon, 1971",
+    "place": "Moon, Hadley–Apennine",
+    "summary": "Larger laser mirror, still in use",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Hadley–Apennine on the Moon, at the foot of a big mountain range. It landed on 30 July 1971."
+     },
+     {
+      "k": "was",
+      "t": "Falcon, a spaceship carrying astronauts Dave Scott and Jim Irwin. It brought something brand new: a car for driving on the Moon, called the Lunar Roving Vehicle."
+     },
+     {
+      "k": "left",
+      "t": "Falcon's bottom half, the Moon car, a science station, a mirror for lasers, and a little figure and sign to remember 14 American and Soviet space explorers who had died."
+     },
+     {
+      "k": "did",
+      "list": [
+       "The astronauts drove the Moon car almost 28 km, much farther than earlier crews could walk.",
+       "They brought home about 77 kg of rocks and soil, plus a tube of soil dug up from 3 m underground.",
+       "A heat probe in the ground measured how much heat escapes from deep inside the Moon."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "Falcon's bottom half was the launch pad for its top half, so it had to stay behind. The Moon car stayed too."
+     },
+     {
+      "k": "help",
+      "t": "The crew left a laser mirror that is even bigger than Apollo 11's. Scientists still bounce lasers off it today."
+     }
+    ],
+    "hook": "Dave Scott dropped a hammer and a feather at the same time, on live TV. There's no air on the Moon to slow the feather down, so they hit the ground together!",
+    "pickup": "The Moon car is still parked up there! Pick up another piece and blast off into deep space.",
+    "source": "NASA NSSDCA, Apollo 15 Lunar Module/ALSEP; mirror size from Apollo 11 and Fundamental Science (arXiv)."
+   },
+   "es": {
+    "title": "Apollo 15 Falcon y el primer carro de la Luna",
+    "short": "Apollo 15 Falcon",
+    "tag": "Luna, 1971",
+    "place": "Luna, Hadley–Apennine",
+    "summary": "Un espejo láser más grande, que todavía se usa",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Hadley–Apennine, en la Luna, al pie de una gran cordillera. Aterrizó el 30 de julio de 1971."
+     },
+     {
+      "k": "was",
+      "t": "Falcon, una nave que llevaba a los astronautas Dave Scott y Jim Irwin. Trajo algo totalmente nuevo: un carro para manejar en la Luna, llamado Vehículo Explorador Lunar."
+     },
+     {
+      "k": "left",
+      "t": "La mitad de abajo de Falcon, el carro lunar, una estación científica, un espejo para láseres, y una pequeña figura con un letrero para recordar a 14 exploradores espaciales estadounidenses y soviéticos que habían muerto."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Los astronautas manejaron el carro lunar casi 28 km, mucho más lejos de lo que las tripulaciones anteriores podían caminar.",
+       "Trajeron unos 77 kg de rocas y suelo, y además un tubo con suelo sacado de 3 m bajo tierra.",
+       "Una sonda de calor en el suelo midió cuánto calor sale desde lo más profundo de la Luna."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "La mitad de abajo de Falcon era la plataforma de lanzamiento de la mitad de arriba, así que tenía que quedarse. El carro lunar también se quedó."
+     },
+     {
+      "k": "help",
+      "t": "La tripulación dejó un espejo láser todavía más grande que el de Apollo 11. Los científicos siguen rebotando láseres en él hoy."
+     }
+    ],
+    "hook": "Dave Scott soltó un martillo y una pluma al mismo tiempo, en vivo por TV. En la Luna no hay aire que frene la pluma, ¡así que tocaron el suelo juntos!",
+    "pickup": "¡El carro lunar sigue estacionado allá arriba! Recoge otro pedazo y despega hacia el espacio profundo.",
+    "source": "NASA NSSDCA, Apollo 15 Lunar Module/ALSEP; tamaño del espejo de Apollo 11 and Fundamental Science (arXiv)."
+   },
+   "pt": {
+    "title": "Apollo 15 Falcon e o primeiro carro da Lua",
+    "short": "Apollo 15 Falcon",
+    "tag": "Lua, 1971",
+    "place": "Lua, Hadley–Apennine",
+    "summary": "Um espelho a laser maior, ainda em uso",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Hadley–Apennine, na Lua, ao pé de uma grande cadeia de montanhas. Pousou em 30 de julho de 1971."
+     },
+     {
+      "k": "was",
+      "t": "Falcon, uma nave que levava os astronautas Dave Scott e Jim Irwin. Ela trouxe algo totalmente novo: um carro para dirigir na Lua, chamado Veículo Lunar Itinerante."
+     },
+     {
+      "k": "left",
+      "t": "A metade de baixo da Falcon, o carro lunar, uma estação científica, um espelho para lasers, e uma pequena figura com uma placa para lembrar 14 exploradores espaciais americanos e soviéticos que tinham morrido."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Os astronautas dirigiram o carro lunar por quase 28 km, muito mais longe do que as equipes anteriores conseguiam andar.",
+       "Trouxeram cerca de 77 kg de rochas e solo, além de um tubo com solo tirado de 3 m abaixo da superfície.",
+       "Uma sonda de calor no chão mediu quanto calor escapa das profundezas da Lua."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "A metade de baixo da Falcon era a plataforma de lançamento da metade de cima, então precisou ficar. O carro lunar ficou também."
+     },
+     {
+      "k": "help",
+      "t": "A tripulação deixou um espelho a laser ainda maior que o da Apollo 11. Os cientistas ainda refletem lasers nele hoje."
+     }
+    ],
+    "hook": "Dave Scott soltou um martelo e uma pena ao mesmo tempo, ao vivo na TV. Na Lua não tem ar para frear a pena, então os dois tocaram o chão juntos!",
+    "pickup": "O carro lunar continua estacionado lá em cima! Recolha outro lixo e decole para o espaço profundo.",
+    "source": "NASA NSSDCA, Apollo 15 Lunar Module/ALSEP; tamanho do espelho de Apollo 11 and Fundamental Science (arXiv)."
+   }
+  },
+  {
+   "n": 5,
+   "body": "deep",
+   "image": "",
+   "links": [
+    {
+     "name": "NASA Science, Pioneer 10",
+     "url": "https://science.nasa.gov/mission/pioneer-10/"
+    }
+   ],
+   "en": {
+    "title": "Pioneer 10, the message in a bottle",
+    "short": "Pioneer 10",
+    "tag": "Deep space, 1972",
+    "place": "Leaving the solar system",
+    "summary": "Proved spacecraft can cross the asteroid belt",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Flying out of our solar system, heading toward a red star called Aldebaran. It was launched on 2 March 1972."
+     },
+     {
+      "k": "was",
+      "t": "The first spacecraft NASA sent out to the giant planets. It was built to last 21 months, but it kept going for more than 30 years!"
+     },
+     {
+      "k": "did",
+      "list": [
+       "It was the first spacecraft to fly through the asteroid belt, a huge ring of space rocks between Mars and Jupiter.",
+       "It was the first to fly past Jupiter, in 1973. It took about 500 pictures, including Jupiter's giant storm, the Great Red Spot.",
+       "In 1983 it became the first human-made object to travel past Neptune."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "Its nuclear power source slowly ran down. Its last message reached us in 2003, from 12 billion km away. That message took more than 11 hours to get to Earth!"
+     },
+     {
+      "k": "help",
+      "t": "Pioneer 10 was hit by fewer space rocks than scientists feared. That proved spacecraft can cross the asteroid belt safely. It also carries a metal sign that tells anyone who finds it where it came from."
+     }
+    ],
+    "hook": "Pioneer 10 should pass the star Aldebaran in about two million years.",
+    "pickup": "Pioneer 10 is still sailing with its message. Pick up another piece and land on Mars!",
+    "source": "NASA Science, Pioneer 10"
+   },
+   "es": {
+    "title": "Pioneer 10, el mensaje en una botella",
+    "short": "Pioneer 10",
+    "tag": "Espacio profundo, 1972",
+    "place": "Saliendo del sistema solar",
+    "summary": "Demostró que las naves pueden cruzar el cinturón de asteroides",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Volando fuera de nuestro sistema solar, rumbo a una estrella roja llamada Aldebarán. Fue lanzada el 2 de marzo de 1972."
+     },
+     {
+      "k": "was",
+      "t": "La primera nave que la NASA envió hacia los planetas gigantes. Estaba hecha para durar 21 meses, ¡pero siguió funcionando más de 30 años!"
+     },
+     {
+      "k": "did",
+      "list": [
+       "Fue la primera nave en atravesar el cinturón de asteroides, un anillo enorme de rocas espaciales entre Marte y Júpiter.",
+       "Fue la primera en pasar junto a Júpiter, en 1973. Tomó unas 500 fotos, incluida la tormenta gigante de Júpiter, la Gran Mancha Roja.",
+       "En 1983 se convirtió en el primer objeto hecho por personas en pasar más allá de Neptuno."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "Su fuente de energía nuclear se fue agotando poco a poco. Su último mensaje nos llegó en 2003, desde 12.000 millones de km de distancia. ¡Ese mensaje tardó más de 11 horas en llegar a la Tierra!"
+     },
+     {
+      "k": "help",
+      "t": "A Pioneer 10 la golpearon menos rocas espaciales de lo que temían los científicos. Eso demostró que las naves pueden cruzar el cinturón de asteroides sin peligro. Además lleva una placa de metal que le dice a quien la encuentre de dónde vino."
+     }
+    ],
+    "hook": "Pioneer 10 debería pasar junto a la estrella Aldebarán en unos dos millones de años.",
+    "pickup": "Pioneer 10 sigue navegando con su mensaje. ¡Recoge otro pedazo y aterriza en Marte!",
+    "source": "NASA Science, Pioneer 10"
+   },
+   "pt": {
+    "title": "Pioneer 10, a mensagem na garrafa",
+    "short": "Pioneer 10",
+    "tag": "Espaço profundo, 1972",
+    "place": "Saindo do sistema solar",
+    "summary": "Provou que naves podem atravessar o cinturão de asteroides",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Voando para fora do nosso sistema solar, rumo a uma estrela vermelha chamada Aldebarã. Foi lançada em 2 de março de 1972."
+     },
+     {
+      "k": "was",
+      "t": "A primeira nave que a NASA enviou para os planetas gigantes. Ela foi feita para durar 21 meses, mas continuou funcionando por mais de 30 anos!"
+     },
+     {
+      "k": "did",
+      "list": [
+       "Foi a primeira nave a atravessar o cinturão de asteroides, um anel enorme de rochas espaciais entre Marte e Júpiter.",
+       "Foi a primeira a passar perto de Júpiter, em 1973. Tirou cerca de 500 fotos, incluindo a tempestade gigante de Júpiter, a Grande Mancha Vermelha.",
+       "Em 1983 se tornou o primeiro objeto feito por pessoas a passar além de Netuno."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "A fonte de energia nuclear foi acabando aos poucos. A última mensagem chegou em 2003, de 12 bilhões de km de distância. Essa mensagem levou mais de 11 horas para chegar à Terra!"
+     },
+     {
+      "k": "help",
+      "t": "A Pioneer 10 foi atingida por menos rochas espaciais do que os cientistas temiam. Isso provou que as naves podem atravessar o cinturão de asteroides com segurança. Ela também leva uma placa de metal que conta para quem a encontrar de onde ela veio."
+     }
+    ],
+    "hook": "A Pioneer 10 deve passar pela estrela Aldebarã daqui a uns dois milhões de anos.",
+    "pickup": "A Pioneer 10 continua navegando com sua mensagem. Recolha outro lixo e pouse em Marte!",
+    "source": "NASA Science, Pioneer 10"
+   }
+  },
+  {
+   "n": 6,
+   "body": "mars",
+   "image": "",
+   "links": [
+    {
+     "name": "NASA Science, Viking 1",
+     "url": "https://science.nasa.gov/mission/viking-1/"
+    }
+   ],
+   "en": {
+    "title": "Viking 1, the first to land safely on Mars",
+    "short": "Viking 1",
+    "tag": "Mars, 1976",
+    "place": "Mars, Chryse Planitia",
+    "summary": "First close look at Mars and the search for life",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Chryse Planitia (the Golden Plain) on Mars. It landed on 20 July 1976, seven years to the day after Apollo 11 landed on the Moon."
+     },
+     {
+      "k": "was",
+      "t": "A robot lander with an arm and a tiny science lab, sent to look for signs of life on Mars. A partner spacecraft flew in circles around Mars above it."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Made the first truly successful landing on Mars and took colour photos of its surroundings.",
+       "Scooped up Mars soil and tested it for life in its lab. The results were puzzling, and it found none of the carbon chemicals that living things are made of.",
+       "Measured the temperature: −86 °C before sunrise and −33 °C in the afternoon.",
+       "The two Viking spacecraft circling Mars mapped almost all of it (97%)."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "It sent weather reports from Mars for six years. Then, in November 1982, a wrong command sent from Earth cut it off, and we never heard from it again."
+     },
+     {
+      "k": "help",
+      "t": "Viking gave us our first close-up look at Mars, and showed how tricky it is to search for life on another planet. The lander is now named the Thomas Mutch Memorial Station, after the leader of its camera team."
+     }
+    ],
+    "hook": "Even on a sunny afternoon, Viking measured −33 °C. That's colder than the inside of a freezer!",
+    "pickup": "Viking sent weather reports from Mars for six years! Pick up another piece to meet the first Mars rover.",
+    "source": "NASA Science, Viking 1"
+   },
+   "es": {
+    "title": "Viking 1, el primero en aterrizar bien en Marte",
+    "short": "Viking 1",
+    "tag": "Marte, 1976",
+    "place": "Marte, Chryse Planitia",
+    "summary": "La primera mirada de cerca a Marte y la búsqueda de vida",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Chryse Planitia (la Llanura Dorada), en Marte. Aterrizó el 20 de julio de 1976, exactamente siete años después de que Apollo 11 aterrizara en la Luna."
+     },
+     {
+      "k": "was",
+      "t": "Un robot de aterrizaje con un brazo y un laboratorio de ciencia diminuto, enviado a buscar señales de vida en Marte. Una nave compañera daba vueltas alrededor de Marte, por encima de él."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Hizo el primer aterrizaje de verdad exitoso en Marte y tomó fotos a color de lo que lo rodeaba.",
+       "Recogió suelo de Marte y buscó vida en él con su laboratorio. Los resultados fueron confusos, y no encontró ninguno de los químicos de carbono de los que están hechos los seres vivos.",
+       "Midió la temperatura: −86 °C antes del amanecer y −33 °C en la tarde.",
+       "Las dos naves Viking que daban vueltas a Marte hicieron un mapa de casi todo el planeta (97 %)."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "Envió reportes del clima de Marte durante seis años. Luego, en noviembre de 1982, una orden equivocada enviada desde la Tierra lo desconectó, y nunca más supimos de él."
+     },
+     {
+      "k": "help",
+      "t": "Viking nos dio la primera mirada de cerca a Marte, y mostró lo difícil que es buscar vida en otro planeta. Hoy el robot se llama Estación Conmemorativa Thomas Mutch, por el líder de su equipo de cámaras."
+     }
+    ],
+    "hook": "Incluso en una tarde de sol, Viking midió −33 °C. ¡Más frío que adentro de un congelador!",
+    "pickup": "¡Viking envió reportes del clima de Marte durante seis años! Recoge otro pedazo para conocer el primer explorador sobre ruedas de Marte.",
+    "source": "NASA Science, Viking 1"
+   },
+   "pt": {
+    "title": "Viking 1, o primeiro a pousar com segurança em Marte",
+    "short": "Viking 1",
+    "tag": "Marte, 1976",
+    "place": "Marte, Chryse Planitia",
+    "summary": "O primeiro olhar de perto para Marte e a busca por vida",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Chryse Planitia (a Planície Dourada), em Marte. Pousou em 20 de julho de 1976, exatamente sete anos depois de a Apollo 11 pousar na Lua."
+     },
+     {
+      "k": "was",
+      "t": "Um robô de pouso com um braço e um laboratório de ciências minúsculo, enviado para procurar sinais de vida em Marte. Uma nave parceira dava voltas em torno de Marte, lá em cima."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Fez o primeiro pouso realmente bem-sucedido em Marte e tirou fotos coloridas ao seu redor.",
+       "Recolheu solo de Marte e procurou vida nele no laboratório. Os resultados foram confusos, e ele não encontrou nenhuma das substâncias de carbono das quais os seres vivos são feitos.",
+       "Mediu a temperatura: −86 °C antes do nascer do sol e −33 °C à tarde.",
+       "As duas naves Viking que davam voltas em Marte mapearam quase todo o planeta (97%)."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "Ele mandou boletins do tempo de Marte por seis anos. Então, em novembro de 1982, um comando errado enviado da Terra o desligou, e nunca mais tivemos notícias dele."
+     },
+     {
+      "k": "help",
+      "t": "A Viking nos deu o primeiro olhar de perto para Marte e mostrou como é difícil procurar vida em outro planeta. Hoje o robô se chama Estação Memorial Thomas Mutch, em homenagem ao líder da equipe de câmeras."
+     }
+    ],
+    "hook": "Mesmo numa tarde de sol, a Viking mediu −33 °C. Mais frio que dentro de um freezer!",
+    "pickup": "A Viking mandou boletins do tempo de Marte por seis anos! Recolha outro lixo para conhecer o primeiro jipe-robô de Marte.",
+    "source": "NASA Science, Viking 1"
+   }
+  },
+  {
+   "n": 7,
+   "body": "mars",
+   "image": "",
+   "links": [
+    {
+     "name": "NASA Science, Mars Pathfinder",
+     "url": "https://science.nasa.gov/mission/mars-pathfinder/"
+    },
+    {
+     "name": "NASA Space Place",
+     "url": "https://spaceplace.nasa.gov/mars-sojourner"
+    }
+   ],
+   "en": {
+    "title": "Mars Pathfinder and Sojourner, the bouncing beach ball",
+    "short": "Pathfinder + Sojourner",
+    "tag": "Mars, 1997",
+    "place": "Mars, Ares Vallis",
+    "summary": "Airbag landing; first Mars rover",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Ares Vallis on Mars, a valley where a giant flood once rushed through. It landed on 4 July 1997."
+     },
+     {
+      "k": "was",
+      "t": "A lander and Sojourner, the first rover (robot car) on Mars. Sojourner was tiny: about the size of a microwave oven, and just 30 cm tall."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Took more than 16,500 photos from the lander and 550 from the rover.",
+       "Found round pebbles which suggest that, long ago, Mars was warmer and had running water.",
+       "Found that Mars dust is magnetic, and measured spinning dust devils."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "It kept working until its last message on 27 September 1997. Then it went quiet."
+     },
+     {
+      "k": "help",
+      "t": "Pathfinder tried a brand-new way to land: wrapped up in giant airbags! It bounced about 15 times, up to 15 m high, before rolling to a stop. Spirit and Opportunity later landed with airbags too."
+     }
+    ],
+    "hook": "Scientists think the flood that made this valley held as much water as North America's Great Lakes, and it all rushed through in about two weeks!",
+    "pickup": "Boing, boing, boing! Pick up another piece to visit a spacecraft that landed on an asteroid.",
+    "source": "NASA Science, Mars Pathfinder; size comparison from NASA Space Place"
+   },
+   "es": {
+    "title": "Mars Pathfinder y Sojourner, la pelota de playa que rebotó",
+    "short": "Pathfinder + Sojourner",
+    "tag": "Marte, 1997",
+    "place": "Marte, Ares Vallis",
+    "summary": "Aterrizaje con bolsas de aire; el primer explorador sobre ruedas de Marte",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Ares Vallis, en Marte, un valle por donde una vez pasó una inundación gigante. Aterrizó el 4 de julio de 1997."
+     },
+     {
+      "k": "was",
+      "t": "Un módulo de aterrizaje y Sojourner, el primer rover (carrito robot) en Marte. Sojourner era chiquito: más o menos del tamaño de un horno microondas, y de solo 30 cm de alto."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Tomó más de 16.500 fotos desde el módulo y 550 desde el rover.",
+       "Encontró piedritas redondas que sugieren que, hace mucho tiempo, Marte era más cálido y tenía agua corriendo.",
+       "Descubrió que el polvo de Marte es magnético, y midió remolinos de polvo que giraban."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "Siguió trabajando hasta su último mensaje, el 27 de septiembre de 1997. Después se quedó en silencio."
+     },
+     {
+      "k": "help",
+      "t": "Pathfinder probó una forma totalmente nueva de aterrizar: ¡envuelto en bolsas de aire gigantes! Rebotó unas 15 veces, hasta 15 m de alto, antes de rodar y quedarse quieto. Después, Spirit y Opportunity también aterrizaron con bolsas de aire."
+     }
+    ],
+    "hook": "Los científicos creen que la inundación que formó este valle tenía tanta agua como los Grandes Lagos de Norteamérica, ¡y toda pasó en unas dos semanas!",
+    "pickup": "¡Boing, boing, boing! Recoge otro pedazo para visitar una nave que aterrizó en un asteroide.",
+    "source": "NASA Science, Mars Pathfinder; comparación de tamaño de NASA Space Place"
+   },
+   "pt": {
+    "title": "Mars Pathfinder e Sojourner, a bola de praia que quicou",
+    "short": "Pathfinder + Sojourner",
+    "tag": "Marte, 1997",
+    "place": "Marte, Ares Vallis",
+    "summary": "Pouso com airbags; o primeiro jipe-robô de Marte",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Ares Vallis, em Marte, um vale por onde uma enchente gigante passou um dia. Pousou em 4 de julho de 1997."
+     },
+     {
+      "k": "was",
+      "t": "Um módulo de pouso e o Sojourner, o primeiro rover (carrinho-robô) em Marte. O Sojourner era pequenininho: mais ou menos do tamanho de um micro-ondas, e só 30 cm de altura."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Tirou mais de 16.500 fotos do módulo e 550 do rover.",
+       "Encontrou pedrinhas redondas que indicam que, há muito tempo, Marte era mais quente e tinha água correndo.",
+       "Descobriu que a poeira de Marte é magnética e mediu redemoinhos de poeira girando."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "Continuou trabalhando até a última mensagem, em 27 de setembro de 1997. Depois ficou em silêncio."
+     },
+     {
+      "k": "help",
+      "t": "A Pathfinder testou um jeito totalmente novo de pousar: embrulhada em airbags gigantes! Ela quicou umas 15 vezes, até 15 m de altura, antes de rolar e parar. Depois, Spirit e Opportunity também pousaram com airbags."
+     }
+    ],
+    "hook": "Os cientistas acham que a enchente que formou este vale tinha tanta água quanto os Grandes Lagos da América do Norte, e passou toda em umas duas semanas!",
+    "pickup": "Boing, boing, boing! Recolha outro lixo para visitar uma nave que pousou num asteroide.",
+    "source": "NASA Science, Mars Pathfinder; comparação de tamanho do NASA Space Place"
+   }
+  },
+  {
+   "n": 8,
+   "body": "eros",
+   "image": "",
+   "links": [
+    {
+     "name": "NASA Science, NEAR Shoemaker",
+     "url": "https://science.nasa.gov/mission/near-shoemaker/"
+    }
+   ],
+   "en": {
+    "title": "NEAR Shoemaker, the surprise asteroid landing",
+    "short": "NEAR Shoemaker",
+    "tag": "Asteroid Eros, 2001",
+    "place": "Asteroid Eros",
+    "summary": "First to orbit and land on an asteroid",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Sitting on Eros, an asteroid (a big space rock) about 34 km long. It landed on 12 February 2001."
+     },
+     {
+      "k": "was",
+      "t": "NEAR, a spacecraft built to fly around an asteroid, not to land on one. It was later renamed NEAR Shoemaker, after the scientist Eugene Shoemaker."
+     },
+     {
+      "k": "did",
+      "list": [
+       "It was the first spacecraft ever to orbit (fly in circles around) an asteroid.",
+       "It took 160,000 pictures, about 10 times more than planned.",
+       "It found that Eros has no magnetic field, and mapped most of its surface."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "At the end of its mission, the team lowered it gently onto the asteroid, at about walking speed. It wasn't built to land, but it survived! It kept sending messages for about two weeks, until the freezing cold stopped it."
+     },
+     {
+      "k": "help",
+      "t": "NEAR was the first spacecraft to orbit an asteroid and the first to land on one. It showed we can get up close to a space rock and study it."
+     }
+    ],
+    "hook": "NEAR started circling Eros on Valentine's Day 2000. Eros is named after the Greek god of love!",
+    "pickup": "First to land on an asteroid! Pick up another piece and meet the twin Mars rovers.",
+    "source": "NASA Science, NEAR Shoemaker"
+   },
+   "es": {
+    "title": "NEAR Shoemaker, el aterrizaje sorpresa en un asteroide",
+    "short": "NEAR Shoemaker",
+    "tag": "Asteroide Eros, 2001",
+    "place": "Asteroide Eros",
+    "summary": "La primera en dar vueltas a un asteroide y en aterrizar en uno",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Sobre Eros, un asteroide (una gran roca espacial) de unos 34 km de largo. Aterrizó el 12 de febrero de 2001."
+     },
+     {
+      "k": "was",
+      "t": "NEAR, una nave hecha para volar alrededor de un asteroide, no para aterrizar en él. Después la llamaron NEAR Shoemaker, por el científico Eugene Shoemaker."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Fue la primera nave en orbitar (dar vueltas alrededor de) un asteroide.",
+       "Tomó 160.000 fotos, unas 10 veces más de lo planeado.",
+       "Descubrió que Eros no tiene campo magnético, e hizo un mapa de casi toda su superficie."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "Al final de su misión, el equipo la bajó suavemente sobre el asteroide, más o menos a la velocidad de una persona caminando. No estaba hecha para aterrizar, ¡pero sobrevivió! Siguió enviando mensajes unas dos semanas, hasta que el frío helado la detuvo."
+     },
+     {
+      "k": "help",
+      "t": "NEAR fue la primera nave en orbitar un asteroide y la primera en aterrizar en uno. Mostró que podemos acercarnos a una roca espacial y estudiarla."
+     }
+    ],
+    "hook": "NEAR empezó a dar vueltas a Eros el Día de San Valentín de 2000. ¡Eros se llama así por el dios griego del amor!",
+    "pickup": "¡La primera en aterrizar en un asteroide! Recoge otro pedazo y conoce a los robots gemelos de Marte.",
+    "source": "NASA Science, NEAR Shoemaker"
+   },
+   "pt": {
+    "title": "NEAR Shoemaker, o pouso surpresa num asteroide",
+    "short": "NEAR Shoemaker",
+    "tag": "Asteroide Eros, 2001",
+    "place": "Asteroide Eros",
+    "summary": "A primeira a orbitar e a pousar num asteroide",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Em cima de Eros, um asteroide (uma grande rocha espacial) com cerca de 34 km de comprimento. Pousou em 12 de fevereiro de 2001."
+     },
+     {
+      "k": "was",
+      "t": "NEAR, uma nave feita para voar em volta de um asteroide, não para pousar nele. Depois ela foi chamada de NEAR Shoemaker, em homenagem ao cientista Eugene Shoemaker."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Foi a primeira nave a orbitar (dar voltas em torno de) um asteroide.",
+       "Tirou 160.000 fotos, umas 10 vezes mais do que o planejado.",
+       "Descobriu que Eros não tem campo magnético e mapeou quase toda a superfície dele."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "No fim da missão, a equipe a desceu devagarinho sobre o asteroide, mais ou menos na velocidade de alguém andando. Ela não foi feita para pousar, mas sobreviveu! Continuou mandando mensagens por umas duas semanas, até o frio congelante pará-la."
+     },
+     {
+      "k": "help",
+      "t": "A NEAR foi a primeira nave a orbitar um asteroide e a primeira a pousar num. Ela mostrou que podemos chegar perto de uma rocha espacial e estudá-la."
+     }
+    ],
+    "hook": "A NEAR começou a dar voltas em Eros no Dia dos Namorados (Valentine's Day) de 2000. Eros tem o nome do deus grego do amor!",
+    "pickup": "A primeira a pousar num asteroide! Recolha outro lixo e conheça os robôs gêmeos de Marte.",
+    "source": "NASA Science, NEAR Shoemaker"
+   }
+  },
+  {
+   "n": 9,
+   "body": "mars",
+   "image": "",
+   "links": [
+    {
+     "name": "NASA Science, Spirit and Opportunity",
+     "url": "https://science.nasa.gov/mission/mars-exploration-rovers-spirit-and-opportunity/"
+    }
+   ],
+   "en": {
+    "title": "Spirit and Opportunity, the twin robot geologists",
+    "short": "Spirit + Opportunity",
+    "tag": "Mars, 2004",
+    "place": "Mars, two sites",
+    "summary": "Showed Mars once had long-lasting water",
+    "sections": [
+     {
+      "k": "where",
+      "h": "Where they are now",
+      "t": "On opposite sides of Mars. Spirit landed in Gusev Crater on 3 January 2004. Opportunity landed at Meridiani Planum three weeks later, on 24 January."
+     },
+     {
+      "k": "was",
+      "h": "What they were",
+      "t": "Twin robot geologists (rock scientists) powered by sunlight. Their job was to find out if Mars once had water."
+     },
+     {
+      "k": "did",
+      "h": "What they did",
+      "list": [
+       "They studied rocks and proved that, a very long time ago, water stayed on Mars for ages.",
+       "Spirit drove almost 8 km.",
+       "Opportunity drove about 45 km, farther than a marathon! For more than 20 years, nothing had driven farther on another world."
+      ]
+     },
+     {
+      "k": "why",
+      "h": "Why they were left there",
+      "t": "Spirit finished its mission in 2010. In June 2018, a giant dust storm covered the whole of Mars and blocked the sunlight Opportunity needed for power. We never heard from it again."
+     },
+     {
+      "k": "help",
+      "t": "What the twins found out about water is a big part of what we know about Mars's past. Opportunity's driving record lasted until October 2026, when the newer rover Perseverance finally beat it."
+     }
+    ],
+    "hook": "Sometimes the Martian wind blew the dust off Opportunity's solar panels, like a free car wash, so it could soak up more sunlight.",
+    "pickup": "The twins showed Mars was once wet! Pick up another piece and go planet-hunting.",
+    "source": "NASA Science, Spirit and Opportunity"
+   },
+   "es": {
+    "title": "Spirit y Opportunity, los robots geólogos gemelos",
+    "short": "Spirit + Opportunity",
+    "tag": "Marte, 2004",
+    "place": "Marte, dos lugares",
+    "summary": "Mostraron que Marte tuvo agua durante mucho tiempo",
+    "sections": [
+     {
+      "k": "where",
+      "h": "Dónde están ahora",
+      "t": "En lados opuestos de Marte. Spirit aterrizó en el cráter Gusev el 3 de enero de 2004. Opportunity aterrizó en Meridiani Planum tres semanas después, el 24 de enero."
+     },
+     {
+      "k": "was",
+      "h": "Qué eran",
+      "t": "Robots geólogos (científicos de las rocas) gemelos que funcionaban con luz del sol. Su trabajo era averiguar si Marte tuvo agua alguna vez."
+     },
+     {
+      "k": "did",
+      "h": "Qué hicieron",
+      "list": [
+       "Estudiaron rocas y demostraron que, hace muchísimo tiempo, hubo agua en Marte durante mucho tiempo.",
+       "Spirit recorrió casi 8 km.",
+       "Opportunity recorrió unos 45 km, ¡más que una maratón! Durante más de 20 años, nada había recorrido tanto en otro mundo."
+      ]
+     },
+     {
+      "k": "why",
+      "h": "Por qué se quedaron allí",
+      "t": "Spirit terminó su misión en 2010. En junio de 2018, una tormenta de polvo gigante cubrió todo Marte y tapó la luz del sol que Opportunity necesitaba para tener energía. Nunca más supimos de él."
+     },
+     {
+      "k": "help",
+      "t": "Lo que los gemelos descubrieron sobre el agua es una gran parte de lo que sabemos del pasado de Marte. El récord de distancia de Opportunity duró hasta octubre de 2026, cuando el rover más nuevo, Perseverance, por fin lo superó."
+     }
+    ],
+    "hook": "A veces el viento de Marte le quitaba el polvo a los paneles solares de Opportunity, como un lavado de carro gratis, para que pudiera recibir más luz del sol.",
+    "pickup": "¡Los gemelos mostraron que Marte estuvo mojado! Recoge otro pedazo y ve a cazar planetas.",
+    "source": "NASA Science, Spirit and Opportunity"
+   },
+   "pt": {
+    "title": "Spirit e Opportunity, os robôs geólogos gêmeos",
+    "short": "Spirit + Opportunity",
+    "tag": "Marte, 2004",
+    "place": "Marte, dois lugares",
+    "summary": "Mostraram que Marte teve água por muito tempo",
+    "sections": [
+     {
+      "k": "where",
+      "h": "Onde eles estão agora",
+      "t": "Em lados opostos de Marte. O Spirit pousou na Cratera Gusev em 3 de janeiro de 2004. O Opportunity pousou em Meridiani Planum três semanas depois, em 24 de janeiro."
+     },
+     {
+      "k": "was",
+      "h": "O que eles eram",
+      "t": "Robôs geólogos (cientistas das rochas) gêmeos movidos a luz do sol. O trabalho deles era descobrir se Marte já teve água."
+     },
+     {
+      "k": "did",
+      "h": "O que eles fizeram",
+      "list": [
+       "Estudaram rochas e provaram que, há muito, muito tempo, a água ficou em Marte por eras.",
+       "O Spirit andou quase 8 km.",
+       "O Opportunity andou cerca de 45 km, mais que uma maratona! Por mais de 20 anos, nada tinha andado tanto em outro mundo."
+      ]
+     },
+     {
+      "k": "why",
+      "h": "Por que eles ficaram lá",
+      "t": "O Spirit terminou a missão em 2010. Em junho de 2018, uma tempestade de poeira gigante cobriu Marte inteiro e bloqueou a luz do sol que o Opportunity precisava para ter energia. Nunca mais tivemos notícias dele."
+     },
+     {
+      "k": "help",
+      "t": "O que os gêmeos descobriram sobre a água é uma grande parte do que sabemos sobre o passado de Marte. O recorde de distância do Opportunity durou até outubro de 2026, quando o rover mais novo, o Perseverance, finalmente o superou."
+     }
+    ],
+    "hook": "Às vezes o vento de Marte tirava a poeira dos painéis solares do Opportunity, como um lava-jato de graça, para ele pegar mais luz do sol.",
+    "pickup": "Os gêmeos mostraram que Marte já foi molhado! Recolha outro lixo e vá caçar planetas.",
+    "source": "NASA Science, Spirit and Opportunity"
+   }
+  },
+  {
+   "n": 10,
+   "body": "sun",
+   "image": "",
+   "links": [
+    {
+     "name": "NASA Science, Kepler",
+     "url": "https://science.nasa.gov/mission/kepler/"
+    }
+   ],
+   "en": {
+    "title": "Kepler, the planet hunter",
+    "short": "Kepler",
+    "tag": "Orbiting the Sun, 2009",
+    "place": "Orbiting the Sun",
+    "summary": "Its data is still public and still being used",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Circling the Sun on its own, safely away from Earth. It was launched on 6 March 2009."
+     },
+     {
+      "k": "was",
+      "t": "A space telescope that hunted for planets around other stars. When a planet passes in front of its star, the star looks a tiny bit dimmer. Kepler watched for those tiny dips."
+     },
+     {
+      "k": "did",
+      "list": [
+       "It found more than 2,600 planets around other stars.",
+       "It found the first Earth-size planets at just the right distance from their stars for water to stay liquid.",
+       "It found that the most common kind of planet is one our solar system doesn't have: bigger than Earth but smaller than Neptune."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "In 2013, two of the wheels it used for steering broke. Engineers had a clever idea: they used the gentle push of sunlight to keep it steady, \"like a kayak steering into the current\". It finally ran out of fuel in 2018."
+     },
+     {
+      "k": "help",
+      "t": "Kepler's data is free for anyone to use, and scientists still study it. It showed that 20–50% of the stars you can see at night probably have small, rocky planets where water could exist."
+     }
+    ],
+    "hook": "When the mission was first imagined, nobody knew of a single planet outside our solar system. Now we know planets are everywhere.",
+    "pickup": "Planets everywhere! Pick up another piece and fly to the biggest thing in the asteroid belt.",
+    "source": "NASA Science, Kepler"
+   },
+   "es": {
+    "title": "Kepler, el cazador de planetas",
+    "short": "Kepler",
+    "tag": "Alrededor del Sol, 2009",
+    "place": "Dando vueltas al Sol",
+    "summary": "Sus datos siguen siendo públicos y se siguen usando",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Dando vueltas al Sol por su cuenta, lejos y a salvo de la Tierra. Fue lanzado el 6 de marzo de 2009."
+     },
+     {
+      "k": "was",
+      "t": "Un telescopio espacial que buscaba planetas alrededor de otras estrellas. Cuando un planeta pasa por delante de su estrella, la estrella se ve un poquito más oscura. Kepler vigilaba esos pequeños bajones de luz."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Encontró más de 2.600 planetas alrededor de otras estrellas.",
+       "Encontró los primeros planetas del tamaño de la Tierra a la distancia justa de su estrella para que el agua se mantenga líquida.",
+       "Descubrió que el tipo de planeta más común es uno que nuestro sistema solar no tiene: más grande que la Tierra pero más pequeño que Neptuno."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "En 2013 se dañaron dos de las ruedas que usaba para orientarse. Los ingenieros tuvieron una idea genial: usaron el empujoncito suave de la luz del sol para mantenerlo firme, \"como un kayak que se dirige contra la corriente\". Al final se quedó sin combustible en 2018."
+     },
+     {
+      "k": "help",
+      "t": "Los datos de Kepler son gratis para quien quiera usarlos, y los científicos todavía los estudian. Mostró que entre el 20 % y el 50 % de las estrellas que ves de noche probablemente tienen planetas pequeños y rocosos donde podría haber agua."
+     }
+    ],
+    "hook": "Cuando se imaginó la misión por primera vez, nadie conocía ni un solo planeta fuera de nuestro sistema solar. Ahora sabemos que hay planetas por todas partes.",
+    "pickup": "¡Planetas por todas partes! Recoge otro pedazo y vuela a lo más grande del cinturón de asteroides.",
+    "source": "NASA Science, Kepler"
+   },
+   "pt": {
+    "title": "Kepler, o caçador de planetas",
+    "short": "Kepler",
+    "tag": "Em volta do Sol, 2009",
+    "place": "Em órbita do Sol",
+    "summary": "Seus dados continuam públicos e ainda são usados",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Dando voltas no Sol sozinho, longe e seguro da Terra. Foi lançado em 6 de março de 2009."
+     },
+     {
+      "k": "was",
+      "t": "Um telescópio espacial que caçava planetas em volta de outras estrelas. Quando um planeta passa na frente da sua estrela, a estrela parece um pouquinho mais fraca. O Kepler ficava de olho nessas pequenas quedas de brilho."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Encontrou mais de 2.600 planetas em volta de outras estrelas.",
+       "Encontrou os primeiros planetas do tamanho da Terra na distância certinha da estrela para a água continuar líquida.",
+       "Descobriu que o tipo de planeta mais comum é um que o nosso sistema solar não tem: maior que a Terra, mas menor que Netuno."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "Em 2013, duas das rodas que ele usava para se orientar quebraram. Os engenheiros tiveram uma ideia esperta: usaram o empurrãozinho suave da luz do sol para mantê-lo firme, \"como um caiaque sendo guiado contra a correnteza\". Ele finalmente ficou sem combustível em 2018."
+     },
+     {
+      "k": "help",
+      "t": "Os dados do Kepler são grátis para qualquer pessoa usar, e os cientistas ainda os estudam. Ele mostrou que de 20% a 50% das estrelas que você vê à noite provavelmente têm planetas pequenos e rochosos onde poderia existir água."
+     }
+    ],
+    "hook": "Quando a missão foi imaginada, ninguém conhecia nenhum planeta fora do nosso sistema solar. Hoje sabemos que existem planetas por toda parte.",
+    "pickup": "Planetas por toda parte! Recolha outro lixo e voe até a coisa maior do cinturão de asteroides.",
+    "source": "NASA Science, Kepler"
+   }
+  },
+  {
+   "n": 11,
+   "body": "ceres",
+   "image": "",
+   "links": [
+    {
+     "name": "NASA Science, Dawn",
+     "url": "https://science.nasa.gov/mission/dawn/"
+    },
+    {
+     "name": "Ceres science page",
+     "url": "https://science.nasa.gov/mission/dawn/science/ceres/"
+    },
+    {
+     "name": "Mission status",
+     "url": "https://science.nasa.gov/mission/dawn/mission-status/"
+    },
+    {
+     "name": "FAQ",
+     "url": "https://science.nasa.gov/mission/dawn/faq/"
+    }
+   ],
+   "en": {
+    "title": "Dawn, the spaceship with the gentle engine",
+    "short": "Dawn",
+    "tag": "Orbiting Ceres, 2015",
+    "place": "Orbiting Ceres",
+    "summary": "Changed how we think about icy worlds",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Circling Ceres, a dwarf planet in the asteroid belt between Mars and Jupiter. It arrived on 5 March 2015."
+     },
+     {
+      "k": "was",
+      "t": "A spaceship with a very gentle engine. It pushed only about as hard as a sheet of paper presses on your hand, but it could keep pushing for years. That let Dawn visit two worlds: the giant asteroid Vesta, and then Ceres."
+     },
+     {
+      "k": "did",
+      "list": [
+       "It mapped Ceres, which is about 940 km wide, swooping as low as 35 km above the ground.",
+       "It found clues that Ceres may still be changing today, with salty water that stays liquid even in the cold.",
+       "It found ammonia, a clue that Ceres may have formed far out in the solar system and moved closer."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "In 2018 it ran out of the fuel it needed to point its solar panels at the Sun and its antenna at Earth."
+     },
+     {
+      "k": "help",
+      "t": "Dawn's discoveries help scientists understand icy worlds, like the frozen moons of the giant planets. Dawn will keep circling Ceres for decades, like a monument in space."
+     }
+    ],
+    "hook": "Ceres is about one quarter ice. Apart from Earth, nothing in the inner solar system holds more water!",
+    "pickup": "Dawn is still circling Ceres! Pick up another piece and go back to Mars to listen for marsquakes.",
+    "source": "NASA Science, Dawn, Ceres science page, Mission status, FAQ"
+   },
+   "es": {
+    "title": "Dawn, la nave del motor suavecito",
+    "short": "Dawn",
+    "tag": "Alrededor de Ceres, 2015",
+    "place": "Dando vueltas a Ceres",
+    "summary": "Cambió lo que pensamos de los mundos helados",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Dando vueltas a Ceres, un planeta enano en el cinturón de asteroides, entre Marte y Júpiter. Llegó el 5 de marzo de 2015."
+     },
+     {
+      "k": "was",
+      "t": "Una nave con un motor muy suavecito. Empujaba más o menos tan fuerte como una hoja de papel apoyada en tu mano, pero podía seguir empujando durante años. Así Dawn pudo visitar dos mundos: el asteroide gigante Vesta, y después Ceres."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Hizo el mapa de Ceres, que mide unos 940 km de ancho, bajando hasta solo 35 km sobre el suelo.",
+       "Encontró pistas de que Ceres podría seguir cambiando hoy, con agua salada que sigue líquida incluso con frío.",
+       "Encontró amoníaco, una pista de que Ceres pudo formarse muy lejos en el sistema solar y luego acercarse."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "En 2018 se quedó sin el combustible que necesitaba para apuntar sus paneles solares al Sol y su antena a la Tierra."
+     },
+     {
+      "k": "help",
+      "t": "Los descubrimientos de Dawn ayudan a los científicos a entender los mundos helados, como las lunas congeladas de los planetas gigantes. Dawn seguirá dando vueltas a Ceres durante décadas, como un monumento en el espacio."
+     }
+    ],
+    "hook": "Ceres es más o menos una cuarta parte hielo. Aparte de la Tierra, ¡nada en el sistema solar interior tiene más agua!",
+    "pickup": "¡Dawn sigue dando vueltas a Ceres! Recoge otro pedazo y vuelve a Marte a escuchar los temblores marcianos.",
+    "source": "NASA Science, Dawn, página científica de Ceres, estado de la misión, preguntas frecuentes"
+   },
+   "pt": {
+    "title": "Dawn, a nave do motor suave",
+    "short": "Dawn",
+    "tag": "Em volta de Ceres, 2015",
+    "place": "Em órbita de Ceres",
+    "summary": "Mudou o que pensamos sobre mundos gelados",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Dando voltas em Ceres, um planeta anão no cinturão de asteroides, entre Marte e Júpiter. Chegou em 5 de março de 2015."
+     },
+     {
+      "k": "was",
+      "t": "Uma nave com um motor bem suave. Ele empurrava mais ou menos com a força de uma folha de papel encostada na sua mão, mas conseguia continuar empurrando por anos. Assim a Dawn visitou dois mundos: o asteroide gigante Vesta, e depois Ceres."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Mapeou Ceres, que tem cerca de 940 km de largura, descendo até só 35 km acima do chão.",
+       "Encontrou pistas de que Ceres ainda pode estar mudando hoje, com água salgada que continua líquida mesmo no frio.",
+       "Encontrou amônia, uma pista de que Ceres pode ter se formado bem longe no sistema solar e depois chegado mais perto."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "Em 2018 ficou sem o combustível que precisava para apontar os painéis solares para o Sol e a antena para a Terra."
+     },
+     {
+      "k": "help",
+      "t": "As descobertas da Dawn ajudam os cientistas a entender os mundos gelados, como as luas congeladas dos planetas gigantes. A Dawn vai continuar dando voltas em Ceres por décadas, como um monumento no espaço."
+     }
+    ],
+    "hook": "Ceres é mais ou menos um quarto gelo. Tirando a Terra, nada no sistema solar interior tem mais água!",
+    "pickup": "A Dawn continua dando voltas em Ceres! Recolha outro lixo e volte para Marte para ouvir os tremores marcianos.",
+    "source": "NASA Science, Dawn, página científica de Ceres, situação da missão, perguntas frequentes"
+   }
+  },
+  {
+   "n": 12,
+   "body": "mars",
+   "image": "",
+   "links": [
+    {
+     "name": "NASA Science, InSight",
+     "url": "https://science.nasa.gov/mission/insight/"
+    },
+    {
+     "name": "InSight science highlights",
+     "url": "https://science.nasa.gov/mission/insight/science-highlights/"
+    }
+   ],
+   "en": {
+    "title": "InSight, the lander that took Mars's pulse",
+    "short": "InSight",
+    "tag": "Mars, 2018",
+    "place": "Mars, Elysium Planitia",
+    "summary": "Found buried ice astronauts might use",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Elysium Planitia, a flat, smooth plain near the middle of Mars. It landed on 26 November 2018."
+     },
+     {
+      "k": "was",
+      "t": "A lander that studied the inside of Mars, a bit like a doctor checking your pulse and temperature. Its long robot arm placed a quake detector and a heat probe on the ground."
+     },
+     {
+      "k": "did",
+      "list": [
+       "It felt the first marsquakes ever recorded. The biggest one made Mars shake for at least six hours!",
+       "It found that the centre of Mars is a ball of liquid metal, bigger than scientists expected.",
+       "It felt a big space rock crash into Mars in 2021. Spacecraft then found the crash had dug up hidden ice.",
+       "It noticed thousands of dust devils (spinning winds) passing by."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "Its last contact was on 15 December 2022, as its power ran out."
+     },
+     {
+      "k": "help",
+      "t": "That hidden ice could one day give astronauts water to drink, help them grow food, and even make rocket fuel. Spacecraft circling Mars still take photos of InSight to see how dust moves."
+     }
+    ],
+    "hook": "InSight could \"feel\" dust devils go past. They tugged on the ground like a giant vacuum cleaner!",
+    "pickup": "Mars has quakes! Pick up your last piece to unlock the first helicopter on another planet.",
+    "source": "NASA Science, InSight, InSight science highlights"
+   },
+   "es": {
+    "title": "InSight, el robot que le tomó el pulso a Marte",
+    "short": "InSight",
+    "tag": "Marte, 2018",
+    "place": "Marte, Elysium Planitia",
+    "summary": "Encontró hielo enterrado que los astronautas podrían usar",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Elysium Planitia, una llanura plana y lisa cerca del centro de Marte. Aterrizó el 26 de noviembre de 2018."
+     },
+     {
+      "k": "was",
+      "t": "Un robot de aterrizaje que estudió el interior de Marte, un poco como un médico que te toma el pulso y la temperatura. Su largo brazo robot puso en el suelo un detector de temblores y una sonda de calor."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Sintió los primeros temblores de Marte jamás registrados. ¡El más grande hizo temblar a Marte por lo menos seis horas!",
+       "Descubrió que el centro de Marte es una bola de metal líquido, más grande de lo que esperaban los científicos.",
+       "Sintió una gran roca espacial chocar contra Marte en 2021. Luego, unas naves descubrieron que el choque había desenterrado hielo escondido.",
+       "Notó miles de remolinos de polvo (vientos que giran) pasando cerca."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "Su último contacto fue el 15 de diciembre de 2022, cuando se le acabó la energía."
+     },
+     {
+      "k": "help",
+      "t": "Ese hielo escondido podría algún día darles a los astronautas agua para beber, ayudarles a cultivar comida e incluso hacer combustible para cohetes. Las naves que dan vueltas a Marte todavía toman fotos de InSight para ver cómo se mueve el polvo."
+     }
+    ],
+    "hook": "InSight podía \"sentir\" los remolinos de polvo al pasar. ¡Jalaban el suelo como una aspiradora gigante!",
+    "pickup": "¡Marte tiene temblores! Recoge tu último pedazo para desbloquear el primer helicóptero en otro planeta.",
+    "source": "NASA Science, InSight, descubrimientos científicos de InSight"
+   },
+   "pt": {
+    "title": "InSight, o robô que mediu o pulso de Marte",
+    "short": "InSight",
+    "tag": "Marte, 2018",
+    "place": "Marte, Elysium Planitia",
+    "summary": "Encontrou gelo enterrado que os astronautas poderiam usar",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Elysium Planitia, uma planície plana e lisa perto do meio de Marte. Pousou em 26 de novembro de 2018."
+     },
+     {
+      "k": "was",
+      "t": "Um robô de pouso que estudou o interior de Marte, um pouco como um médico medindo seu pulso e sua temperatura. O longo braço robótico colocou no chão um detector de tremores e uma sonda de calor."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Sentiu os primeiros tremores de Marte já registrados. O maior fez Marte tremer por pelo menos seis horas!",
+       "Descobriu que o centro de Marte é uma bola de metal líquido, maior do que os cientistas esperavam.",
+       "Sentiu uma grande rocha espacial bater em Marte em 2021. Depois, naves descobriram que a batida tinha desenterrado gelo escondido.",
+       "Percebeu milhares de redemoinhos de poeira (ventos que giram) passando."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "O último contato foi em 15 de dezembro de 2022, quando a energia acabou."
+     },
+     {
+      "k": "help",
+      "t": "Esse gelo escondido poderia um dia dar aos astronautas água para beber, ajudar a plantar comida e até fazer combustível de foguete. As naves que dão voltas em Marte ainda tiram fotos da InSight para ver como a poeira se move."
+     }
+    ],
+    "hook": "A InSight conseguia \"sentir\" os redemoinhos de poeira passando. Eles puxavam o chão como um aspirador de pó gigante!",
+    "pickup": "Marte tem tremores! Recolha seu último lixo para desbloquear o primeiro helicóptero em outro planeta.",
+    "source": "NASA Science, InSight, destaques científicos da InSight"
+   }
+  },
+  {
+   "n": 13,
+   "body": "mars",
+   "image": "",
+   "links": [
+    {
+     "name": "NASA Science, Ingenuity Mars Helicopter",
+     "url": "https://science.nasa.gov/mission/mars-2020-perseverance/ingenuity-mars-helicopter/"
+    }
+   ],
+   "en": {
+    "title": "Ingenuity, the first helicopter on another planet",
+    "short": "Ingenuity",
+    "tag": "Mars, 2021",
+    "place": "Mars, Jezero Crater",
+    "summary": "Led to the SkyFall Mars helicopters",
+    "sections": [
+     {
+      "k": "where",
+      "t": "Jezero Crater on Mars. It arrived on 18 February 2021, tucked under the belly of the Perseverance rover."
+     },
+     {
+      "k": "was",
+      "t": "A small helicopter. It was only meant to try up to five test flights."
+     },
+     {
+      "k": "did",
+      "list": [
+       "On 19 April 2021, it made the first powered flight on another planet.",
+       "It flew 72 times in nearly three years, travelled 17 km, and climbed as high as 24 m.",
+       "It scouted from the sky to help the Perseverance team decide where to go."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "It made its last flight on 18 January 2024, and its mission ended a week later."
+     },
+     {
+      "k": "help",
+      "t": "Ingenuity proved helicopters can fly in Mars's super-thin air. NASA is now planning SkyFall, a team of new Mars helicopters that will look for landing spots for astronauts and search for ice underground."
+     }
+    ],
+    "hook": "Ingenuity was supposed to fly 5 times. It flew 72!",
+    "pickup": "You've collected every piece! Time for the finale.",
+    "source": "NASA Science, Ingenuity Mars Helicopter"
+   },
+   "es": {
+    "title": "Ingenuity, el primer helicóptero en otro planeta",
+    "short": "Ingenuity",
+    "tag": "Marte, 2021",
+    "place": "Marte, cráter Jezero",
+    "summary": "Abrió el camino a los helicópteros SkyFall para Marte",
+    "sections": [
+     {
+      "k": "where",
+      "t": "El cráter Jezero, en Marte. Llegó el 18 de febrero de 2021, guardado debajo de la panza del rover Perseverance."
+     },
+     {
+      "k": "was",
+      "t": "Un helicóptero pequeño. Solo iba a intentar hasta cinco vuelos de prueba."
+     },
+     {
+      "k": "did",
+      "list": [
+       "El 19 de abril de 2021 hizo el primer vuelo con motor en otro planeta.",
+       "Voló 72 veces en casi tres años, recorrió 17 km y subió hasta 24 m de alto.",
+       "Exploró desde el cielo para ayudar al equipo de Perseverance a decidir a dónde ir."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "Hizo su último vuelo el 18 de enero de 2024, y su misión terminó una semana después."
+     },
+     {
+      "k": "help",
+      "t": "Ingenuity demostró que los helicópteros pueden volar en el aire súper delgado de Marte. Ahora la NASA está planeando SkyFall, un equipo de nuevos helicópteros para Marte que buscarán lugares de aterrizaje para astronautas y buscarán hielo bajo tierra."
+     }
+    ],
+    "hook": "Ingenuity iba a volar 5 veces. ¡Voló 72!",
+    "pickup": "¡Recogiste todos los pedazos! Llegó la hora del gran final.",
+    "source": "NASA Science, Ingenuity Mars Helicopter"
+   },
+   "pt": {
+    "title": "Ingenuity, o primeiro helicóptero em outro planeta",
+    "short": "Ingenuity",
+    "tag": "Marte, 2021",
+    "place": "Marte, Cratera Jezero",
+    "summary": "Abriu caminho para os helicópteros SkyFall em Marte",
+    "sections": [
+     {
+      "k": "where",
+      "t": "A Cratera Jezero, em Marte. Chegou em 18 de fevereiro de 2021, guardado embaixo da barriga do rover Perseverance."
+     },
+     {
+      "k": "was",
+      "t": "Um helicóptero pequeno. Ele só ia tentar até cinco voos de teste."
+     },
+     {
+      "k": "did",
+      "list": [
+       "Em 19 de abril de 2021, fez o primeiro voo motorizado em outro planeta.",
+       "Voou 72 vezes em quase três anos, percorreu 17 km e subiu até 24 m de altura.",
+       "Explorou lá de cima para ajudar a equipe do Perseverance a decidir para onde ir."
+      ]
+     },
+     {
+      "k": "why",
+      "t": "Fez o último voo em 18 de janeiro de 2024, e a missão terminou uma semana depois."
+     },
+     {
+      "k": "help",
+      "t": "O Ingenuity provou que helicópteros conseguem voar no ar superfino de Marte. Agora a NASA está planejando o SkyFall, uma equipe de novos helicópteros para Marte que vão procurar lugares de pouso para astronautas e buscar gelo debaixo do chão."
+     }
+    ],
+    "hook": "O Ingenuity ia voar 5 vezes. Ele voou 72!",
+    "pickup": "Você recolheu todos os lixos! Chegou a hora do grande final.",
+    "source": "NASA Science, Ingenuity Mars Helicopter"
+   }
+  }
+ ],
+ "finale": {
+  "en": {
+   "title": "Left behind, not forgotten",
+   "script": [
+    "You picked up 13 pieces of litter and visited 13 machines that people left in space. Some are still helping us, like the mirrors on the Moon that tell us exactly how far away it is. Others taught us how to build the next explorers.",
+    "They were left behind, but they're not forgotten. Nobody can tidy up the Moon or Mars yet. Here on Earth, you just did!"
+   ]
+  },
+  "es": {
+   "title": "Se quedaron allá, pero no los olvidamos",
+   "script": [
+    "Recogiste 13 pedazos de basura y visitaste 13 máquinas que las personas dejaron en el espacio. Algunas todavía nos ayudan, como los espejos de la Luna que nos dicen exactamente a qué distancia está. Otras nos enseñaron a construir a los próximos exploradores.",
+    "Se quedaron allá, pero no las olvidamos. Nadie puede ordenar la Luna ni Marte todavía. ¡Aquí en la Tierra, tú acabas de hacerlo!"
+   ]
+  },
+  "pt": {
+   "title": "Deixadas para trás, mas não esquecidas",
+   "script": [
+    "Você recolheu 13 lixos e visitou 13 máquinas que as pessoas deixaram no espaço. Algumas ainda nos ajudam, como os espelhos na Lua que nos dizem exatamente a que distância ela está. Outras nos ensinaram a construir os próximos exploradores.",
+    "Elas ficaram para trás, mas não foram esquecidas. Ninguém consegue arrumar a Lua ou Marte ainda. Aqui na Terra, você acabou de fazer isso!"
+   ]
+  }
+ }
+}

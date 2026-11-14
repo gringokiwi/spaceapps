@@ -1,0 +1,190 @@
+/* debris: the drawings, as inline SVG strings.
+   Eagle, the crew buddies, the bin and the camera scene come from the design canvas "Debris App Screens".
+   The 13 chapter patches follow the canvas's patch style (cream edge, orange ring, stitched centre). */
+(function () {
+  "use strict";
+  const CREAM = "#FFF4E8", ORANGE = "#FF7A1A", NAVY = "#0B1A5C", INK = "#1D1A3F";
+  const aria = label => label ? `role="img" aria-label="${String(label).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]))}"` : `aria-hidden="true"`;
+
+  /* ---------- Eagle the lander ---------- */
+  function eagle({ label = "", tip = CREAM, look = "center", mood = "happy", cls = "" } = {}) {
+    const dx = look === "right" ? 3 : 0, dy = look === "right" ? 1 : 0;
+    return `<svg class="${cls}" viewBox="0 0 200 220" ${aria(label)}>
+<ellipse cx="100" cy="210" rx="82" ry="9" fill="${NAVY}" opacity=".35"/>
+<path d="M54 148 L30 196 M146 148 L170 196 M100 160 L100 198" stroke="#D9560B" stroke-width="13" stroke-linecap="round" fill="none"/>
+<ellipse cx="27" cy="201" rx="17" ry="8" fill="#B6450A"/><ellipse cx="173" cy="201" rx="17" ry="8" fill="#B6450A"/><ellipse cx="100" cy="203" rx="14" ry="7" fill="#B6450A"/>
+<rect x="34" y="114" width="132" height="48" rx="18" fill="#D9560B"/>
+<rect x="48" y="126" width="22" height="24" rx="6" fill="#FFC98F" opacity=".55"/><rect x="130" y="126" width="22" height="24" rx="6" fill="#FFC98F" opacity=".55"/>
+<path d="M84 160 L116 160 L123 175 Q100 181 77 175 Z" fill="#B6450A"/>
+${head({ tip, dx, dy, mood })}
+</svg>`;
+  }
+  /* The head on its own (Safety, Found, Danger), drawn in the same coordinates. */
+  function head({ tip, dx = 0, dy = 0, mood = "happy" }) {
+    const py = mood === "worried" ? 78 : 72 + dy, hy = py - 4;
+    const mouth = mood === "worried" ? `<ellipse cx="100" cy="106" rx="5" ry="6" fill="${INK}"/>`
+      : mood === "smile" ? `<path d="M91 103 Q100 111 109 103" fill="none" stroke="${INK}" stroke-width="4.5" stroke-linecap="round"/>`
+      : `<path d="M89 101 Q100 116 111 101 Z" fill="${INK}"/><ellipse cx="100" cy="108" rx="5.5" ry="3" fill="#FF7A9C"/>`;
+    return `<path d="M66 50 L52 26 M134 50 L150 28" stroke="#D9560B" stroke-width="7" stroke-linecap="round" fill="none"/>
+<circle cx="50" cy="22" r="11" fill="${tip}"/><path d="M142 22 Q152 38 166 18 Q153 28 142 22 Z" fill="${tip}"/>
+<rect x="85" y="26" width="30" height="18" rx="7" fill="#D9560B"/>
+<circle cx="38" cy="82" r="10" fill="#D9560B"/><circle cx="162" cy="82" r="10" fill="#D9560B"/>
+<rect x="44" y="36" width="112" height="88" rx="38" fill="${ORANGE}"/>
+<ellipse cx="100" cy="108" rx="38" ry="15" fill="#FFA45C"/>
+<circle cx="77" cy="74" r="20" fill="#FFFFFF"/><circle cx="${77 + dx}" cy="${py}" r="11" fill="${INK}"/><circle cx="${73.5 + dx}" cy="${hy}" r="3.4" fill="#FFFFFF"/>
+<circle cx="123" cy="74" r="20" fill="#FFFFFF"/><circle cx="${123 + dx}" cy="${py}" r="11" fill="${INK}"/><circle cx="${119.5 + dx}" cy="${hy}" r="3.4" fill="#FFFFFF"/>
+${mouth}`;
+  }
+  function eagleHead({ label = "", mood = "smile", look = "center", cls = "" } = {}) {
+    const dx = look === "right" ? 3 : 0;
+    return `<svg class="${cls}" viewBox="30 8 140 122" ${aria(label)}>${head({ tip: "#FFC98F", dx, mood })}</svg>`;
+  }
+
+  /* ---------- Crew buddies (Profile) ---------- */
+  const BUDDY_ART = {
+    eagle: `<rect x="8" y="12" width="64" height="56" rx="24" fill="#FF7A1A"/><circle cx="29" cy="38" r="12" fill="#FFFFFF"/><circle cx="29" cy="38" r="6.6" fill="#1D1A3F"/><circle cx="51" cy="38" r="12" fill="#FFFFFF"/><circle cx="51" cy="38" r="6.6" fill="#1D1A3F"/><path d="M34 56 Q40 62 46 56" fill="none" stroke="#1D1A3F" stroke-width="3.4" stroke-linecap="round"/>`,
+    hadley: `<rect x="8" y="20" width="64" height="48" rx="20" fill="#A9BEE6"/><path d="M4 24 Q40 -6 76 24 Z" fill="#FFC98F"/><circle cx="29" cy="42" r="12" fill="#FFFFFF"/><circle cx="30" cy="43" r="6.6" fill="#1D1A3F"/><circle cx="51" cy="42" r="12" fill="#FFFFFF"/><circle cx="52" cy="43" r="6.6" fill="#1D1A3F"/><path d="M34 59 Q40 64 46 59" fill="none" stroke="#1D1A3F" stroke-width="3.4" stroke-linecap="round"/>`,
+    oppy: `<rect x="35" y="44" width="10" height="26" rx="5" fill="#5E39D1"/><rect x="4" y="16" width="72" height="38" rx="18" fill="#A07EFF"/><circle cx="26" cy="35" r="12" fill="#FFFFFF"/><circle cx="29" cy="35" r="6.6" fill="#1D1A3F"/><circle cx="54" cy="35" r="12" fill="#FFFFFF"/><circle cx="57" cy="35" r="6.6" fill="#1D1A3F"/>`,
+    ginny: `<ellipse cx="40" cy="12" rx="36" ry="4.5" fill="#D93A6B"/><rect x="37" y="10" width="6" height="14" fill="#D93A6B"/><rect x="12" y="22" width="56" height="50" rx="20" fill="#FF5C8A"/><circle cx="29" cy="44" r="12" fill="#FFFFFF"/><circle cx="29" cy="43" r="6.6" fill="#1D1A3F"/><circle cx="51" cy="44" r="12" fill="#FFFFFF"/><circle cx="51" cy="43" r="6.6" fill="#1D1A3F"/><ellipse cx="40" cy="62" rx="3.6" ry="4.4" fill="#1D1A3F"/>`,
+    voyager: `<circle cx="40" cy="40" r="34" fill="#E9DCC6"/><circle cx="40" cy="42" r="25" fill="#D8C6A8"/><circle cx="29" cy="40" r="11" fill="#FFFFFF"/><circle cx="29" cy="43" r="6" fill="#1D1A3F"/><circle cx="51" cy="40" r="11" fill="#FFFFFF"/><circle cx="51" cy="43" r="6" fill="#1D1A3F"/><path d="M34 57 Q40 62 46 57" fill="none" stroke="#1D1A3F" stroke-width="3.4" stroke-linecap="round"/>`,
+    viking: `<polygon points="14,40 27,16 53,16 66,40 53,64 27,64" fill="#E0553B" stroke="#E0553B" stroke-width="10" stroke-linejoin="round"/><circle cx="29" cy="38" r="12" fill="#FFFFFF"/><circle cx="29" cy="36" r="6.6" fill="#1D1A3F"/><circle cx="51" cy="38" r="12" fill="#FFFFFF"/><circle cx="51" cy="36" r="6.6" fill="#1D1A3F"/><path d="M34 55 Q40 61 46 55" fill="none" stroke="#1D1A3F" stroke-width="3.4" stroke-linecap="round"/>`
+  };
+  const BUDDIES = [["eagle", "Eagle"], ["hadley", "Hadley"], ["oppy", "Oppy"], ["ginny", "Ginny"], ["voyager", "Voyager"], ["viking", "Viking"]];
+  const buddy = (id, label = "") => `<svg viewBox="0 0 80 80" ${aria(label)}>${BUDDY_ART[id] || BUDDY_ART.eagle}</svg>`;
+
+  /* ---------- The 13 chapter patches ---------- */
+  const PATCH_BG = { moon: "#1F43C4", mars: "#B23A1E", deep: "#0B1A5C", eros: "#5E39D1", sun: "#13795B", ceres: "#2F55D6" };
+  const EMBLEM = {
+    // 1 Surveyor 3: the robot that tested the ground
+    1: () => `<g transform="translate(0 2)"><path d="M-14 6 L14 6 L0 -12 Z" stroke="none"/><path d="M-14 6 L-24 24 M14 6 L24 24 M0 6 L0 24 M0 -12 L0 -22" stroke-width="3.5" fill="none"/><path d="M-8 -26 Q0 -18 8 -26" fill="none" stroke-width="3"/><path d="M14 0 L24 -6 L27 0" stroke-width="2.5" fill="none"/></g>`,
+    // 2 Apollo 11 and the Moon mirror: a laser goes in, bounces back
+    2: () => `<path d="M-4 -16 L-14 -30 M4 -16 L14 -30" stroke-width="2.5" stroke-dasharray="3 4" fill="none"/><rect x="-20" y="-12" width="40" height="30" rx="3" fill="none" stroke-width="3.5"/><circle cx="-11" cy="-2" r="4" stroke="none"/><circle cx="0" cy="-2" r="4" stroke="none"/><circle cx="11" cy="-2" r="4" stroke="none"/><circle cx="-11" cy="9" r="4" stroke="none"/><circle cx="0" cy="9" r="4" stroke="none"/><circle cx="11" cy="9" r="4" stroke="none"/><path d="M-14 18 L-18 26 M14 18 L18 26" stroke-width="3" fill="none"/>`,
+    // 3 Apollo 12 Intrepid: the lander's bottom half, and the first moonquake made by people
+    3: () => `<g transform="translate(0 -4)"><rect x="-20" y="-12" width="40" height="14" rx="3" stroke="none"/><path d="M-16 0 L-27 20 M16 0 L27 20 M0 2 L0 20" stroke-width="4" fill="none"/><path d="M-7 2 L7 2 L9 9 L-9 9 Z" stroke="none"/></g><path d="M-30 25 l6 -6 l6 6 l6 -6 l6 6 l6 -6 l6 6 l6 -6 l6 6 l6 -6" stroke-width="3" fill="none"/>`,
+    // 4 Apollo 15: the first Moon car
+    4: () => `<g transform="translate(0 4)"><rect x="-24" y="-4" width="48" height="10" rx="3" stroke="none"/><circle cx="-17" cy="14" r="7" fill="none" stroke-width="3.5"/><circle cx="17" cy="14" r="7" fill="none" stroke-width="3.5"/><path d="M-4 -4 L-4 -16 M10 -4 L10 -14" stroke-width="3" fill="none"/><path d="M-2 -24 Q8 -14 18 -24 Z" stroke="none"/></g>`,
+    // 5 Pioneer 10: the message in a bottle, heading for a red star
+    5: () => `<path d="M-26 -8 Q0 14 26 -8 Q0 2 -26 -8 Z" stroke="none"/><path d="M0 2 L0 -20" stroke-width="2.5" fill="none"/><circle cx="0" cy="-22" r="3" stroke="none"/><rect x="-7" y="4" width="14" height="9" rx="2" stroke="none"/><path d="M-6 10 L-23 21 M6 10 L23 21" stroke-width="2.5" fill="none"/><circle cx="-24" cy="22" r="3.5" stroke="none"/><circle cx="24" cy="22" r="3.5" stroke="none"/><path d="M18 -32 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" stroke="none"/>`,
+    // 6 Viking 1: the lander with a lab and a scoop
+    6: () => `<path d="M-18 -16 Q-6 -28 6 -16 Z" stroke="none"/><path d="M-6 -6 L-6 -16" stroke-width="3" fill="none"/><rect x="-15" y="-6" width="30" height="12" rx="3" stroke="none"/><path d="M-12 6 L-22 21 M12 6 L22 21 M0 6 L0 21" stroke-width="3.5" fill="none"/><ellipse cx="-22" cy="23" rx="5" ry="2.5" stroke="none"/><ellipse cx="22" cy="23" rx="5" ry="2.5" stroke="none"/><ellipse cx="0" cy="23" rx="4" ry="2" stroke="none"/><path d="M15 -2 L25 -10 L29 -3" stroke-width="3" fill="none"/>`,
+    // 7 Pathfinder: the bouncing beach ball
+    7: bg => `<path d="M-32 22 H30" stroke-width="2.5" fill="none"/><path d="M-31 21 Q-27 4 -23 21 Q-20 11 -17 21" stroke-width="2.5" stroke-dasharray="2 4" fill="none"/><g stroke="${bg}" stroke-width="2"><circle cx="-1" cy="-10" r="10"/><circle cx="-9" cy="2" r="10"/><circle cx="9" cy="2" r="10"/><circle cx="0" cy="11" r="9"/></g>`,
+    // 8 NEAR Shoemaker: landing on asteroid Eros
+    8: bg => `<path d="M-28 12 Q-30 0 -16 -2 Q-6 -8 8 -4 Q26 -4 28 8 Q28 20 10 20 Q-4 24 -18 22 Q-28 20 -28 12 Z" stroke="none"/><circle cx="-12" cy="10" r="3" fill="${bg}" stroke="none"/><circle cx="6" cy="12" r="4" fill="${bg}" stroke="none"/><circle cx="16" cy="4" r="2.4" fill="${bg}" stroke="none"/><g transform="translate(2 -19)"><rect x="-4" y="-4" width="8" height="8" rx="1" stroke="none"/><rect x="-16" y="-2" width="10" height="4" stroke="none"/><rect x="6" y="-2" width="10" height="4" stroke="none"/><path d="M0 -4 L0 -9" stroke-width="2" fill="none"/></g><path d="M2 -12 L2 -8" stroke-width="2" stroke-dasharray="1 3" fill="none"/>`,
+    // 9 Spirit and Opportunity: the twin robot geologists
+    9: () => `<rect x="-28" y="-6" width="56" height="5" rx="1.5" stroke="none"/><rect x="-12" y="-1" width="24" height="9" rx="2" stroke="none"/><path d="M12 -6 L12 -20" stroke-width="3" fill="none"/><rect x="6" y="-27" width="13" height="7" rx="2" stroke="none"/><path d="M-18 8 L-20 13 M0 8 L0 13 M18 8 L20 13" stroke-width="2.5" fill="none"/><circle cx="-20" cy="18" r="5" fill="none" stroke-width="3"/><circle cx="0" cy="18" r="5" fill="none" stroke-width="3"/><circle cx="20" cy="18" r="5" fill="none" stroke-width="3"/>`,
+    // 10 Kepler: a planet passes its star, and the light dips
+    10: bg => `<circle cx="0" cy="-8" r="15" stroke="none"/><circle cx="6" cy="-6" r="4.5" fill="${bg}" stroke="none"/><path d="M-26 19 H-9 Q-6 26 0 26 Q6 26 9 19 H26" fill="none" stroke-width="3"/><path d="M-22 -28 l1.5 3.5 3.5 1.5 -3.5 1.5 -1.5 3.5 -1.5 -3.5 -3.5 -1.5 3.5 -1.5z" stroke="none"/>`,
+    // 11 Dawn: long solar wings and a gentle engine
+    11: bg => `<rect x="-31" y="-6" width="22" height="7" rx="1.5" stroke="none"/><rect x="9" y="-6" width="22" height="7" rx="1.5" stroke="none"/><path d="M-9 -2.5 H-6 M6 -2.5 H9" stroke-width="2" fill="none"/><rect x="-6" y="-10" width="12" height="15" rx="2" stroke="none"/><path d="M-4 -10 Q0 -17 4 -10" fill="none" stroke-width="2.5"/><path d="M0 8 L0 12 M0 16 L0 19 M0 23 L0 25" stroke-width="3" fill="none"/><circle cx="20" cy="18" r="7" stroke="none"/><circle cx="18" cy="16" r="1.8" fill="${bg}" stroke="none"/>`,
+    // 12 InSight: taking Mars's pulse
+    12: bg => `<path d="M-30 22 H-12 l3 -3 l3 3 l3 -3 l3 3 H30" stroke-width="2.5" fill="none"/><circle cx="-19" cy="-8" r="10" stroke="none"/><circle cx="19" cy="-8" r="10" stroke="none"/><path d="M-19 -18 V2 M-29 -8 H-9 M19 -18 V2 M9 -8 H29" stroke="${bg}" stroke-width="1.5" fill="none"/><rect x="-10" y="-6" width="20" height="10" rx="2" stroke="none"/><path d="M-6 4 L-11 18 M6 4 L11 18" stroke-width="3" fill="none"/><path d="M14 22 A7 7 0 0 1 28 22 Z" stroke="none"/>`,
+    // 13 Ingenuity: the first helicopter on another planet
+    13: () => `<path d="M-28 -20 H28" stroke-width="3.5" fill="none"/><path d="M-24 -12 H24" stroke-width="3" fill="none"/><rect x="-7" y="-28" width="14" height="5" rx="1" stroke="none"/><path d="M0 -23 V-2" stroke-width="3" fill="none"/><rect x="-8" y="-3" width="16" height="12" rx="3" stroke="none"/><path d="M-6 8 L-16 24 M6 8 L16 24 M-2 9 L-6 24 M2 9 L6 24" stroke-width="2.2" fill="none"/>`
+  };
+  function patch(n, body, label = "") {
+    const bg = PATCH_BG[body] || PATCH_BG.moon, draw = EMBLEM[n] || EMBLEM[1];
+    return `<svg viewBox="0 0 160 160" ${aria(label)}>
+<circle cx="80" cy="80" r="78" fill="${CREAM}"/><circle cx="80" cy="80" r="71" fill="${ORANGE}"/>
+<circle cx="80" cy="80" r="65.5" fill="none" stroke="${NAVY}" stroke-width="2" stroke-dasharray="3 3"/><circle cx="80" cy="80" r="61" fill="${bg}"/>
+<g transform="translate(80 80) scale(1.5)" fill="${CREAM}" stroke="${CREAM}" stroke-linecap="round" stroke-linejoin="round">${draw(bg)}</g>
+</svg>`;
+  }
+
+  /* ---------- Icons (24 × 24 line icons from the canvas) ---------- */
+  const ICON = {
+    camera: `<rect x="3" y="7" width="18" height="13" rx="3"/><circle cx="12" cy="13.5" r="3.5"/><path d="M8 7l1.5-3h5L16 7"/>`,
+    close: `<path d="M6 6l12 12M18 6 6 18"/>`,
+    back: `<path d="M14.5 5.5 8 12l6.5 6.5"/>`,
+    chevron: `<path d="M9.5 5.5 16 12l-6.5 6.5"/>`,
+    home: `<path d="M3.5 11 12 4l8.5 7M6 9.5V20h12V9.5"/>`,
+    jacket: `<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/>`,
+    me: `<circle cx="12" cy="8" r="4"/><path d="M4 20.5c.8-4 3.8-6.5 8-6.5s7.2 2.5 8 6.5"/>`,
+    globe: `<circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c3 3 3 16 0 19M12 2.5c-3 3-3 16 0 19"/>`,
+    hand: `<path d="M7 11V5a1.5 1.5 0 0 1 3 0v5M10 10V3.5a1.5 1.5 0 0 1 3 0V10M13 10V4.5a1.5 1.5 0 0 1 3 0V11M16 11V7a1.5 1.5 0 0 1 3 0v8a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.7L4.5 14a1.5 1.5 0 0 1 2.4-1.7L8 13.5"/>`,
+    grownups: `<circle cx="8" cy="7" r="3.2"/><path d="M2.5 20c.4-3.6 2.6-6 5.5-6s5.1 2.4 5.5 6"/><circle cx="17.5" cy="10" r="2.4"/><path d="M14.8 20c.2-2.8 1.3-4.6 2.7-4.6s3.6 1.8 4 4.6"/>`,
+    warning: `<path d="M12 3 2.5 20h19L12 3z"/><path d="M12 10v5M12 17.6v.2"/>`,
+    check: `<path d="M5 12.5 10 17.5 19 7"/>`,
+    checkCircle: `<circle cx="12" cy="12" r="9.5"/><path d="M7.5 12.5 10.5 15.5 16.5 9"/>`,
+    image: `<rect x="3" y="4.5" width="18" height="15" rx="3"/><circle cx="8.5" cy="10" r="1.8"/><path d="m4 17 5-4.5 4 3.5 3-2.5 4 3.5"/>`,
+    external: `<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>`,
+    refresh: `<path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/>`
+  };
+  function icon(name, { size = 24, width = 2.3, cls = "" } = {}) {
+    return `<svg class="ico ${cls}" viewBox="0 0 24 24" width="${size}" height="${size}" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round">${ICON[name] || ""}</svg>`;
+  }
+  const play = (playing, size = 28) => `<svg viewBox="0 0 24 24" width="${size}" height="${size}" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="${ORANGE}"/>${playing ? `<rect x="8" y="8" width="8" height="8" rx="1.5" fill="${NAVY}"/>` : `<path d="M10 7.5v9l7-4.5z" fill="${NAVY}"/>`}</svg>`;
+
+  /* ---------- Scenes ---------- */
+  // The camera view from the canvas: a sweet wrapper on a path next to grass.
+  const scene = (label = "") => `<svg viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" ${aria(label)}>
+<rect width="390" height="844" fill="#9AA3B5"/>
+<path d="M0 0 H390 V250 Q200 300 0 230 Z" fill="#6E9F68"/><path d="M0 230 Q200 300 390 250 V268 Q200 318 0 248 Z" fill="#5C8A57"/>
+<circle cx="70" cy="560" r="16" fill="#8892A6"/><circle cx="320" cy="690" r="22" fill="#8892A6"/><circle cx="300" cy="400" r="9" fill="#8892A6"/><circle cx="90" cy="740" r="10" fill="#8892A6"/>
+<path d="M60 120 q14 -30 30 0 q-15 12 -30 0 Z" fill="#4F7B4B"/><path d="M290 90 q14 -30 30 0 q-15 12 -30 0 Z" fill="#4F7B4B"/>
+<g transform="rotate(-14 195 440)"><rect x="120" y="398" width="150" height="84" rx="12" fill="#E8457A"/><path d="M120 410 l-22 -14 v88 l22 -14 Z M270 410 l22 -14 v88 l-22 -14 Z" fill="#C92F63"/><rect x="146" y="420" width="98" height="14" rx="7" fill="#FFD6E3"/><rect x="146" y="444" width="64" height="12" rx="6" fill="#FFD6E3"/></g>
+</svg>`;
+  const frame = () => `<svg class="scan-frame" viewBox="0 0 300 300" aria-hidden="true" fill="none" stroke="${CREAM}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 60 V28 Q6 6 28 6 H60 M240 6 h32 q22 0 22 22 v32 M294 240 v32 q0 22 -22 22 h-32 M60 294 H28 Q6 294 6 272 V240"/></svg>`;
+
+  // A bin with litter dropping in (Bin it). Colours follow the bin.
+  const BIN_LOOK = {
+    white: { body: "#FFFFFF", lid: "#E6E9F5", mark: `<g fill="none" stroke="#1F43C4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" transform="translate(175 156)"><path d="M-6 -22 L6 -22 L16 -6"/><path d="M22 6 L14 22 L-4 22"/><path d="M-16 20 L-24 4 L-14 -10"/><path d="M10 -12 L17 -5 L22 -14"/><path d="M0 16 L-5 22 L1 28"/><path d="M-20 -8 L-13 -11 L-10 -2"/></g>` },
+    green: { body: "#3F8F4B", lid: "#2F7A3C", mark: `<g fill="none" stroke="${CREAM}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" transform="translate(175 156)"><path d="M-18 22 C-20 -6 6 -22 22 -24 C22 -6 12 20 -18 22 Z"/><path d="M-18 22 L8 -6"/></g>` },
+    black: { body: "#22252E", lid: "#3A3E4A", mark: `<g fill="none" stroke="#8A90A6" stroke-width="6" stroke-linecap="round" transform="translate(175 156)"><path d="M-20 -22 V26 M0 -22 V26 M20 -22 V26"/></g>` },
+    special_dropoff: { body: "#F2B33D", lid: "#D99A1E", mark: `<g fill="none" stroke="${NAVY}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" transform="translate(175 156)"><path d="M0 -26 -28 22 H28 Z"/><path d="M0 -8 V6 M0 14 V15"/></g>` }
+  };
+  function bin(kind, label = "") {
+    const b = BIN_LOOK[kind] || BIN_LOOK.black;
+    return `<svg viewBox="0 0 350 230" ${aria(label)}>
+<path d="M0 196 Q175 172 350 196 V230 H0 Z" fill="${NAVY}" opacity=".45"/>
+<g class="drop"><g transform="rotate(18 180 46)"><rect x="150" y="28" width="60" height="34" rx="6" fill="#E8457A"/><path d="M150 34 l-10 -7 v40 l10 -7 Z M210 34 l10 -7 v40 l-10 -7 Z" fill="#C92F63"/></g></g>
+<path d="M160 78 q16 10 30 0" fill="none" stroke="#FFC98F" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 9"/>
+<path d="M118 104 H232 L222 200 Q221 208 213 208 H137 Q129 208 128 200 Z" fill="${b.body}"/>
+<rect x="106" y="90" width="138" height="18" rx="9" fill="${b.lid}"/>
+${b.mark}
+</svg>`;
+  }
+
+  // The sparkles behind "Patch unlocked!"
+  const sparkles = () => `<svg class="sparkles" viewBox="0 0 390 420" aria-hidden="true">
+<path d="M52 70 Q52 90 72 90 Q52 90 52 110 Q52 90 32 90 Q52 90 52 70 Z" fill="#FFC98F"/>
+<path d="M338 120 Q338 136 354 136 Q338 136 338 152 Q338 136 322 136 Q338 136 338 120 Z" fill="#FFC98F"/>
+<path d="M318 40 Q318 50 328 50 Q318 50 318 60 Q318 50 308 50 Q318 50 318 40 Z" fill="${CREAM}"/>
+<path d="M70 300 Q70 310 80 310 Q70 310 70 320 Q70 310 60 310 Q70 310 70 300 Z" fill="${CREAM}"/>
+<path d="M330 330 Q330 344 344 344 Q330 344 330 358 Q330 344 316 344 Q330 344 330 330 Z" fill="#FFC98F"/>
+<circle cx="96" cy="170" r="5" fill="#FF7A9C"/><circle cx="300" cy="230" r="5" fill="#A07EFF"/><circle cx="120" cy="40" r="4" fill="${CREAM}"/><circle cx="270" cy="90" r="4" fill="#FF7A9C"/>
+</svg>`;
+
+  /* ---------- The finale map: where the 13 machines rest ---------- */
+  const PINS = { 1: [130, 100], 2: [168, 100], 3: [140, 122], 4: [156, 78], 5: [334, 200], 6: [244, 132], 7: [266, 124], 8: [212, 50], 9: [290, 156], 10: [47, 68], 11: [318, 56], 12: [276, 178], 13: [246, 168] };
+  function map(unlocked, L, label = "") {
+    const pin = i => {
+      const [x, y] = PINS[i], on = i <= unlocked;
+      return `<g class="pin${on ? " on" : ""}"><circle cx="${x}" cy="${y}" r="11"/><text x="${x}" y="${y + 4.5}" text-anchor="middle">${i}</text></g>`;
+    };
+    const txt = (x, y, s, a = "middle") => `<text class="lbl" x="${x}" y="${y}" text-anchor="${a}">${String(s).replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]))}</text>`;
+    let pins = ""; for (let i = 1; i <= 13; i++) pins += pin(i);
+    return `<svg class="map" viewBox="0 0 360 250" ${aria(label)}>
+<rect x="0" y="0" width="360" height="250" rx="22" fill="${NAVY}"/>
+<g fill="${CREAM}" opacity=".55"><circle cx="96" cy="26" r="1.6"/><circle cx="200" cy="20" r="1.4"/><circle cx="250" cy="70" r="1.2"/><circle cx="350" cy="140" r="1.4"/><circle cx="190" cy="160" r="1.2"/><circle cx="70" cy="230" r="1.4"/><circle cx="300" cy="110" r="1.2"/></g>
+<clipPath id="mapClip"><rect x="0" y="0" width="360" height="250" rx="22"/></clipPath>
+<g clip-path="url(#mapClip)"><circle cx="-20" cy="125" r="88" fill="none" stroke="#8FA3EA" stroke-width="2" stroke-dasharray="3 6"/><circle cx="-20" cy="125" r="58" fill="#FFC98F"/><circle cx="-20" cy="125" r="46" fill="#FFA45C" opacity=".6"/></g>
+${txt(14, 200, L.sun)}
+<circle cx="112" cy="198" r="16" fill="#1F43C4" stroke="#8FA3EA" stroke-width="2"/><path d="M103 192 q5 -6 10 -1 q4 5 -2 9 q-6 2 -8 -8z M116 204 q5 -2 7 2 q-2 5 -7 3z" fill="#2F9E73"/>
+${txt(112, 232, L.earth)}
+<circle cx="150" cy="104" r="36" fill="#C9D3FA"/><circle cx="140" cy="88" r="5" fill="#A9B4D6"/><circle cx="164" cy="118" r="7" fill="#A9B4D6"/><circle cx="128" cy="118" r="3.5" fill="#A9B4D6"/>
+${txt(150, 156, L.moon)}
+<circle cx="264" cy="152" r="46" fill="#D9673A"/><path d="M228 140 q14 -10 30 -2 q8 6 -4 10 q-16 2 -26 -8z M268 186 q12 -8 24 -2 q-6 8 -24 2z" fill="#B6450A"/>
+${txt(264, 216, L.mars)}
+<path d="M200 50 q-2 -10 10 -10 q14 -2 16 8 q2 10 -10 12 q-14 2 -16 -10z" fill="#A9B4D6"/>
+${txt(212, 80, L.eros)}
+<circle cx="318" cy="56" r="16" fill="#A9B4D6"/>
+${txt(318, 90, L.ceres)}
+<path d="M316 216 Q326 208 334 200 L358 170" fill="none" stroke="#8FA3EA" stroke-width="2" stroke-dasharray="3 5"/>
+${txt(352, 240, L.deep, "end")}
+${pins}
+</svg>`;
+  }
+
+  window.ART = { eagle, eagleHead, buddy, BUDDIES, patch, icon, play, scene, frame, bin, sparkles, map };
+})();

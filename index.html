@@ -3,176 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Planet Patrol</title>
-<meta name="description" content="Clean up the Earth and unlock stories of the machines we left on the Moon and Mars.">
-<meta name="theme-color" content="#7CC7FF">
+<title>debris</title>
+<meta name="description" content="Pick up litter on Earth and unlock the stories of 13 machines people left on the Moon, Mars and beyond. A NASA Space Apps game for kids.">
+<meta name="theme-color" content="#1F43C4">
+<link rel="icon" href="img/icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@600;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap">
 <link rel="stylesheet" href="style.css">
+<script src="art.js" defer></script>
+<script src="game.js" defer></script>
 </head>
 <body>
-<div class="scene" aria-hidden="true">
-  <svg class="sky" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice">
-    <g class="stars">
-      <path class="tw t1" d="M40 60 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4z"/>
-      <path class="tw t2" d="M330 120 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z"/>
-      <path class="tw t3" d="M250 40 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z"/>
-      <path class="tw t1" d="M370 300 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z"/>
-      <path class="tw t2" d="M20 380 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z"/>
-      <circle cx="120" cy="30" r="2.5"/><circle cx="190" cy="90" r="2"/><circle cx="300" cy="220" r="2.5"/><circle cx="60" cy="230" r="2"/><circle cx="380" cy="40" r="2"/>
-    </g>
-    <g class="moon"><circle cx="350" cy="170" r="26" fill="#FFF6D8" stroke="#2B2140" stroke-width="4"/><circle cx="342" cy="162" r="5" fill="#F1E3B5"/><circle cx="358" cy="180" r="4" fill="#F1E3B5"/></g>
-    <g class="mars"><circle cx="30" cy="300" r="20" fill="#FF7A3D" stroke="#2B2140" stroke-width="4"/><path d="M16 295 q10 -6 22 0" stroke="#D9531B" stroke-width="4" fill="none"/></g>
-    <g class="ringed"><ellipse cx="365" cy="430" rx="34" ry="9" fill="none" stroke="#FFC93C" stroke-width="5"/><circle cx="365" cy="430" r="18" fill="#B48CFF" stroke="#2B2140" stroke-width="4"/></g>
-    <g class="rocket"><path d="M30 520 q10 -26 20 0 v18 h-20z" fill="#fff" stroke="#2B2140" stroke-width="4"/><circle cx="40" cy="522" r="4" fill="#5DA8FF"/><path d="M30 538 l-8 8 h8z M50 538 l8 8 h-8z" fill="#FF5A5A" stroke="#2B2140" stroke-width="3"/><path class="flame" d="M34 541 q6 16 12 0z" fill="#FFC93C"/></g>
-    <path d="M0 700 Q100 650 200 690 T400 670 V800 H0z" fill="#FFB27A" stroke="#2B2140" stroke-width="4"/>
-    <path d="M0 740 Q120 710 230 735 T400 725 V800 H0z" fill="#FF8F57"/>
-  </svg>
-</div>
+<p id="demo" class="demo-banner" hidden></p>
+<main id="app" class="screen t-blue"></main>
 <div id="confetti" class="confetti" aria-hidden="true"></div>
-<header class="top">
-  <button id="profileBtn" class="profile" type="button" aria-label="Change my profile"><span id="pAvatar" class="avatarDot">🙂</span><span id="pName">Player</span></button>
-  <div class="score" aria-label="My points"><span class="lbl">⭐</span><b id="myPoints">0</b></div>
-</header>
-
-<main>
-  <p id="demoBanner" class="demoBanner" hidden>🎈 Demo mode: Spark is pretending to scan. The real game uses AI.</p>
-  <!-- SCAN -->
-  <section id="v-scan" class="view" aria-labelledby="t-scan">
-    <p class="kicker">🌍 Earth cleanup mission!</p>
-    <h1 id="t-scan" class="title">Planet Patrol</h1>
-
-    <div class="schematic">
-      <div id="robot" class="robot r-idle" aria-hidden="true">
-        <svg viewBox="0 0 260 270" width="230" height="239">
-          <g class="sparkles"><path d="M28 70 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z"/><path d="M228 110 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z"/><path d="M214 30 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z"/></g>
-          <!-- legs -->
-          <rect x="96" y="232" width="24" height="26" rx="10" class="limb"/><rect x="140" y="232" width="24" height="26" rx="10" class="limb"/>
-          <ellipse cx="106" cy="260" rx="20" ry="9" class="foot"/><ellipse cx="154" cy="260" rx="20" ry="9" class="foot"/>
-          <!-- arms -->
-          <g class="armL"><path d="M74 176 Q46 190 44 222" class="arm"/><circle cx="44" cy="226" r="11" class="hand"/></g>
-          <g class="armR"><path d="M186 176 Q214 190 216 222" class="arm"/><circle cx="216" cy="226" r="11" class="hand"/></g>
-          <!-- body -->
-          <rect x="72" y="160" width="116" height="84" rx="34" class="torso"/>
-          <path d="M130 212 c-14 -12 -18 -24 -8 -28 c4 -2 8 0 8 4 c0 -4 4 -6 8 -4 c10 4 6 16 -8 28z" class="core"/>
-          <rect x="94" y="228" width="72" height="8" rx="4" class="belt"/>
-          <!-- head -->
-          <g class="head">
-            <line x1="130" y1="30" x2="130" y2="8" class="antenna"/>
-            <path class="star" d="M130 -8 l5 10 11 2 -8 8 2 11 -10 -5 -10 5 2 -11 -8 -8 11 -2z"/>
-            <circle cx="58" cy="100" r="16" class="ear"/><circle cx="202" cy="100" r="16" class="ear"/>
-            <circle cx="130" cy="98" r="70" class="helmet"/>
-            <rect x="74" y="56" width="112" height="90" rx="44" class="visor"/>
-            <ellipse cx="100" cy="72" rx="16" ry="8" class="shine"/>
-            <line x1="84" y1="100" x2="176" y2="100" class="scanline"/>
-            <g class="face f-idle"><ellipse cx="108" cy="98" rx="11" ry="14" class="eye"/><ellipse cx="152" cy="98" rx="11" ry="14" class="eye"/><circle cx="110" cy="101" r="6" class="pupil"/><circle cx="154" cy="101" r="6" class="pupil"/><circle cx="105" cy="93" r="3" class="glint"/><circle cx="149" cy="93" r="3" class="glint"/><circle cx="90" cy="120" r="7" class="cheek"/><circle cx="170" cy="120" r="7" class="cheek"/><path d="M118 124 Q130 134 142 124" class="mouth"/></g>
-            <g class="face f-think"><ellipse cx="108" cy="98" rx="11" ry="14" class="eye"/><ellipse cx="152" cy="98" rx="11" ry="14" class="eye"/><circle cx="113" cy="92" r="6" class="pupil"/><circle cx="157" cy="92" r="6" class="pupil"/><circle cx="90" cy="120" r="7" class="cheek"/><circle cx="170" cy="120" r="7" class="cheek"/><circle cx="136" cy="128" r="5" class="mouthFill"/></g>
-            <g class="face f-yes"><path d="M96 102 Q108 84 120 102" class="mouth thick"/><path d="M140 102 Q152 84 164 102" class="mouth thick"/><circle cx="90" cy="120" r="8" class="cheek"/><circle cx="170" cy="120" r="8" class="cheek"/><path d="M112 118 Q130 142 148 118 Z" class="mouthFill"/></g>
-            <g class="face f-no"><ellipse cx="108" cy="100" rx="10" ry="12" class="eye"/><ellipse cx="152" cy="100" rx="10" ry="12" class="eye"/><circle cx="108" cy="104" r="5" class="pupil"/><circle cx="152" cy="104" r="5" class="pupil"/><path d="M96 84 L118 90 M164 84 L142 90" class="mouth"/><path d="M118 130 Q130 122 142 130" class="mouth"/></g>
-            <g class="face f-unsure"><ellipse cx="108" cy="100" rx="10" ry="12" class="eye"/><ellipse cx="152" cy="98" rx="12" ry="15" class="eye"/><circle cx="110" cy="102" r="5" class="pupil"/><circle cx="154" cy="100" r="6" class="pupil"/><path d="M96 82 L120 86" class="mouth"/><path d="M114 128 q6 -6 12 0 t12 0" class="mouth"/></g>
-            <g class="face f-danger"><circle cx="108" cy="96" r="14" class="eye"/><circle cx="152" cy="96" r="14" class="eye"/><circle cx="108" cy="96" r="6" class="pupil"/><circle cx="152" cy="96" r="6" class="pupil"/><ellipse cx="130" cy="128" rx="10" ry="9" class="mouthFill"/></g>
-          </g>
-          <text class="sign s-unsure" x="196" y="52">?</text>
-          <text class="sign s-danger" x="200" y="54">!</text>
-        </svg>
-      </div>
-      <p class="tag">Spark the cleanup robot</p>
-    </div>
-
-    <p id="says" class="says" aria-live="polite">Hi! I'm Spark. Find some trash and take a photo of it.</p>
-
-    <div id="alert" class="alert" role="alert" hidden>
-      <div class="alertIcon" aria-hidden="true">✋</div>
-      <div><b>Don't touch it!</b><br>Call an adult.</div>
-    </div>
-
-    <div id="result" class="panel result" hidden>
-      <p class="panelLbl">🔎 Spark says</p>
-      <div class="row"><span>It's</span><b id="rType">—</b></div>
-      <div class="row"><span>Goes in</span><b id="rBin" class="bin">—</b></div>
-      <div class="earned" id="rPoints"></div>
-    </div>
-
-    <input id="file" type="file" accept="image/*" capture="environment" hidden>
-    <button id="snap" class="btn big" type="button">📷 Take a photo</button>
-
-    <div id="photo" class="photo" hidden><img id="photoImg" alt="Your photo"></div>
-
-    <p class="global"><span class="lbl">Picked up by all players</span> <b id="global">—</b></p>
-    <p class="note">Photos of objects only. No people. Photos are never saved.</p>
-  </section>
-
-  <!-- MISSIONS -->
-  <section id="v-missions" class="view" aria-labelledby="t-mis" hidden>
-    <p class="kicker">🎯 Earn badges!</p>
-    <h2 id="t-mis" class="title">Missions</h2>
-    <ul id="missionList" class="list"></ul>
-  </section>
-
-  <!-- STORIES -->
-  <section id="v-stories" class="view" aria-labelledby="t-sto" hidden>
-    <p class="kicker">🌕 Moon &amp; Mars 🔴</p>
-    <h2 id="t-sto" class="title">Space stories</h2>
-    <p class="sub">Machines we left on the Moon and Mars. Finish missions to open them.</p>
-    <ul id="storyList" class="list"></ul>
-  </section>
-
-  <!-- LOG -->
-  <section id="v-log" class="view" aria-labelledby="t-log" hidden>
-    <p class="kicker">📒 Look how much you did!</p>
-    <h2 id="t-log" class="title">My log</h2>
-    <div class="stats"><div><b id="logItems">0</b><span>items</span></div><div><b id="logPoints">0</b><span>points</span></div><div><b id="logBadges">0</b><span>badges</span></div></div>
-    <div id="badges" class="badges"></div>
-    <ul id="logList" class="list log"></ul>
-  </section>
-</main>
-
-<nav class="menu" aria-label="Menu">
-  <button type="button" data-view="scan" class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.5"/><path d="M8 7l1.5-3h5L16 7"/></svg>Scan</button>
-  <button type="button" data-view="missions"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>Missions</button>
-  <button type="button" data-view="stories"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c3 2.5 4.5 6 4.5 10l-2 4h-5l-2-4C7.5 8 9 4.5 12 2z"/><circle cx="12" cy="10" r="1.8"/><path d="M9.5 16L7 20l3-1M14.5 16L17 20l-3-1"/></svg>Stories</button>
-  <button type="button" data-view="log"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>Log</button>
-</nav>
-
-<!-- Profile: only a nickname + an avatar, saved on this phone -->
-<dialog id="profile" aria-labelledby="t-profile">
-  <form method="dialog" id="profileForm">
-    <p class="kicker">🚀 Join the patrol!</p>
-    <h2 id="t-profile">What should we call you?</h2>
-    <p class="sub">Make up a nickname. Don't use your real name.</p>
-    <label for="nick" class="hide">Nickname</label>
-    <input id="nick" maxlength="16" autocomplete="off" placeholder="e.g. Comet Rider" required>
-    <p class="sub">Pick your avatar</p>
-    <div id="avatars" class="avatars" role="radiogroup" aria-label="Avatar"></div>
-    <button class="btn big" type="submit">Ready!</button>
-  </form>
-</dialog>
-
-<!-- Mission complete -->
-<dialog id="award" aria-labelledby="t-award">
-  <form method="dialog">
-    <p class="kicker">🎉 Mission complete!</p>
-    <div id="awardBadge" class="awardBadge">⭐</div>
-    <h2 id="t-award">Amazing job!</h2>
-    <p id="awardText"></p>
-    <button class="btn big" type="submit" value="story">🚀 Read the story</button>
-    <button class="btn light" type="submit" value="ok">Keep cleaning</button>
-  </form>
-</dialog>
-
-<!-- One story -->
-<dialog id="story" aria-labelledby="sTitle">
-  <form method="dialog">
-    <p id="sPlace" class="kicker"></p>
-    <h2 id="sTitle"></h2>
-    <img id="sImg" alt="" hidden>
-    <p id="sText"></p>
-    <p id="sSource" class="source"></p>
-    <button class="btn big" type="submit">Close</button>
-  </form>
-</dialog>
-
-<script src="game.js"></script>
+<noscript><p>debris needs JavaScript to run.</p></noscript>
 </body>
 </html>

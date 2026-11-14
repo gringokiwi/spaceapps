@@ -1,5 +1,6 @@
 /* Scanner: Claude (Haiku, with vision) looks at ONE photo and says whether it is trash.
    Adapted from Litter Spotter (netlify/lib/spotter.mjs in katamar-lang/isla-skills), without payments.
+   It speaks as Eagle, the lander from the debris app, in the player's language.
    The ANTHROPIC_API_KEY lives only here, on the server. The photo is never stored. */
 import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
@@ -12,6 +13,8 @@ export const TYPES = ["plastic", "can", "paper_cardboard", "glass", "organic", "
    "special_dropoff" = batteries, electronics, chemicals, needles, broken glass: an adult takes them to a collection point. */
 export const BINS = ["white", "green", "black", "special_dropoff", "none"];
 export const PHOTO_PROBLEMS = ["none", "screen", "people", "blurry"];
+/* The languages the app speaks. */
+export const LANGS = { en: "English", es: "Spanish (Latin American)", pt: "Brazilian Portuguese" };
 
 export const ScanSchema = z.object({
   photo_problem: z.enum(PHOTO_PROBLEMS).describe("'screen' if the photo shows a screen (phone, computer, TV, tablet); 'people' if a person or face is in the foreground; 'blurry' if nothing can be seen clearly; otherwise 'none'"),
@@ -19,10 +22,11 @@ export const ScanSchema = z.object({
   type: z.enum(TYPES).describe("Type of the main object; 'none' if there is no object or it is not trash"),
   bin: z.enum(BINS).describe("Where it goes: white (clean plastic, cans, paper, cardboard, glass), green (food scraps, peels), black (dirty napkins, dirty wrappers, cigarette butts), special_dropoff (batteries, electronics, chemicals, needles, broken glass), none if it is not trash"),
   dangerous: z.boolean().describe("true if a child must not touch it: broken glass, needles or syringes, sharp objects, chemicals, broken or leaking batteries"),
-  message: z.string().describe("One short, kind sentence for a child aged 7 to 12, in English, at most 20 words")
+  item: z.string().describe("Everyday name of the main object, 1 to 4 words, in the language asked for, for example 'Plastic wrapper'; empty if there is no clear object"),
+  message: z.string().describe("One short, kind sentence for a child aged 7 to 12, in the language asked for, at most 20 words")
 });
 
-const SYSTEM = `You are Spark, a friendly robot in a game for children aged 7 to 12 who clean up their neighbourhood.
+const SYSTEM = `You are Eagle, a friendly lander who helps children aged 7 to 12 clean up their neighbourhood in a game called debris.
 The child takes a photo of ONE object they found. You say whether it is trash, what type it is, and which bin it goes in.
 Rules:
 - If the photo shows a screen (phone, computer, TV, tablet), set photo_problem = "screen".
@@ -32,7 +36,8 @@ Rules:
 - If you can't tell whether it is trash, use is_trash = "unsure".
 - dangerous = true for broken glass, needles or syringes, blades or sharp objects, chemicals or poison bottles, broken batteries. An unbroken glass bottle is not dangerous.
 - Bins (Colombia's colour code): white for clean, dry plastic, cans, paper, cardboard and glass; green for food scraps and peels; black for dirty or non-recyclable things (used napkins, cigarette butts, wrappers with food); special_dropoff for batteries, electronics, chemicals, needles and broken glass.
-- message: one short, cheerful, simple sentence in English for a child. No hard words. If it is dangerous, say not to touch it and to call an adult.`;
+- item: the everyday name of the main object in 1 to 4 simple words, in the language the user asks for, like "Plastic wrapper", "Juice box" or "Broken glass". Never name or describe a person.
+- message: one short, cheerful, simple sentence for a child, in the language the user asks for. No hard words. If it is dangerous, say not to touch it and to call an adult.`;
 
 let client = null;
 export function setClaudeClient(c) { client = c; }
@@ -43,15 +48,16 @@ function getClient() {
   return (client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY, timeout: 9000, maxRetries: 0 }));
 }
 
-export async function scan(base64, mediaType) {
+export async function scan(base64, mediaType, lang = "en") {
+  const language = LANGS[lang] || LANGS.en;
   const response = await getClient().messages.parse({
     model: MODEL,
-    max_tokens: 1000,
+    max_tokens: 2000,
     system: SYSTEM,
     output_config: { effort: "low", format: zodOutputFormat(ScanSchema) },
     messages: [{ role: "user", content: [
       { type: "image", source: { type: "base64", media_type: mediaType, data: base64 } },
-      { type: "text", text: "Photo from a child who is cleaning up. What is it, and is it trash?" }
+      { type: "text", text: `Photo from a child who is cleaning up. What is it, and is it trash? Write the item and the message in ${language}.` }
     ] }]
   });
   if (response.stop_reason === "refusal") throw Object.assign(new Error("The AI declined to look at this photo"), { code: "refusal" });
@@ -71,6 +77,9 @@ export function tidy(out) {
   if (dangerous) { is_trash = "yes"; bin = "special_dropoff"; }
   if (is_trash === "no") { type = "none"; bin = "none"; }
   if (is_trash === "yes" && type === "none") type = "other";
-  const message = String(out.message || "").replace(/\s+/g, " ").trim().slice(0, 160);
-  return { photo_problem, is_trash, type, bin, dangerous, message };
+  const clean = (s, max) => String(s || "").replace(/\s+/g, " ").trim().slice(0, max);
+  // No name for photos that can't be used: they may show a person or a screen.
+  const item = photo_problem === "none" ? clean(out.item, 40) : "";
+  const message = clean(out.message, 160);
+  return { photo_problem, is_trash, type, bin, dangerous, item, message };
 }
