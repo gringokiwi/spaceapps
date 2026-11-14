@@ -29,6 +29,40 @@
   let missions = [], stories = [];
   const awardQueue = [];
 
+  /* ---------- Demo mode (?demo in the address): no server, no AI. Spark pretends, and the page says so. ---------- */
+  const DEMO = /[?&]demo\b/.test(location.search);
+  const DEMO_RESULTS = [
+    { photo_problem: "none", is_trash: "yes", type: "plastic", bin: "white", dangerous: false, message: "A plastic bottle! It goes in the white bin." },
+    { photo_problem: "none", is_trash: "yes", type: "can", bin: "white", dangerous: false, message: "A can! Great catch, it goes in the white bin." },
+    { photo_problem: "none", is_trash: "yes", type: "glass", bin: "special_dropoff", dangerous: true, message: "Don't touch it! That's broken glass. Call an adult." },
+    { photo_problem: "none", is_trash: "no", type: "none", bin: "none", dangerous: false, message: "That's a leaf. Leaves aren't trash!" },
+    { photo_problem: "none", is_trash: "yes", type: "paper_cardboard", bin: "white", dangerous: false, message: "A paper cup! Into the white bin it goes." },
+    { photo_problem: "screen", is_trash: "no", type: "none", bin: "none", dangerous: false, message: "That looks like a screen. Take a photo of the real object, not a screen!" },
+    { photo_problem: "none", is_trash: "unsure", type: "other", bin: "black", dangerous: false, message: "Hmm, I'm not sure. Can you take another photo?" }
+  ];
+  let demoN = 0, demoTotal = 0;
+  async function demoScan() {
+    await new Promise(r => setTimeout(r, 1300));
+    const result = DEMO_RESULTS[demoN++ % DEMO_RESULTS.length];
+    const retake = result.photo_problem !== "none", counts = !retake && result.is_trash === "yes";
+    return { result, retake, counts, total: counts ? ++demoTotal : null };
+  }
+
+  /* ---------- Confetti when a mission is complete ---------- */
+  function confetti() {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const box = $("confetti"), colors = ["#FF7A1A", "#FFC93C", "#2FBF71", "#3D8BFF", "#FF7DB0", "#9B6BFF"];
+    for (let i = 0; i < 60; i++) {
+      const c = el("i");
+      c.style.left = Math.random() * 100 + "%";
+      c.style.background = colors[i % colors.length];
+      c.style.animationDuration = 1.6 + Math.random() * 1.6 + "s";
+      c.style.animationDelay = Math.random() * .4 + "s";
+      box.appendChild(c);
+    }
+    setTimeout(() => { box.textContent = ""; }, 3800);
+  }
+
   /* ---------- Robot ---------- */
   function robot(state, text) {
     $("robot").className = "robot r-" + state;
@@ -100,6 +134,7 @@
     try {
       const image = await shrink(f);
       $("photoImg").src = image; $("photo").hidden = false;
+      if (DEMO) { showResult(await demoScan()); return; }
       const r = await fetch("/api/scan", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ image }) });
       const j = await r.json().catch(() => ({}));
       if (!r.ok) { robot("no", j.error || "Something went wrong. Try again."); return; }
@@ -171,6 +206,7 @@
     $("awardText").textContent = `You earned the “${m.title}” badge and opened a space story.`;
     d.onclose = () => { if (d.returnValue === "story") openStory(m.story); else nextAward(); };
     d.showModal();
+    confetti();
   }
 
   function paintMissions() {
@@ -251,10 +287,11 @@
   async function getJSON(url) { const r = await fetch(url, { cache: "no-cache" }); if (!r.ok) throw new Error(url); return r.json(); }
   async function start() {
     paintProfile(); paintPoints(); robot("idle");
+    $("demoBanner").hidden = !DEMO;
     try { missions = (await getJSON("missions.json")).missions || []; } catch { missions = []; }
     try { stories = (await getJSON("stories.json")).stories || []; } catch { stories = []; }
     checkMissions();
-    fetch("/api/counter").then(r => r.ok ? r.json() : null).then(j => { if (j && typeof j.total === "number") $("global").textContent = j.total.toLocaleString("en"); }).catch(() => {});
+    if (!DEMO) fetch("/api/counter").then(r => r.ok ? r.json() : null).then(j => { if (j && typeof j.total === "number") $("global").textContent = j.total.toLocaleString("en"); }).catch(() => {});
     if (!profile) openProfile();
   }
   start();

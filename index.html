@@ -5,65 +5,79 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Planet Patrol</title>
 <meta name="description" content="Clean up the Earth and unlock stories of the machines we left on the Moon and Mars.">
-<meta name="theme-color" content="#EDE3D1">
+<meta name="theme-color" content="#7CC7FF">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@600;800&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="scene" aria-hidden="true">
+  <svg class="sky" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice">
+    <g class="stars">
+      <path class="tw t1" d="M40 60 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4z"/>
+      <path class="tw t2" d="M330 120 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z"/>
+      <path class="tw t3" d="M250 40 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z"/>
+      <path class="tw t1" d="M370 300 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z"/>
+      <path class="tw t2" d="M20 380 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z"/>
+      <circle cx="120" cy="30" r="2.5"/><circle cx="190" cy="90" r="2"/><circle cx="300" cy="220" r="2.5"/><circle cx="60" cy="230" r="2"/><circle cx="380" cy="40" r="2"/>
+    </g>
+    <g class="moon"><circle cx="350" cy="170" r="26" fill="#FFF6D8" stroke="#2B2140" stroke-width="4"/><circle cx="342" cy="162" r="5" fill="#F1E3B5"/><circle cx="358" cy="180" r="4" fill="#F1E3B5"/></g>
+    <g class="mars"><circle cx="30" cy="300" r="20" fill="#FF7A3D" stroke="#2B2140" stroke-width="4"/><path d="M16 295 q10 -6 22 0" stroke="#D9531B" stroke-width="4" fill="none"/></g>
+    <g class="ringed"><ellipse cx="365" cy="430" rx="34" ry="9" fill="none" stroke="#FFC93C" stroke-width="5"/><circle cx="365" cy="430" r="18" fill="#B48CFF" stroke="#2B2140" stroke-width="4"/></g>
+    <g class="rocket"><path d="M30 520 q10 -26 20 0 v18 h-20z" fill="#fff" stroke="#2B2140" stroke-width="4"/><circle cx="40" cy="522" r="4" fill="#5DA8FF"/><path d="M30 538 l-8 8 h8z M50 538 l8 8 h-8z" fill="#FF5A5A" stroke="#2B2140" stroke-width="3"/><path class="flame" d="M34 541 q6 16 12 0z" fill="#FFC93C"/></g>
+    <path d="M0 700 Q100 650 200 690 T400 670 V800 H0z" fill="#FFB27A" stroke="#2B2140" stroke-width="4"/>
+    <path d="M0 740 Q120 710 230 735 T400 725 V800 H0z" fill="#FF8F57"/>
+  </svg>
+</div>
+<div id="confetti" class="confetti" aria-hidden="true"></div>
 <header class="top">
   <button id="profileBtn" class="profile" type="button" aria-label="Change my profile"><span id="pAvatar" class="avatarDot">🙂</span><span id="pName">Player</span></button>
-  <div class="score" aria-label="My points"><span class="lbl">PTS</span><b id="myPoints">0</b></div>
+  <div class="score" aria-label="My points"><span class="lbl">⭐</span><b id="myPoints">0</b></div>
 </header>
 
 <main>
+  <p id="demoBanner" class="demoBanner" hidden>🎈 Demo mode: Spark is pretending to scan. The real game uses AI.</p>
   <!-- SCAN -->
   <section id="v-scan" class="view" aria-labelledby="t-scan">
-    <p class="kicker">FIELD UNIT 01 · EARTH</p>
+    <p class="kicker">🌍 Earth cleanup mission!</p>
     <h1 id="t-scan" class="title">Planet Patrol</h1>
 
     <div class="schematic">
       <div id="robot" class="robot r-idle" aria-hidden="true">
-        <svg viewBox="0 0 300 262" width="240" height="210">
-          <!-- callout lines -->
-          <g class="callouts">
-            <path d="M206 70 H262 V40" /><circle cx="262" cy="34" r="7" class="dot"/><text x="226" y="62">VISOR</text>
-            <path d="M136 206 L112 242 H42" /><circle cx="36" cy="242" r="7" class="dot"/><text x="44" y="236">CORE</text>
-            <path d="M226 168 H270 V196" /><circle cx="270" cy="202" r="5" class="dot"/><text x="232" y="160">ARM-R</text>
-            <path d="M94 96 H40 V66" /><circle cx="40" cy="60" r="5" class="dot"/><text x="48" y="90">SCAN</text>
-          </g>
+        <svg viewBox="0 0 260 270" width="230" height="239">
+          <g class="sparkles"><path d="M28 70 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z"/><path d="M228 110 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z"/><path d="M214 30 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z"/></g>
+          <!-- legs -->
+          <rect x="96" y="232" width="24" height="26" rx="10" class="limb"/><rect x="140" y="232" width="24" height="26" rx="10" class="limb"/>
+          <ellipse cx="106" cy="260" rx="20" ry="9" class="foot"/><ellipse cx="154" cy="260" rx="20" ry="9" class="foot"/>
+          <!-- arms -->
+          <g class="armL"><path d="M74 176 Q46 190 44 222" class="arm"/><circle cx="44" cy="226" r="11" class="hand"/></g>
+          <g class="armR"><path d="M186 176 Q214 190 216 222" class="arm"/><circle cx="216" cy="226" r="11" class="hand"/></g>
           <!-- body -->
-          <g class="body">
-            <path class="arm armL" d="M92 166 Q70 186 66 222" />
-            <path class="arm armR" d="M208 166 Q230 186 234 222" />
-            <rect x="72" y="150" width="34" height="30" rx="10" class="shoulder"/>
-            <rect x="194" y="150" width="34" height="30" rx="10" class="shoulder"/>
-            <path d="M98 150 H202 L194 236 Q150 252 106 236 Z" class="torso"/>
-            <line x1="120" y1="226" x2="180" y2="226" class="trim"/>
-            <circle cx="150" cy="196" r="17" class="ring"/>
-            <circle cx="150" cy="196" r="9" class="core"/>
-          </g>
+          <rect x="72" y="160" width="116" height="84" rx="34" class="torso"/>
+          <path d="M130 212 c-14 -12 -18 -24 -8 -28 c4 -2 8 0 8 4 c0 -4 4 -6 8 -4 c10 4 6 16 -8 28z" class="core"/>
+          <rect x="94" y="228" width="72" height="8" rx="4" class="belt"/>
           <!-- head -->
           <g class="head">
-            <rect x="136" y="132" width="28" height="22" rx="4" class="neck"/>
-            <circle cx="150" cy="88" r="56" class="helmet"/>
-            <circle cx="150" cy="90" r="40" class="visor"/>
-            <ellipse cx="136" cy="72" rx="14" ry="8" class="shine"/>
-            <line x1="114" y1="90" x2="186" y2="90" class="scanline"/>
-            <!-- faces drawn on the visor -->
-            <g class="face f-idle"><circle cx="136" cy="92" r="6" class="eye"/><circle cx="164" cy="92" r="6" class="eye"/><path d="M138 108 Q150 116 162 108" class="mouth"/></g>
-            <g class="face f-think"><circle cx="142" cy="86" r="6" class="eye"/><circle cx="170" cy="86" r="6" class="eye"/><path d="M140 110 H160" class="mouth"/></g>
-            <g class="face f-yes"><path d="M128 94 Q136 84 144 94" class="mouth"/><path d="M156 94 Q164 84 172 94" class="mouth"/><path d="M134 106 Q150 122 166 106" class="mouth"/></g>
-            <g class="face f-no"><circle cx="136" cy="94" r="5" class="eye"/><circle cx="164" cy="94" r="5" class="eye"/><path d="M138 114 Q150 106 162 114" class="mouth"/></g>
-            <g class="face f-unsure"><path d="M126 80 L144 84" class="mouth"/><circle cx="136" cy="94" r="5" class="eye"/><circle cx="164" cy="92" r="7" class="eye"/><path d="M136 112 Q143 105 150 112 T164 112" class="mouth"/></g>
-            <g class="face f-danger"><circle cx="136" cy="88" r="8" class="eye"/><circle cx="164" cy="88" r="8" class="eye"/><ellipse cx="150" cy="110" rx="7" ry="6" class="eye"/></g>
+            <line x1="130" y1="30" x2="130" y2="8" class="antenna"/>
+            <path class="star" d="M130 -8 l5 10 11 2 -8 8 2 11 -10 -5 -10 5 2 -11 -8 -8 11 -2z"/>
+            <circle cx="58" cy="100" r="16" class="ear"/><circle cx="202" cy="100" r="16" class="ear"/>
+            <circle cx="130" cy="98" r="70" class="helmet"/>
+            <rect x="74" y="56" width="112" height="90" rx="44" class="visor"/>
+            <ellipse cx="100" cy="72" rx="16" ry="8" class="shine"/>
+            <line x1="84" y1="100" x2="176" y2="100" class="scanline"/>
+            <g class="face f-idle"><ellipse cx="108" cy="98" rx="11" ry="14" class="eye"/><ellipse cx="152" cy="98" rx="11" ry="14" class="eye"/><circle cx="110" cy="101" r="6" class="pupil"/><circle cx="154" cy="101" r="6" class="pupil"/><circle cx="105" cy="93" r="3" class="glint"/><circle cx="149" cy="93" r="3" class="glint"/><circle cx="90" cy="120" r="7" class="cheek"/><circle cx="170" cy="120" r="7" class="cheek"/><path d="M118 124 Q130 134 142 124" class="mouth"/></g>
+            <g class="face f-think"><ellipse cx="108" cy="98" rx="11" ry="14" class="eye"/><ellipse cx="152" cy="98" rx="11" ry="14" class="eye"/><circle cx="113" cy="92" r="6" class="pupil"/><circle cx="157" cy="92" r="6" class="pupil"/><circle cx="90" cy="120" r="7" class="cheek"/><circle cx="170" cy="120" r="7" class="cheek"/><circle cx="136" cy="128" r="5" class="mouthFill"/></g>
+            <g class="face f-yes"><path d="M96 102 Q108 84 120 102" class="mouth thick"/><path d="M140 102 Q152 84 164 102" class="mouth thick"/><circle cx="90" cy="120" r="8" class="cheek"/><circle cx="170" cy="120" r="8" class="cheek"/><path d="M112 118 Q130 142 148 118 Z" class="mouthFill"/></g>
+            <g class="face f-no"><ellipse cx="108" cy="100" rx="10" ry="12" class="eye"/><ellipse cx="152" cy="100" rx="10" ry="12" class="eye"/><circle cx="108" cy="104" r="5" class="pupil"/><circle cx="152" cy="104" r="5" class="pupil"/><path d="M96 84 L118 90 M164 84 L142 90" class="mouth"/><path d="M118 130 Q130 122 142 130" class="mouth"/></g>
+            <g class="face f-unsure"><ellipse cx="108" cy="100" rx="10" ry="12" class="eye"/><ellipse cx="152" cy="98" rx="12" ry="15" class="eye"/><circle cx="110" cy="102" r="5" class="pupil"/><circle cx="154" cy="100" r="6" class="pupil"/><path d="M96 82 L120 86" class="mouth"/><path d="M114 128 q6 -6 12 0 t12 0" class="mouth"/></g>
+            <g class="face f-danger"><circle cx="108" cy="96" r="14" class="eye"/><circle cx="152" cy="96" r="14" class="eye"/><circle cx="108" cy="96" r="6" class="pupil"/><circle cx="152" cy="96" r="6" class="pupil"/><ellipse cx="130" cy="128" rx="10" ry="9" class="mouthFill"/></g>
           </g>
-          <text class="sign s-unsure" x="196" y="40">?</text>
-          <text class="sign s-danger" x="198" y="42">!</text>
+          <text class="sign s-unsure" x="196" y="52">?</text>
+          <text class="sign s-danger" x="200" y="54">!</text>
         </svg>
       </div>
-      <p class="tag">SPARK · CLEANUP ROBOT</p>
+      <p class="tag">Spark the cleanup robot</p>
     </div>
 
     <p id="says" class="says" aria-live="polite">Hi! I'm Spark. Find some trash and take a photo of it.</p>
@@ -74,7 +88,7 @@
     </div>
 
     <div id="result" class="panel result" hidden>
-      <p class="panelLbl">SCAN REPORT</p>
+      <p class="panelLbl">🔎 Spark says</p>
       <div class="row"><span>It's</span><b id="rType">—</b></div>
       <div class="row"><span>Goes in</span><b id="rBin" class="bin">—</b></div>
       <div class="earned" id="rPoints"></div>
@@ -91,14 +105,14 @@
 
   <!-- MISSIONS -->
   <section id="v-missions" class="view" aria-labelledby="t-mis" hidden>
-    <p class="kicker">MISSION LOG</p>
+    <p class="kicker">🎯 Earn badges!</p>
     <h2 id="t-mis" class="title">Missions</h2>
     <ul id="missionList" class="list"></ul>
   </section>
 
   <!-- STORIES -->
   <section id="v-stories" class="view" aria-labelledby="t-sto" hidden>
-    <p class="kicker">ARCHIVE · MOON &amp; MARS</p>
+    <p class="kicker">🌕 Moon &amp; Mars 🔴</p>
     <h2 id="t-sto" class="title">Space stories</h2>
     <p class="sub">Machines we left on the Moon and Mars. Finish missions to open them.</p>
     <ul id="storyList" class="list"></ul>
@@ -106,7 +120,7 @@
 
   <!-- LOG -->
   <section id="v-log" class="view" aria-labelledby="t-log" hidden>
-    <p class="kicker">FIELD NOTES</p>
+    <p class="kicker">📒 Look how much you did!</p>
     <h2 id="t-log" class="title">My log</h2>
     <div class="stats"><div><b id="logItems">0</b><span>items</span></div><div><b id="logPoints">0</b><span>points</span></div><div><b id="logBadges">0</b><span>badges</span></div></div>
     <div id="badges" class="badges"></div>
@@ -124,7 +138,7 @@
 <!-- Profile: only a nickname + an avatar, saved on this phone -->
 <dialog id="profile" aria-labelledby="t-profile">
   <form method="dialog" id="profileForm">
-    <p class="kicker">NEW CREW MEMBER</p>
+    <p class="kicker">🚀 Join the patrol!</p>
     <h2 id="t-profile">What should we call you?</h2>
     <p class="sub">Make up a nickname. Don't use your real name.</p>
     <label for="nick" class="hide">Nickname</label>
@@ -138,9 +152,9 @@
 <!-- Mission complete -->
 <dialog id="award" aria-labelledby="t-award">
   <form method="dialog">
-    <p class="kicker">MISSION COMPLETE</p>
+    <p class="kicker">🎉 Mission complete!</p>
     <div id="awardBadge" class="awardBadge">⭐</div>
-    <h2 id="t-award">Well done!</h2>
+    <h2 id="t-award">Amazing job!</h2>
     <p id="awardText"></p>
     <button class="btn big" type="submit" value="story">🚀 Read the story</button>
     <button class="btn light" type="submit" value="ok">Keep cleaning</button>
