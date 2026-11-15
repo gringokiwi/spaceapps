@@ -17,7 +17,8 @@ export default async req => {
     try {
       if (await read(c.usedKey)) return json(200, { pickups: await read(PICKUPS), counted: false });
       await add(c.usedKey);                   // mark the ticket used first, then count it
-      return json(200, { pickups: await add(PICKUPS), counted: true });
+      try { return json(200, { pickups: await add(PICKUPS), counted: true }); }
+      catch (e) { await add(c.usedKey, -1).catch(() => {}); throw e; }   // the count failed: unmark the ticket, so the phone's retry counts it
     } finally { inFlight.delete(c.id); }
   } catch { return json(503, { error: "Couldn't count it right now. Try again later.", code: "store" }); }
 };

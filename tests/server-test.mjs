@@ -43,11 +43,19 @@ await t("The same ticket sent twice at once counts once", async () => {
   const [[a, ja], [b, jb]] = await Promise.all([pick(j.ticket), pick(j.ticket)]);
   assert.equal(a, 200); assert.equal(b, 200); assert.equal([ja.counted, jb.counted].filter(Boolean).length, 1); assert.equal(await total(), 2);
 });
+await t("If counting fails, the ticket isn't burnt: the phone's retry counts it", async () => {
+  next = TRASH; const [, j] = await call({ image: IMG, lang: "en" });
+  const real = store.setJSON.bind(store); let failOnce = true;
+  store.setJSON = async (k, v) => { if (k === common.PICKUPS && failOnce) { failOnce = false; throw new Error("disk full"); } return real(k, v); };
+  const [st1] = await pick(j.ticket); assert.equal(st1, 503);
+  store.setJSON = real;
+  const [st2, j2] = await pick(j.ticket); assert.equal(st2, 200); assert.equal(j2.counted, true); assert.equal(await total(), 3);
+});
 await t("Forged, malformed and expired tickets are refused", async () => {
   const forged = ticket.slice(0, -2) + (ticket.endsWith("AA") ? "BB" : "AA");
   assert.equal((await pick(forged))[0], 400); assert.equal((await pick("+1"))[0], 400); assert.equal((await pick(""))[0], 400);
   const old = common.makeTicket(Date.now() - (common.TICKET_DAYS + 1) * 86400000);
-  const [st, j] = await pick(old); assert.equal(st, 410); assert.equal(j.code, "expired"); assert.equal(await total(), 2);
+  const [st, j] = await pick(old); assert.equal(st, 410); assert.equal(j.code, "expired"); assert.equal(await total(), 3);
 });
 await t("A ticket made with another key is refused", async () => {
   const key = process.env.ANTHROPIC_API_KEY; process.env.ANTHROPIC_API_KEY = "another-key";
@@ -61,7 +69,7 @@ await t("Dangerous finds, retakes and not-litter get no ticket", async () => {
   [, j] = await call({ image: IMG, lang: "pt" }); assert.equal(j.retake, true); assert.equal(j.ticket, null); assert.equal(j.result.item, ""); assert.match(j.result.message, /pessoa/);
   next = { photo_problem: "none", is_trash: "no", type: "none", bin: "none", dangerous: false, item: "Leaf", message: "That's a leaf." };
   [, j] = await call({ image: IMG, lang: "fr" }); assert.equal(j.ticket, null); assert.ok(seen.messages[0].content[1].text.endsWith("in English."));
-  assert.equal(await total(), 2);
+  assert.equal(await total(), 3);
 });
 await t("AI failure answers in the player's language", async () => {
   fail = Object.assign(new Error("boom"), { code: "ai_failed" });

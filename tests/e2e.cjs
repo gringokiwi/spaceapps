@@ -738,6 +738,62 @@ async function layoutOk(page, label) {
   });
   await check("No errors in the console (Listen)", async () => assert.deepEqual(pj.errors, []));
 
+  /* ---------- L: the state fixes from the audit ---------- */
+  const pl = await newPage(noCam, { camera: false });
+  const demoLs = (page, k) => page.evaluate(k => JSON.parse(localStorage.getItem("debris.demo." + k)), k);
+  await pl.goto(URL0 + "?demo"); await pl.waitForSelector(".wordmark");
+  for (const b of ["Let's go!", "Let's go!", "I'm ready!", "Got it!", "Ready!"]) await tapText(pl, b);
+  await tapText(pl, "Scan litter"); await pl.locator(".shutter").click(); await pl.waitForSelector(".found", { timeout: 8000 });
+  await check("A find that survived a reload can still be called wrong, from the bin screen", async () => {
+    await pl.reload(); await pl.waitForSelector(".holding"); await tapText(pl, "Bin my litter");
+    await tapText(pl, "That's not right, scan again"); await pl.waitForSelector(".scan");
+    assert.equal(await demoLs(pl, "pending"), null); assert.equal((await demoLs(pl, "binned")) || 0, 0, "nothing was binned");
+  });
+  await check("Back after a Space round shows the chapter as a chapter, not 'Now bin your litter!'", async () => {
+    await pl.locator(".shutter").click(); await pl.waitForSelector(".found", { timeout: 8000 });
+    await tapText(pl, "Hear the story"); await tapText(pl, "Now bin your litter!"); await tapText(pl, "It's in the bin!");
+    assert.equal(await h1(pl), "Patch unlocked!"); await pl.goBack(); await pl.waitForSelector(".story");
+    assert.deepEqual((await pl.locator(".story-body .btn").allTextContents()).map(x => x.trim()), ["Back to my jacket"]);
+  });
+  await check("A second tab with older progress can't overwrite newer progress", async () => {
+    const tabB = await pl.context().newPage(); await tabB.goto(URL0 + "?demo#home"); await tabB.waitForSelector(".home-top");
+    await pl.goto(URL0 + "?demo#home"); await pl.waitForSelector(".home-top");
+    await tapText(pl, "Scan litter"); await pl.locator(".shutter").click(); await pl.waitForSelector(".found", { timeout: 8000 });
+    await tapText(pl, "Hear the story"); await tapText(pl, "Now bin your litter!"); await tapText(pl, "It's in the bin!");
+    assert.equal(await demoLs(pl, "binned"), 2);
+    await tabB.locator("#app").getByRole("button", { name: "Scan litter" }).click(); await tabB.locator(".shutter").click(); await tabB.waitForSelector(".found", { timeout: 8000 });
+    assert.equal(await demoLs(tabB, "binned"), 2, "tab B didn't write its old count back"); assert.equal((await demoLs(tabB, "log")).length, 2);
+    await tabB.locator("#app").getByRole("button", { name: "Hear the story" }).click();
+    assert.equal(await h1(tabB), CONTENT.chapters[2].en.title, "tab B picked up the newer progress: chapter 3 is next");
+    await tabB.close();
+  });
+  await check("Changing the language doesn't break what the 3D jacket remembers", async () => {
+    await pl.evaluate(() => localStorage.setItem("debris.demo.jacketSeen", "2")); await pl.goto(URL0 + "?demo#me"); await pl.waitForSelector("#lang");
+    await pl.selectOption("#lang", "pt"); assert.equal(await pl.evaluate(() => localStorage.getItem("debris.demo.jacketSeen")), "2");
+    await pl.selectOption("#lang", "en");
+  });
+  await check("No errors in the console (audit fixes)", async () => assert.deepEqual(pl.errors, []));
+  await check("A touch double tap on \"It's in the bin!\" doesn't skip the patch", async () => {
+    const tc = await noCam.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, deviceScaleFactor: 1 });
+    const pt = await tc.newPage(); await pt.goto(URL0 + "?demo"); await pt.waitForSelector(".wordmark");
+    const tapB = async name => { await pt.waitForTimeout(400); await pt.locator("#app").getByRole("button", { name, exact: false }).first().tap(); };
+    for (const b of ["Let's go!", "Let's go!", "I'm ready!", "Got it!", "Ready!", "Scan litter"]) await tapB(b);
+    await pt.waitForTimeout(400); await pt.locator(".shutter").tap(); await pt.waitForSelector(".found", { timeout: 8000 });
+    await tapB("Hear the story"); await tapB("Now bin your litter!"); await pt.waitForTimeout(400);
+    const box = await pt.locator("[data-act=binned]").boundingBox(), x = box.x + box.width / 2, y = box.y + box.height / 2;
+    await pt.touchscreen.tap(x, y); await pt.touchscreen.tap(x, y);   // a quick double tap
+    await pt.waitForTimeout(300); assert.equal(await h1(pt), "Patch unlocked!");
+    await tc.close();
+  });
+  await check("A pick-up request that never answers doesn't freeze Impact", async () => {
+    const ps = await newPage(noCam, { camera: false });
+    await ps.unroute("**/api/pickup"); await ps.route("**/api/pickup", () => {});   // never answers
+    await ps.addInitScript(() => localStorage.setItem("debris.tickets", '["tk-stuck"]'));
+    await ps.goto(URL0 + "#impact"); await ps.waitForSelector(".tower-card", { timeout: 15000 });
+    assert.ok(/\d/.test(await ps.locator(".total-card .sr-only").textContent()));
+    await ps.context().close();
+  });
+
   /* ---------- D: desktop width ---------- */
   const p4 = await newPage(cam, { width: 1280, height: 860 });
   await p4.goto(URL0); await p4.waitForSelector(".wordmark");

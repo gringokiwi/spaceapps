@@ -21,9 +21,10 @@
 
   /* ---------- Saving on this phone (if the browser blocks it, the game still works without saving) ---------- */
   const PREFIX = DEMO ? "debris.demo." : "debris.";
-  const KEYS = ["lang", "profile", "binned", "log", "pending", "lastNew", "introDone", "safetyDone", "finaleSeen", "jacketSeen", "tickets", "teller", "tellerChosen"];
-  const load = (k, d) => { try { const v = localStorage.getItem(PREFIX + k); return v == null ? d : JSON.parse(v); } catch { return d; } };
-  const save = (k, v) => { try { localStorage.setItem(PREFIX + k, JSON.stringify(v)); } catch {} };
+  const KEYS = ["lang", "profile", "binned", "log", "pending", "lastNew", "introDone", "safetyDone", "finaleSeen", "tickets", "teller", "tellerChosen"];   // saved from S
+  const written = {};   // what this tab last read or wrote for each key: it only writes keys it changed itself, so an older tab can't undo a newer one
+  const load = (k, d) => { try { const v = localStorage.getItem(PREFIX + k); written[k] = v; return v == null ? d : JSON.parse(v); } catch { return d; } };
+  const save = (k, v) => { try { const s = JSON.stringify(v); localStorage.setItem(PREFIX + k, s); written[k] = s; } catch {} };
 
   /* ---------- Words on the screen, in English, Spanish and Portuguese ---------- */
   const UI = {
@@ -218,26 +219,34 @@
   /* ---------- State ---------- */
   const guessLang = () => { const l = String(navigator.language || "en").slice(0, 2).toLowerCase(); return LANGS.includes(l) ? l : "en"; };
   const int = (v, lo, hi) => Number.isInteger(v) ? Math.min(hi, Math.max(lo, v)) : lo;
+  // What is saved on this phone, checked as it is read (see docs/screens-and-state.md)
+  function readSaved() {
+    const profile = load("profile", null), pending = load("pending", null), log = load("log", []), tickets = load("tickets", []);
+    return {
+      lang: LANGS.includes(load("lang")) ? load("lang") : guessLang(),
+      profile: profile && typeof profile.nick === "string" ? profile : null,   // { nick, buddy }
+      binned: int(load("binned", 0), 0, TOTAL),          // patches earned: chapter n is earned when the n-th piece is binned
+      log: Array.isArray(log) ? log : [],                 // every piece binned: [{ date, type }]
+      pending: pending && BINS.includes(pending.bin) ? pending : null,   // the piece in the child's hand: { item, type, bin, saved, ticket }
+      lastNew: int(load("lastNew", 0), 0, TOTAL),
+      tickets: (Array.isArray(tickets) ? tickets : []).filter(x => typeof x === "string").slice(-50),   // pick-ups waiting to be counted on the server
+      introDone: !!load("introDone", false), safetyDone: !!load("safetyDone", false), finaleSeen: !!load("finaleSeen", false),
+      teller: load("teller") === "boi" ? "boi" : "space",   // who tells the story: "space" (the storyboard) or "boi" (the Bull)
+      tellerChosen: !!load("tellerChosen", false)
+    };
+  }
   const S = {
-    lang: LANGS.includes(load("lang")) ? load("lang") : guessLang(),
-    profile: load("profile", null),                    // { nick, buddy }
-    binned: int(load("binned", 0), 0, TOTAL),          // patches earned: chapter n is earned when the n-th piece is binned
-    log: Array.isArray(load("log", [])) ? load("log", []) : [],   // every piece binned: [{ date, type }]
-    pending: load("pending", null),                    // the piece in the child's hand: { item, type, bin, saved }
-    lastNew: int(load("lastNew", 0), 0, TOTAL),
-    tickets: (Array.isArray(load("tickets", [])) ? load("tickets", []) : []).filter(x => typeof x === "string").slice(-50),   // pick-ups waiting to be counted on the server
-    introDone: !!load("introDone", false), safetyDone: !!load("safetyDone", false), finaleSeen: !!load("finaleSeen", false),
-    teller: load("teller") === "boi" ? "boi" : "space",   // who tells the story: "space" (the storyboard) or "boi" (the Boi de Mamão)
-    tellerChosen: !!load("tellerChosen", false),
+    ...readSaved(),
     boi: null,        // the Boi's lines (boi.json); if they don't load, the app runs with the space story only
     content: null, pickups: null, counterAt: 0, impact: null,   // pickups: confirmed in the bin (Home, Impact)
     view: null,       // { name, params }
     scan: null,       // this round's photo and answer: { kind, image, result, message }. Never saved.
     earned: null      // the newest pick-up moment: { n } (patch earned) or { extra } (pieces binned), and whether it has played
   };
-  if (!S.profile || typeof S.profile.nick !== "string") S.profile = null;
-  if (S.pending && !BINS.includes(S.pending.bin)) S.pending = null;
-  const persist = () => KEYS.forEach(k => save(k, S[k]));
+  let wiping = false;   // "Start over" is erasing this phone: nothing may be written back
+  const persist = () => { if (!wiping) KEYS.forEach(k => { if (JSON.stringify(S[k]) !== written[k]) save(k, S[k]); }); };
+  // Another tab saved something: take it, so this tab never writes older progress back over it
+  window.addEventListener("storage", e => { if (e.key && e.key.startsWith(PREFIX) && KEYS.includes(e.key.slice(PREFIX.length))) Object.assign(S, readSaved()); });
 
   /* ---------- Text helpers ---------- */
   const lookup = (o, path) => path.split(".").reduce((x, k) => (x == null ? x : x[k]), o);
@@ -280,6 +289,7 @@
   };
   function steps(screen) {
     const names = isBoi() ? t("stepsBoi") : t("steps.names"), i = ROUND[isBoi() ? "boi" : "space"][screen];
+    if (!i) return "";
     return h`<div class="steps" role="img" aria-label="${t("steps.label", { i, name: names[i - 1] })}">${names.map((nm, k) =>
       k + 1 < i ? h`<span class="dot done"></span>` : k + 1 === i ? h`<span class="cur">${k + 1} ${nm}</span>` : h`<span class="dot"></span>`)}</div>`;
   }
@@ -545,6 +555,7 @@
   };
 
   screens.story = ({ n, from = "round" }) => {
+    if (from === "round" && !(S.pending && n === S.binned + 1)) from = "jacket";   // Back after the piece was binned: just the chapter
     const ch = chapter(n), c = L(ch), round = from === "round", boiRound = from === "boi", img = safeImg(ch.image);
     const back = round ? (S.scan && S.scan.kind === "found" ? backBtn(t("found.back"), goAttrs("found")) : backBtn(t("back"), goAttrs("home")))
       : boiRound ? backBtn(t("back"), isBoi() ? goAttrs("feast", { n }) : goAttrs("home")) : backBtn(t("back"), goAttrs(from));
@@ -587,7 +598,8 @@
       <div class="legend${p.bin === "special_dropoff" ? " four" : ""}" role="list" aria-label="${t("bin.legend")}">${["white", "green", "black"].map(k => binChip(k, k === p.bin))}${p.bin === "special_dropoff" ? binChip("special_dropoff", true) : ""}</div>
       <div class="grow"></div>
       <button type="button" class="btn btn-primary" data-act="binned">${ico("check", { size: 28, width: 2.6 })}${p.bin === "special_dropoff" ? t("bin.doneSpecial") : t("bin.done")}</button>
-      <button type="button" class="btn-link" data-act="later">${t("bin.later")}</button>` };
+      <button type="button" class="btn-link" data-act="later">${t("bin.later")}</button>
+      <button type="button" class="btn-link" data-act="wrong">${t("found.wrong")}</button>` };
   };
 
   /* The moment a piece goes in the bin. Each one is its own history entry, { n } (the patch it earned) or { extra } (a piece
@@ -938,7 +950,7 @@
     story: p => Number.isInteger(p.n) && p.n >= 1 && p.n <= TOTAL && (p.from === "explore" || p.n <= S.binned || (!!S.pending && p.n === S.binned + 1)),
     explore: () => true, usage: () => true,
     bin: () => !!S.pending,
-    unlocked: earnedOk,
+    unlocked: p => !isBoi() && earnedOk(p),
     feast: p => isBoi() && earnedOk(p),
     finale: () => S.binned >= TOTAL,
     impact: () => true
@@ -969,8 +981,12 @@
     S.view = { name, params };
     render(true);
   });
+  let shownAt = 0, touchAt = -Infinity;   // when the screen on show appeared; when the last touch began (mouse and pen never count)
+  app.addEventListener("pointerdown", e => { touchAt = e.pointerType === "touch" ? e.timeStamp : -Infinity; });
+  const carriedOver = () => touchAt >= shownAt && touchAt - shownAt < 350;   // a touch that began just after the screen changed: the second tap of a double tap
   function render(focus) {
     const { name, params } = S.view;
+    if (focus) shownAt = performance.now();
     const active = document.activeElement, keep = active && active.id, keepHeading = !!active && active.tagName === "H1";
     const v = screens[name](params || {});
     app.className = "screen " + v.theme + (v.cls ? " " + v.cls : "");
@@ -993,7 +1009,7 @@
   /* ---------- Taps ---------- */
   app.addEventListener("click", e => {
     const el = e.target.closest("[data-go],[data-act]");
-    if (!el || !app.contains(el)) return;
+    if (!el || !app.contains(el) || carriedOver()) return;
     if (isBoi()) sound.unlock();
     if (el.dataset.go) {
       const params = {};
@@ -1014,6 +1030,7 @@
     e.target.removeAttribute("aria-invalid");
   });
   app.addEventListener("submit", e => {
+    if (carriedOver()) return e.preventDefault();
     const tf = e.target.closest("form[data-form=teller]");
     if (tf) {
       e.preventDefault();
@@ -1055,7 +1072,8 @@
     later: () => { if (S.pending) { S.pending.saved = true; persist(); } go("home"); },
     reset: () => {
       if (!window.confirm(t("me.resetConfirm"))) return;
-      KEYS.forEach(k => { try { localStorage.removeItem(PREFIX + k); } catch {} });
+      wiping = true;
+      KEYS.concat("jacketSeen").forEach(k => { try { localStorage.removeItem(PREFIX + k); } catch {} });
       location.replace(location.pathname + location.search);
     },
     reload: () => location.reload(),
@@ -1189,8 +1207,10 @@
     sending = (async () => {
       while (S.tickets.length) {
         let r, j = {};
-        try { r = await fetch("/api/pickup", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ticket: S.tickets[0] }) }); j = await r.json().catch(() => ({})); }
-        catch { break; }                                              // offline: try again later
+        const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 10000);
+        try { r = await fetch("/api/pickup", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ticket: S.tickets[0] }), signal: ctl.signal }); j = await r.json().catch(() => ({})); }
+        catch { break; }                                              // offline or no answer: try again later
+        finally { clearTimeout(timer); }
         if (!(r.ok || r.status === 400 || r.status === 410)) break;   // the server can't count right now
         S.tickets = S.tickets.slice(1); persist();                   // counted, already counted, or never countable
         if (r.ok && typeof j.pickups === "number") { S.pickups = j.pickups; S.counterAt = Date.now(); }
@@ -1285,6 +1305,7 @@
   }
 
   /* ---------- Confetti ---------- */
+  let confettiTimer = 0;
   function confetti() {
     if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const box = document.getElementById("confetti"), colors = ["#FF7A1A", "#FFC98F", "#FFF4E8", "#2F9E73", "#FF7A9C", "#A07EFF"];
@@ -1296,7 +1317,7 @@
       c.style.animationDuration = 1.6 + Math.random() * 1.6 + "s"; c.style.animationDelay = Math.random() * 0.4 + "s";
       box.appendChild(c);
     }
-    setTimeout(() => { box.textContent = ""; }, 3800);
+    clearTimeout(confettiTimer); confettiTimer = setTimeout(() => { box.textContent = ""; }, 3800);
   }
 
   /* ---------- Start ---------- */
@@ -1307,16 +1328,18 @@
       fetch("boi.json", { cache: "no-cache" }).then(r => (r.ok ? r.json() : null)),
       new Promise(ok => setTimeout(() => ok(null), 8000))
     ]).then(validBoi).catch(() => null);
+    let content;
     try {
       const r = await fetch("content.json", { cache: "no-cache" });
       if (!r.ok) throw new Error("content");
-      S.content = await r.json();
+      content = await r.json();
     } catch {
       app.className = "screen t-blue";
       app.innerHTML = h`<div class="grow center-col"><h1>${t("errors.load")}</h1></div><button type="button" class="btn btn-primary" data-act="reload">${t("retry.again")}</button>`.s;
       return;
     }
     S.boi = await boiLines;
+    S.content = content;   // only now may Back and Forward draw screens (the popstate handler waits for the stories)
     // A piece found before the page was closed is still in the child's hand: it waits on Home to be binned.
     if (S.pending && !S.pending.saved) { S.pending.saved = true; persist(); }
     sendTickets();   // pick-ups confirmed while offline are counted now

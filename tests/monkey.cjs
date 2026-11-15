@@ -38,7 +38,7 @@ async function walk(browser, URL0, seed, steps) {
   const state = async () => { await page.waitForSelector("#app h1", { timeout: 6000 }).catch(() => {}); return page.evaluate(() => { const g = k => { try { return JSON.parse(localStorage.getItem("debris." + k)); } catch { return null; } };
     const h = document.querySelector("#app h1");
     return { binned: g("binned") || 0, log: (g("log") || []).length, teller: g("teller"), hash: location.hash, histName: history.state && history.state.name,
-      h1: h ? h.textContent.trim() : "", exits: document.querySelectorAll("#app button:not([disabled]), #app a, #app input[type=submit], #app label.teller-card, #app label.buddy").length,
+      h1: h ? h.textContent.trim() : "", text: (document.getElementById("app") || {}).textContent || "", exits: document.querySelectorAll("#app button:not([disabled]), #app a, #app input[type=submit], #app label.teller-card, #app label.buddy").length,
       cls: (document.getElementById("app") || {}).className || "(no app yet)" }; }); };
   const fail = (why, extra = "") => { throw new Error(`seed ${seed}: ${why} ${extra}\n  trail: ${trail.slice(-14).join(" → ")}`); };
   await page.goto(URL0); await page.waitForSelector("#app h1");
@@ -71,6 +71,7 @@ async function walk(browser, URL0, seed, steps) {
     const s = await state();
     if (errors.length) fail("page error", errors.join(" | "));
     if (!s.h1) fail("screen without a heading", s.cls);
+    if (/\bundefined\b|\bNaN\b/.test(s.text)) fail("'undefined' or 'NaN' on screen", s.cls);
     if (!s.exits && !/scan/.test(s.cls)) fail("dead end: no way out", s.cls);
     if (s.binned < prev.binned) fail("patches went down", `${prev.binned} → ${s.binned}`);
     if (s.log < prev.log) fail("cleanup log shrank", `${prev.log} → ${s.log}`);
