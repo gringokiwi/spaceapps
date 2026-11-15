@@ -21,21 +21,24 @@ No payments, no accounts, no ads. The scanner is adapted from Litter Spotter in 
 4. Photos of people or screens, or things that aren't litter, don't count. Eagle asks for another photo.
 5. **My jacket** shows all 13 patches; tap one to hear its story again. **Me** has the cleanup log, the language (English, Español, Português) and a section for grown-ups.
 6. After chapter 13: the **finale**, with the pieces collected, every patch and a map of the 13 resting places. Children can keep scanning after that; nothing is ever lost.
+7. **Impact** (in the menu) shows how much litter everyone has picked up: a big total that counts up, and a "Litter to the Moon" tower that stacks every piece at 10 cm and compares it with famous tall things on the way to the Moon (see the team's spec, *Impact Screen Spec: Litter to the Moon*). Only confirmed pick-ups count: a piece adds 1 to the shared total when a child taps "It's in the bin!", never for a scan alone, a dangerous find or a find the child rejects.
 
-Add `?demo` to the address to show the app without the scanner: Eagle pretends to scan (no camera needed), and demo progress is kept apart from real progress.
+Add `?demo` to the address to show the app without the scanner: Eagle pretends to scan (no camera needed), and demo progress is kept apart from real progress. On the Impact screen, demo mode shows sample data with a "Demo data" label: 1,284 pieces, or any total with `?demo&total=N`.
 
 ## Files
 
 | File | What it is |
 |---|---|
 | `index.html`, `style.css`, `game.js` | The app: screens, the round, camera, read-aloud, and every word on screen in English, Spanish and Portuguese |
-| `art.js` | The drawings as SVG: Eagle, the crew buddies, the 13 chapter patches, the bins, the finale map |
+| `art.js` | The drawings as SVG: Eagle, the crew buddies, the 13 chapter patches, the bins, the finale map, the Impact milestones, tower and Earth-to-Moon strip |
+| `impact.js` | The Impact screen's milestones (the spec's `MILESTONES`, unchanged) and maths: tower height, milestone passed and next, progress between them, the log-scale strip, and heights in each language's number format |
 | `content.json` | The story in English, Spanish and Portuguese: opening scene, 13 chapters, finale. English is the storyboard word for word. `links` are the storyboard's sources; `image` can hold a NASA picture per chapter |
 | `docs/abandoned-but-not-forgotten-storyboard.md` | The team's storyboard, exported from the team's doc |
 | `img/chapters/` | NASA images for the chapters go here (e.g. `img/chapters/1.jpg`, then set `"image": "img/chapters/1.jpg"` in `content.json`). Until then each chapter shows its patch |
 | `server.mjs` | The app as one Node server, for Railway or any host that runs `npm start`: serves the app's files (and nothing else from the repo) and the `/api` routes below, plus `GET /api/health`. Counters go in a file on a volume |
 | `netlify/functions/scan.mjs` | `POST /api/scan` `{image, lang}`: sends the photo to Claude and answers in the player's language. The photo is never stored |
-| `netlify/functions/counter.mjs` | `GET /api/counter`: how many pieces of litter all players have found |
+| `netlify/functions/pickup.mjs` | `POST /api/pickup` `{ticket}`: adds exactly 1 to the shared total for a confirmed pick-up. Each ticket counts once; sending it again answers 200 without counting |
+| `netlify/functions/counter.mjs` | `GET /api/counter`: how many pieces of litter all players have confirmed in the bin |
 | `netlify/lib/scanner.mjs` | The scanner (Claude Haiku with vision). Returns `is_trash` (yes / no / unsure), `type`, `bin`, `dangerous`, `item` (a short name, like "Plastic wrapper"), `message` and `photo_problem` |
 | `netlify/lib/common.mjs` | Photo limits, storage (Netlify Blobs on Netlify; a JSON file or memory with `server.mjs`) and helpers |
 
@@ -44,7 +47,10 @@ Add `?demo` to the address to show the app without the scanner: Eagle pretends t
 - Photos are never saved: the phone shrinks them, the server sends them once to Claude and forgets them. The camera stops as soon as the child leaves the scan screen.
 - No names, emails or personal data. The profile is a nickname and a crew buddy in `localStorage`.
 - Progress, patches and the cleanup log (date and type of each piece) live on the phone.
-- The server only keeps counters: pieces found, and photos analysed per day (in Netlify Blobs, or in a small file on the Railway volume). The per-player limit uses a sha256 of the IP and the day; the IP itself is never stored or logged.
+- The app never asks for the phone's location.
+- The shared total only ever goes up by 1. A scan of litter that is safe to pick up returns a one-time ticket: a random number and an expiry (14 days), signed by the server, with nothing about the child, the place or the photo. The phone sends it back when the child confirms the pick-up, and keeps it until it can (offline is fine). The server remembers used tickets until they expire, so none counts twice.
+- The server only keeps counters: pieces picked up, photos analysed per day, and used tickets (in Netlify Blobs, or in a small file on the Railway volume).
+- Photos do leave the phone, once each, to be checked by the scanner (Claude). That is why the Impact spec's line "We never collect your location or upload your photos" is not shown. The per-player limit uses a sha256 of the IP and the day; the IP itself is never stored or logged.
 
 ## Bins
 
@@ -80,6 +86,7 @@ Then open http://localhost:3000 (or http://localhost:3000/?demo without a key).
 - Server, with a fake Claude: Spanish and Portuguese answers, the new `item` field, a person in the photo (no name kept), sharp things marked dangerous, unknown language, AI failure, bad photo, per-player limit, scanner switched off, counter, and that the photo is never stored.
 - Whole app in Chromium with a fake camera (phone 390 × 844, 320 × 640 in Spanish, desktop): onboarding, a full round, chapters 1, 2 and 13 checked against the storyboard, danger, retake, not litter, server error, save for later across a reload, jacket, cleanup log, Spanish and Portuguese, special drop-off, the finale and a 14th piece, no camera (file picker), demo mode with no server, the back button, no sideways scroll, and buttons at least 44 px.
 - `server.mjs`: the app's files are served and everything else is hidden (server code, `node_modules`, `.git`, `..` tricks), the API routes, the 2 MB body limit, security headers, and counters kept across a restart. The whole browser test above also passes behind it.
+- Impact: the tower maths against the spec's examples and every boundary (0, 1, 5, 11, 12, 379, 380, 96/97, 1,284, Everest, the ISS, the Moon) and number formats; tickets on the server (one +1 per confirmed pick-up, a second phone sees it, replayed, simultaneous, forged and expired tickets don't count, dangerous finds get none); in the browser, the count-up, reduce-motion, the spec's lines in English, Portuguese and Spanish, the Moon line at 96/97, the Demo data label, `?total` ignored outside demo, an offline pick-up counted later, and no location requested.
 - **Not yet**: the real Claude key with real photos, and NASA pictures for the chapters.
 
 ## The 3D explorer jacket

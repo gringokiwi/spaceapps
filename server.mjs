@@ -1,6 +1,6 @@
 /* debris as one Node server, for Railway or any host that runs `npm start`.
    It serves the app's files and the same API routes as the Netlify functions:
-   POST /api/scan, GET /api/counter, and GET /api/health for the host's health check.
+   POST /api/scan, POST /api/pickup, GET /api/counter, and GET /api/health for the host's health check.
    The counters go in a JSON file on a volume (RAILWAY_VOLUME_MOUNT_PATH, or STORE_DIR);
    without a volume they live in memory and start again from zero after each deploy. */
 import http from "node:http";
@@ -9,6 +9,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import scan from "./netlify/functions/scan.mjs";
 import counter from "./netlify/functions/counter.mjs";
+import pickup from "./netlify/functions/pickup.mjs";
 import { setStore, memoryStore, fileStore } from "./netlify/lib/common.mjs";
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
@@ -20,7 +21,7 @@ const store = storeDir ? fileStore(path.join(storeDir, "debris-counters.json")) 
 setStore(store);
 
 /* Only the app's own files are served: never the server code, node_modules or anything hidden. */
-const FILES = new Set(["index.html", "style.css", "game.js", "art.js", "jacket3d.js", "content.json"]);
+const FILES = new Set(["index.html", "style.css", "game.js", "art.js", "impact.js", "jacket3d.js", "content.json"]);
 const FOLDERS = ["img/", "docs/"];
 const TYPES = { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json; charset=utf-8",
   ".svg": "image/svg+xml", ".glb": "model/gltf-binary", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".md": "text/markdown; charset=utf-8" };
@@ -31,7 +32,7 @@ const SECURITY = {
   "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
 };
 
-const API = { "/api/scan": scan, "/api/counter": counter };
+const API = { "/api/scan": scan, "/api/counter": counter, "/api/pickup": pickup };
 
 function send(res, status, body, headers = {}) {
   const text = typeof body === "string" ? body : JSON.stringify(body);

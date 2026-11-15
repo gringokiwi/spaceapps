@@ -108,7 +108,8 @@ ${mouth}`;
     checkCircle: `<circle cx="12" cy="12" r="9.5"/><path d="M7.5 12.5 10.5 15.5 16.5 9"/>`,
     image: `<rect x="3" y="4.5" width="18" height="15" rx="3"/><circle cx="8.5" cy="10" r="1.8"/><path d="m4 17 5-4.5 4 3.5 3-2.5 4 3.5"/>`,
     external: `<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>`,
-    refresh: `<path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/>`
+    refresh: `<path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/>`,
+    impact: `<path d="M19.5 14.5A8.5 8.5 0 1 1 9.5 4.5a7 7 0 0 0 10 10z"/><path d="M17 3.5v3M15.5 5h3"/>`
   };
   function icon(name, { size = 24, width = 2.3, cls = "" } = {}) {
     return `<svg class="ico ${cls}" viewBox="0 0 24 24" width="${size}" height="${size}" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round">${ICON[name] || ""}</svg>`;
@@ -186,5 +187,51 @@ ${pins}
 </svg>`;
   }
 
-  window.ART = { eagle, eagleHead, buddy, BUDDIES, patch, icon, play, scene, frame, bin, sparkles, map };
+  /* ---------- Impact: litter to the Moon ---------- */
+  // Simple silhouettes of the tower's milestones (48 × 48), in the colour of the text around them.
+  const MILESTONE_ART = {
+    kid: `<circle cx="24" cy="8" r="5.5"/><path d="M17 18 q7 -4 14 0 l-1 13 h-12 z"/><path d="M18 30 h5 v15 h-5z M25 30 h5 v15 h-5z"/><path d="M17 19 l-6 9 M31 19 l6 9" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"/>`,
+    cristo: `<circle cx="24" cy="7" r="3.6"/><path d="M3 13 h42 v4 h-42z"/><path d="M20 12 h8 l3 26 h-14z"/><path d="M16 38 h16 v8 h-16z"/>`,
+    liberty: `<path d="M14 46 l3 -10 h14 l3 10z"/><path d="M19 36 l2 -19 h6 l2 19z"/><circle cx="24" cy="13" r="3.4"/><path d="M20 10 l-2 -3 M24 9 v-4 M28 10 l2 -3 M27 18 l6 -12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/><path d="M33 6 q-3 -3 0 -6 q3 3 0 6z" fill="#FF7A1A"/>`,
+    saturnV: `<path d="M24 2 c3 3 4 7 4 11 v25 h-8 v-25 c0 -4 1 -8 4 -11z"/><path d="M20 30 l-5 12 h5z M28 30 l5 12 h-5z"/><path d="M21 38 h6 l1 6 h-8z"/><path d="M20 19 h8 M20 29 h8" stroke="${NAVY}" stroke-width="1.6"/>`,
+    oneWTC: `<path d="M17 46 l3 -35 h8 l3 35z"/><path d="M24 11 v-10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M24 11 L19.5 46 M24 11 L28.5 46" stroke="${NAVY}" stroke-width="1"/>`,
+    burj: `<path d="M17 46 V38 H19 V29 H21 V20 H22.5 V11 H23.5 V2 L24 0.5 L24.5 2 V11 H25.5 V20 H27 V29 H29 V38 H31 V46 Z"/>`,
+    everest: `<path d="M1 46 L17 18 L22 25 L29 10 L47 46 Z" fill="#8FA3EA"/><path d="M29 10 L24.6 19 L27 17.5 L29.5 20.5 L32 17.8 L33.6 18.4 Z"/>`,
+    iss: `<path d="M3 24 h42" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><rect x="5" y="12" width="9" height="24" rx="1"/><rect x="34" y="12" width="9" height="24" rx="1"/><rect x="15.5" y="15" width="5" height="18" rx="1"/><rect x="27.5" y="15" width="5" height="18" rx="1"/><rect x="20" y="20" width="8" height="8" rx="2"/>`,
+    moon: `<circle cx="24" cy="24" r="19" fill="#C9D3FA"/><circle cx="17" cy="19" r="4" fill="#A9B4D6"/><circle cx="29" cy="31" r="5" fill="#A9B4D6"/><circle cx="31" cy="15" r="2.5" fill="#A9B4D6"/>`
+  };
+  const milestone = id => `<svg class="ms-art" viewBox="0 0 48 48" aria-hidden="true" fill="currentColor">${MILESTONE_ART[id] || ""}</svg>`;
+
+  // The litter tower between two milestones: cans, bottles and wrappers stacked up to `progress` (0 to 1).
+  function stack(progress) {
+    const top = 14, ground = 196, h = Math.max(0, Math.min(1, progress)) * (ground - top);
+    return `<svg class="litter-stack" viewBox="0 0 120 200" aria-hidden="true">
+<defs><pattern id="litterPattern" width="40" height="24" patternUnits="userSpaceOnUse">
+<rect width="40" height="24" fill="#2F55D6"/>
+<rect x="2" y="3" width="11" height="18" rx="3" fill="#E0553B"/><rect x="2" y="7" width="11" height="4" fill="${CREAM}" opacity=".85"/>
+<rect x="16" y="7" width="9" height="15" rx="3" fill="#8FD3C1"/><rect x="18.5" y="3" width="4" height="5" rx="1" fill="#2F9E73"/>
+<rect x="28" y="9" width="9" height="9" rx="2" fill="#FF7A9C"/><path d="M28 10 l-2 -2 v11 l2 -2z M37 10 l2 -2 v11 l-2 -2z" fill="#E8457A"/>
+</pattern></defs>
+<path d="M4 ${top} H116" stroke="#FFC98F" stroke-width="2.5" stroke-dasharray="4 5" stroke-linecap="round"/>
+${h > 0 ? `<rect class="stack-fill" x="22" y="${(ground - h).toFixed(1)}" width="76" height="${h.toFixed(1)}" rx="8" fill="url(#litterPattern)" stroke="${CREAM}" stroke-width="2.5"/>` : ""}
+<path d="M4 ${ground + 1} H116" stroke="${CREAM}" stroke-width="3" stroke-linecap="round"/>
+</svg>`;
+  }
+
+  // From Earth to the Moon on a log scale: a dot per milestone, the tower's place marked.
+  function strip(dots, at, L, label) {
+    const x0 = 26, x1 = 294, X = p => (x0 + p * (x1 - x0)).toFixed(1), tx = X(at);
+    const esc = s => String(s).replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+    return `<svg class="strip" viewBox="0 0 320 66" ${aria(label)}>
+<path d="M${x0} 30 H${x1}" stroke="#8FA3EA" stroke-width="3" stroke-linecap="round"/>
+<path d="M${x0} 30 H${tx}" stroke="${ORANGE}" stroke-width="5" stroke-linecap="round"/>
+${dots.map(d => `<circle cx="${X(d.pos)}" cy="30" r="4.5" fill="${d.passed ? ORANGE : NAVY}" stroke="${d.passed ? CREAM : "#8FA3EA"}" stroke-width="2"/>`).join("")}
+<circle cx="13" cy="30" r="11" fill="#1F43C4" stroke="#8FA3EA" stroke-width="2"/><path d="M7 26 q4 -5 8 -1 q3 4 -2 7 q-5 2 -6 -6z M15 33 q4 -2 6 2 q-2 4 -6 2z" fill="#2F9E73"/>
+<circle cx="307" cy="30" r="11" fill="#C9D3FA"/><circle cx="303" cy="27" r="2.6" fill="#A9B4D6"/><circle cx="310" cy="34" r="3" fill="#A9B4D6"/>
+<path d="M${tx} 22 l-6 -10 h12 z" fill="#FFC98F" stroke="${NAVY}" stroke-width="1.5" stroke-linejoin="round"/>
+<text class="lbl" x="13" y="60" text-anchor="middle">${esc(L.earth)}</text><text class="lbl" x="307" y="60" text-anchor="middle">${esc(L.moon)}</text>
+</svg>`;
+  }
+
+  window.ART = { eagle, eagleHead, buddy, BUDDIES, patch, icon, play, scene, frame, bin, sparkles, map, milestone, stack, strip };
 })();

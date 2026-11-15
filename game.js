@@ -12,11 +12,14 @@
   const LANGS = ["en", "es", "pt"];
   const BINS = ["white", "green", "black", "special_dropoff"];
   const DEMO = /[?&]demo\b/.test(location.search);
+  /* In demo mode the Impact screen shows sample data, labelled "Demo data": 1,284 pieces (the spec's worked example), or ?total=N. */
+  const demoParam = DEMO && /[?&]total=(\d{1,12})(?:&|$)/.exec(location.search);
+  let demoTotal = demoParam ? Number(demoParam[1]) : 1284;
   const app = document.getElementById("app");
 
   /* ---------- Saving on this phone (if the browser blocks it, the game still works without saving) ---------- */
   const PREFIX = DEMO ? "debris.demo." : "debris.";
-  const KEYS = ["lang", "profile", "binned", "log", "pending", "lastNew", "introDone", "safetyDone", "finaleSeen", "jacketSeen"];
+  const KEYS = ["lang", "profile", "binned", "log", "pending", "lastNew", "introDone", "safetyDone", "finaleSeen", "jacketSeen", "tickets"];
   const load = (k, d) => { try { const v = localStorage.getItem(PREFIX + k); return v == null ? d : JSON.parse(v); } catch { return d; } };
   const save = (k, v) => { try { localStorage.setItem(PREFIX + k, JSON.stringify(v)); } catch {} };
 
@@ -26,7 +29,7 @@
       langName: "English",
       demo: "Demo mode: Eagle pretends to scan, so you can try every screen. The real game uses AI.",
       back: "Back", menu: "Menu", listen: "Listen", stop: "Stop",
-      nav: { home: "Home", jacket: "Jacket", me: "Me" },
+      nav: { home: "Home", jacket: "Jacket", impact: "Impact", me: "Me" },
       welcome: { mascot: "Eagle the lander, the debris mascot", tagline: "Every piece left behind has a story.", body: "Pick up litter on Earth. Unlock the stories of the machines we left on the Moon and Mars.", go: "Let's go!", grownups: "For grown-ups", language: "Language" },
       opening: { kicker: "The story begins", hook: "Did you know?", go: "I'm ready!" },
       safety: { bubble: "Hi, I'm Eagle! Four quick rules before we explore.", title: "Stay safe out there", go: "Got it!",
@@ -34,7 +37,7 @@
       profile: { title: "What should we call you?", sub: "Pick a space nickname. Don't use your real name.", nick: "Nickname", nickMissing: "Type a nickname first.", buddy: "Choose your crew buddy", privacy: "Your nickname and buddy stay on this phone. No account, no email.", go: "Ready!",
         names: ["MoonWalker", "StarHopper", "CometKid", "RocketFox", "OrbitRider", "Stardust"] },
       home: { title: "Home", patches: "{n} of {total}", patchesLabel: "{n} of {total} patches. Open my jacket", meLabel: "My profile: {nick}", jacket: "My explorer jacket",
-        toGo: { one: "1 patch to go", other: "{n} patches to go" }, allDone: "Every patch earned!", counter: "Kids everywhere have found {n} pieces of litter.", schools: "Bring debris to your school or your next beach cleanup!",
+        toGo: { one: "1 patch to go", other: "{n} patches to go" }, allDone: "Every patch earned!", counter: "Kids everywhere have picked up {n} pieces of litter.", schools: "Bring debris to your school or your next beach cleanup!",
         scan: "Scan litter", holding: "You're holding: {item}", holdingSub: "Bin it to earn your next patch.", binNow: "Bin my litter", finale: "See the finale", finaleSub: "All 13 patches are on your jacket." },
       steps: { names: ["Scan", "Story", "Bin it", "Patch"], label: "Step {i} of 4: {name}" },
       scan: { close: "Close and go home", hint: "Fit one piece of litter inside the frame", shutter: "Take the photo", privacy: "No people or faces in the photo. We check it, then delete it.",
@@ -64,12 +67,18 @@
         "This app doesn't keep the photo: not on our server, not in our logs and not on this phone.",
         "Photos of people, faces or screens don't count. Eagle asks for another photo instead.",
         "The nickname, crew buddy, patches and cleanup log stay on this phone. There are no accounts, payments or ads.",
-        "To keep the AI affordable, each phone can send a limited number of photos a day. The server keeps only counts, never the photo or the address it came from."] },
+        "To keep the AI affordable, each phone can send a limited number of photos a day. The server keeps only counts, and random one-time numbers that stop a pick-up being counted twice: never the photo or the address it came from."] },
       usage: { title: "Live usage", intro: "Real numbers from this app, counted as kids scan. They refresh on their own.", all: "Everyone, so far", today: "Today", total: "pieces found", players: "players", photos: "photos scanned", pieces: "pieces found", note: "Only numbers are counted: no names, no photos. A day is counted in UTC time.", demo: "Demo mode doesn't show live numbers. Open the app without ?demo to see them.", wait: "Getting the numbers…", fail: "The numbers aren't available right now." },
       explore: { title: "All the stories", hint: "For teachers, parents and judges: open any chapter without scanning. Your patches stay the same.", back: "Back to all the stories" },
       sources: { title: "Where the stories come from", intro: "Every chapter comes from the team's storyboard, “Abandoned but Not Forgotten”. These are the pages its facts come from." },
       finale: { kicker: "You did it!", count: { one: "You picked up 1 piece of litter!", other: "You picked up {n} pieces of litter!" }, map: "Where they rest today", patches: "Your patches", home: "Back to home",
         mapLabel: "A map of the 13 resting places: 4 on the Moon, 5 on Mars, and 4 more out in space." },
+      impact: { title: "Our impact", pilot: "Pilot: Florianópolis", totalLabel: "pieces of litter picked up",
+        moonBags: "That's more than all the bags astronauts left on the Moon!",
+        towerPassed: "Our litter tower is {height} tall, taller than {passed}!", towerStart: "Our litter tower is {height} tall!",
+        nextStop: "Next stop: {next}", reachedMoon: "We reached the Moon!", assumption: "If every piece were stacked 10 cm high.",
+        demoData: "Demo data", loading: "Counting…", error: "The total didn't load. Check the internet and try again.", again: "Try again",
+        strip: "From Earth to the Moon: our litter tower is {height} so far.", earth: "Earth", moon: "Moon" },
       bodies: { moon: "Moon", mars: "Mars", deep: "Deep space", eros: "Asteroid", sun: "Around the Sun", ceres: "Ceres" },
       map: { sun: "Sun", earth: "Earth", moon: "Moon", mars: "Mars", eros: "Eros", ceres: "Ceres", deep: "Deep space" },
       types: { plastic: "plastic", can: "can", paper_cardboard: "paper or cardboard", glass: "glass", organic: "food scraps", batteries_electronics: "batteries or electronics", chemicals: "chemicals", sharp_object: "something sharp", other: "litter", none: "not litter" },
@@ -79,7 +88,7 @@
       langName: "Español",
       demo: "Modo demo: Eagle finge escanear para que puedas probar todas las pantallas. El juego de verdad usa IA.",
       back: "Atrás", menu: "Menú", listen: "Escuchar", stop: "Parar",
-      nav: { home: "Inicio", jacket: "Chaqueta", me: "Yo" },
+      nav: { home: "Inicio", jacket: "Chaqueta", impact: "Impacto", me: "Yo" },
       welcome: { mascot: "Eagle, el módulo lunar, la mascota de debris", tagline: "Todo lo que se queda atrás tiene una historia.", body: "Recoge basura en la Tierra. Desbloquea las historias de las máquinas que dejamos en la Luna y en Marte.", go: "¡Vamos!", grownups: "Para adultos", language: "Idioma" },
       opening: { kicker: "Empieza la historia", hook: "¿Sabías que…?", go: "¡Empecemos!" },
       safety: { bubble: "¡Hola, soy Eagle! Cuatro reglas rápidas antes de explorar.", title: "Cuídate allá afuera", go: "¡Entendido!",
@@ -87,7 +96,7 @@
       profile: { title: "¿Cómo te llamamos?", sub: "Elige un apodo espacial. No uses tu nombre real.", nick: "Apodo", nickMissing: "Primero escribe un apodo.", buddy: "Elige quién viaja contigo", privacy: "Tu apodo y tu elección se quedan en este teléfono. Sin cuenta, sin correo.", go: "¡Listo!",
         names: ["CaminaLunas", "SaltaEstrellas", "Cometa", "ZorroCohete", "Órbita", "PolvoEstelar"] },
       home: { title: "Inicio", patches: "{n} de {total}", patchesLabel: "{n} de {total} parches. Abrir mi chaqueta", meLabel: "Mi perfil: {nick}", jacket: "Mi chaqueta de exploración",
-        toGo: { one: "Falta 1 parche", other: "Faltan {n} parches" }, allDone: "¡Tienes todos los parches!", counter: "Niños y niñas de todas partes han encontrado {n} pedazos de basura.", schools: "¡Lleva debris a tu escuela o a tu próxima limpieza de playa!",
+        toGo: { one: "Falta 1 parche", other: "Faltan {n} parches" }, allDone: "¡Tienes todos los parches!", counter: "Niños y niñas de todas partes han recogido {n} pedazos de basura.", schools: "¡Lleva debris a tu escuela o a tu próxima limpieza de playa!",
         scan: "Escanear basura", holding: "Tienes en la mano: {item}", holdingSub: "Échala en la caneca para ganar tu próximo parche.", binNow: "Botar mi basura", finale: "Ver el gran final", finaleSub: "Los 13 parches están en tu chaqueta." },
       steps: { names: ["Escanear", "Historia", "A la caneca", "Parche"], label: "Paso {i} de 4: {name}" },
       scan: { close: "Cerrar e ir al inicio", hint: "Pon un pedazo de basura dentro del marco", shutter: "Tomar la foto", privacy: "Sin personas ni caras en la foto. La revisamos y luego la borramos.",
@@ -117,12 +126,18 @@
         "Esta app no guarda la foto: ni en nuestro servidor, ni en nuestros registros, ni en este teléfono.",
         "Las fotos de personas, caras o pantallas no cuentan. Eagle pide otra foto.",
         "El apodo, quien viaja contigo, los parches y el registro de limpieza se quedan en este teléfono. No hay cuentas, pagos ni anuncios.",
-        "Para que la IA no cueste demasiado, cada teléfono puede enviar un número limitado de fotos al día. El servidor solo guarda conteos, nunca la foto ni la dirección de donde vino."] },
+        "Para que la IA no cueste demasiado, cada teléfono puede enviar un número limitado de fotos al día. El servidor solo guarda conteos, y números al azar de un solo uso para que una recogida no se cuente dos veces: nunca la foto ni la dirección de donde vino."] },
       usage: { title: "Uso en vivo", intro: "Números reales de esta app, contados mientras los niños escanean. Se actualizan solos.", all: "Entre todos, hasta ahora", today: "Hoy", total: "pedazos encontrados", players: "jugadores", photos: "fotos escaneadas", pieces: "pedazos encontrados", note: "Solo se cuentan números: sin nombres y sin fotos. El día se cuenta en hora UTC.", demo: "El modo demo no muestra números en vivo. Abre la app sin ?demo para verlos.", wait: "Buscando los números…", fail: "Los números no están disponibles ahora." },
       explore: { title: "Todas las historias", hint: "Para profes, familias y jurados: abre cualquier capítulo sin escanear. Tus parches no cambian.", back: "Volver a todas las historias" },
       sources: { title: "De dónde vienen las historias", intro: "Cada capítulo viene del guion del equipo, «Abandoned but Not Forgotten». Estas son las páginas de donde salen sus datos." },
       finale: { kicker: "¡Lo lograste!", count: { one: "¡Recogiste 1 pedazo de basura!", other: "¡Recogiste {n} pedazos de basura!" }, map: "Dónde descansan hoy", patches: "Tus parches", home: "Volver al inicio",
         mapLabel: "Un mapa de los 13 lugares de descanso: 4 en la Luna, 5 en Marte y 4 más en el espacio." },
+      impact: { title: "Nuestro impacto", pilot: "Piloto: Florianópolis", totalLabel: "piezas de basura recogidas",
+        moonBags: "¡Eso es más que todas las bolsas que los astronautas dejaron en la Luna!",
+        towerPassed: "¡Nuestra torre de basura mide {height}, más alta que {passed}!", towerStart: "¡Nuestra torre de basura mide {height}!",
+        nextStop: "Próxima parada: {next}", reachedMoon: "¡Llegamos a la Luna!", assumption: "Si cada pieza se apilara con 10 cm de altura.",
+        demoData: "Datos de demostración", loading: "Contando…", error: "El total no cargó. Revisa el internet e intenta otra vez.", again: "Intentar otra vez",
+        strip: "De la Tierra a la Luna: nuestra torre de basura mide {height} por ahora.", earth: "Tierra", moon: "Luna" },
       bodies: { moon: "Luna", mars: "Marte", deep: "Espacio profundo", eros: "Asteroide", sun: "Alrededor del Sol", ceres: "Ceres" },
       map: { sun: "Sol", earth: "Tierra", moon: "Luna", mars: "Marte", eros: "Eros", ceres: "Ceres", deep: "Espacio profundo" },
       types: { plastic: "plástico", can: "lata", paper_cardboard: "papel o cartón", glass: "vidrio", organic: "restos de comida", batteries_electronics: "pilas o electrónicos", chemicals: "químicos", sharp_object: "algo cortante", other: "basura", none: "no es basura" },
@@ -132,7 +147,7 @@
       langName: "Português",
       demo: "Modo demo: o Eagle finge que escaneia para você testar todas as telas. O jogo de verdade usa IA.",
       back: "Voltar", menu: "Menu", listen: "Ouvir", stop: "Parar",
-      nav: { home: "Início", jacket: "Jaqueta", me: "Eu" },
+      nav: { home: "Início", jacket: "Jaqueta", impact: "Impacto", me: "Eu" },
       welcome: { mascot: "Eagle, o módulo lunar, mascote do debris", tagline: "Tudo o que ficou para trás tem uma história.", body: "Recolha lixo na Terra. Desbloqueie as histórias das máquinas que deixamos na Lua e em Marte.", go: "Vamos lá!", grownups: "Para adultos", language: "Idioma" },
       opening: { kicker: "A história começa", hook: "Você sabia?", go: "Vamos lá!" },
       safety: { bubble: "Oi, eu sou o Eagle! Quatro regrinhas rápidas antes de explorar.", title: "Cuide-se lá fora", go: "Entendi!",
@@ -140,7 +155,7 @@
       profile: { title: "Como vamos te chamar?", sub: "Escolha um apelido espacial. Não use seu nome de verdade.", nick: "Apelido", nickMissing: "Escreva um apelido primeiro.", buddy: "Escolha quem viaja com você", privacy: "Seu apelido e sua escolha ficam neste celular. Sem conta, sem e-mail.", go: "Pronto!",
         names: ["AndaLua", "PulaEstrela", "Cometa", "RaposaFoguete", "Órbita", "PoeiraEstelar"] },
       home: { title: "Início", patches: "{n} de {total}", patchesLabel: "{n} de {total} emblemas. Abrir minha jaqueta", meLabel: "Meu perfil: {nick}", jacket: "Minha jaqueta de exploração",
-        toGo: { one: "Falta 1 emblema", other: "Faltam {n} emblemas" }, allDone: "Você ganhou todos os emblemas!", counter: "Crianças do mundo todo já encontraram {n} pedaços de lixo.", schools: "Leve o debris para a sua escola ou para o próximo mutirão de limpeza da praia!",
+        toGo: { one: "Falta 1 emblema", other: "Faltam {n} emblemas" }, allDone: "Você ganhou todos os emblemas!", counter: "Crianças do mundo todo já recolheram {n} pedaços de lixo.", schools: "Leve o debris para a sua escola ou para o próximo mutirão de limpeza da praia!",
         scan: "Escanear lixo", holding: "Você está segurando: {item}", holdingSub: "Jogue na lixeira para ganhar seu próximo emblema.", binNow: "Jogar meu lixo fora", finale: "Ver o grande final", finaleSub: "Os 13 emblemas estão na sua jaqueta." },
       steps: { names: ["Escanear", "História", "Na lixeira", "Emblema"], label: "Passo {i} de 4: {name}" },
       scan: { close: "Fechar e voltar ao início", hint: "Coloque um lixo dentro do quadro", shutter: "Tirar a foto", privacy: "Sem pessoas ou rostos na foto. A gente confere e depois apaga.",
@@ -170,12 +185,18 @@
         "Este app não guarda a foto: nem no nosso servidor, nem nos nossos registros, nem neste celular.",
         "Fotos de pessoas, rostos ou telas não contam. O Eagle pede outra foto.",
         "O apelido, quem viaja com você, os emblemas e o registro de limpeza ficam neste celular. Não há contas, pagamentos nem anúncios.",
-        "Para a IA não custar caro demais, cada celular pode enviar um número limitado de fotos por dia. O servidor guarda só contagens, nunca a foto nem o endereço de onde ela veio."] },
+        "Para a IA não custar caro demais, cada celular pode enviar um número limitado de fotos por dia. O servidor guarda só contagens, e números aleatórios de uso único para que um recolhimento não conte duas vezes: nunca a foto nem o endereço de onde ela veio."] },
       usage: { title: "Uso ao vivo", intro: "Números reais deste app, contados enquanto as crianças escaneiam. Eles se atualizam sozinhos.", all: "Todo mundo, até agora", today: "Hoje", total: "lixos encontrados", players: "jogadores", photos: "fotos escaneadas", pieces: "lixos encontrados", note: "Só números são contados: sem nomes e sem fotos. O dia é contado no horário UTC.", demo: "O modo demo não mostra números ao vivo. Abra o app sem ?demo para ver.", wait: "Buscando os números…", fail: "Os números não estão disponíveis agora." },
       explore: { title: "Todas as histórias", hint: "Para professores, famílias e jurados: abra qualquer capítulo sem escanear. Seus emblemas não mudam.", back: "Voltar para todas as histórias" },
       sources: { title: "De onde vêm as histórias", intro: "Cada capítulo vem do roteiro da equipe, “Abandoned but Not Forgotten”. Estas são as páginas de onde vêm os fatos." },
       finale: { kicker: "Você conseguiu!", count: { one: "Você recolheu 1 pedaço de lixo!", other: "Você recolheu {n} pedaços de lixo!" }, map: "Onde elas estão hoje", patches: "Seus emblemas", home: "Voltar ao início",
         mapLabel: "Um mapa dos 13 lugares de descanso: 4 na Lua, 5 em Marte e mais 4 no espaço." },
+      impact: { title: "Nosso impacto", pilot: "Piloto: Florianópolis", totalLabel: "pedaços de lixo recolhidos",
+        moonBags: "Isso é mais do que todos os sacos que os astronautas deixaram na Lua!",
+        towerPassed: "Nossa torre de lixo tem {height} de altura, mais alta que {passed}!", towerStart: "Nossa torre de lixo tem {height} de altura!",
+        nextStop: "Próxima parada: {next}", reachedMoon: "Chegamos à Lua!", assumption: "Se cada pedaço fosse empilhado com 10 cm de altura.",
+        demoData: "Dados de demonstração", loading: "Contando…", error: "O total não carregou. Confira a internet e tente de novo.", again: "Tentar de novo",
+        strip: "Da Terra à Lua: nossa torre de lixo tem {height} até agora.", earth: "Terra", moon: "Lua" },
       bodies: { moon: "Lua", mars: "Marte", deep: "Espaço profundo", eros: "Asteroide", sun: "Em volta do Sol", ceres: "Ceres" },
       map: { sun: "Sol", earth: "Terra", moon: "Lua", mars: "Marte", eros: "Eros", ceres: "Ceres", deep: "Espaço profundo" },
       types: { plastic: "plástico", can: "lata", paper_cardboard: "papel ou papelão", glass: "vidro", organic: "restos de comida", batteries_electronics: "pilhas ou eletrônicos", chemicals: "produtos químicos", sharp_object: "algo cortante", other: "lixo", none: "não é lixo" },
@@ -193,8 +214,9 @@
     log: Array.isArray(load("log", [])) ? load("log", []) : [],   // every piece binned: [{ date, type }]
     pending: load("pending", null),                    // the piece in the child's hand: { item, type, bin, saved }
     lastNew: int(load("lastNew", 0), 0, TOTAL),
+    tickets: (Array.isArray(load("tickets", [])) ? load("tickets", []) : []).filter(x => typeof x === "string").slice(-50),   // pick-ups waiting to be counted on the server
     introDone: !!load("introDone", false), safetyDone: !!load("safetyDone", false), finaleSeen: !!load("finaleSeen", false),
-    content: null, counter: null, counterAt: 0,
+    content: null, counter: null, pickups: null, counterAt: 0, impact: null,   // counter: pieces found (Live usage); pickups: confirmed in the bin (Home, Impact)
     view: null,       // { name, params }
     scan: null,       // this round's photo and answer: { kind, image, result, message }. Never saved.
     earned: null      // what was just earned, for the Unlocked screen: { n } or { extra: true }
@@ -244,7 +266,7 @@
   }
   const say = (text, { mood = "happy", look = "right", label = "Eagle" } = {}) =>
     h`<div class="say">${raw(A.eagleHead({ label, mood, look, cls: "say-eagle" }))}<p class="bubble">${text}</p></div>`;
-  const nav = cur => h`<nav class="nav" aria-label="${t("menu")}">${["home", "jacket", "me"].map(k =>
+  const nav = cur => h`<nav class="nav" aria-label="${t("menu")}">${["home", "jacket", "impact", "me"].map(k =>
     h`<button type="button" data-go="${k}" ${cur === k ? raw('aria-current="page"') : ""}>${ico(k)}<span>${t("nav." + k)}</span></button>`)}</nav>`;
   function listenBtn(key) {
     if (!canSpeak) return "";
@@ -336,14 +358,14 @@
         <span class="row-between"><b>${t("home.jacket")}</b><span class="peach">${n >= TOTAL ? t("home.allDone") : tn("home.toGo", TOTAL - n)}</span></span>
         <span class="dots13" aria-hidden="true">${range(TOTAL).map(i => h`<span class="${i <= n ? "on" : ""}"></span>`)}</span>
       </button>
-      <div class="card card-blue2 counter" id="counter">${ico("globe", { size: 30, width: 2.2 })}<p>${counterText()}</p></div>
+      <button type="button" class="card card-blue2 counter" id="counter" data-go="impact">${ico("globe", { size: 30, width: 2.2 })}<p>${counterText()}</p>${ico("chevron", { width: 2.6 })}</button>
       ${n >= TOTAL ? h`<button type="button" class="card card-peach holding" data-go="finale"><span class="holding-text"><b>${t("home.finale")}</b><span>${t("home.finaleSub")}</span></span>${ico("chevron", { width: 2.6 })}</button>` : ""}
       <div class="grow"></div>
       ${pend ? h`<button type="button" class="btn btn-primary btn-big" data-go="bin">${ico("check", { size: 30, width: 2.6 })}${t("home.binNow")}</button>`
         : h`<button type="button" class="btn btn-primary btn-big" data-go="scan">${ico("camera", { size: 30, width: 2.4 })}${t("home.scan")}</button>`}
       ${nav("home")}` };
   };
-  const counterText = () => S.counter > 0 ? h`${splitBold(t("home.counter"), "n", fmt(S.counter))} ${t("home.schools")}` : h`${t("home.schools")}`;
+  const counterText = () => S.pickups > 0 ? h`${splitBold(t("home.counter"), "n", fmt(S.pickups))} ${t("home.schools")}` : h`${t("home.schools")}`;
 
   screens.scan = () => {
     if (S.pending && !S.pending.saved) { S.pending = null; persist(); }   // an unconfirmed find is dropped when the camera opens again
@@ -631,6 +653,68 @@
       after: () => { if (first) confetti(); } };
   };
 
+  /* ---------- Impact: litter to the Moon (the team's spec) ---------- */
+  screens.impact = () => {
+    if (!S.impact || S.impact.visit !== visit) startImpact();
+    const I = S.impact, IM = window.IMPACT;
+    const head = h`<div class="impact-head"><h1 tabindex="-1">${t("impact.title")}</h1><span class="tag">${t("impact.pilot")}</span>${DEMO ? h`<span class="tag tag-demo">${t("impact.demoData")}</span>` : ""}</div>`;
+    if (I.status !== "ok") return { theme: "t-blue", cls: "impact", html: h`${head}
+      <div class="grow center-col">${I.status === "error"
+        ? h`<p class="lede">${t("impact.error")}</p><button type="button" class="btn btn-outline" data-act="impactRetry">${t("impact.again")}</button>`
+        : h`<span class="spinner" aria-hidden="true"></span><p role="status">${t("impact.loading")}</p>`}</div>
+      ${nav("impact")}` };
+    const w = IM.tower(I.total), H = m => IM.formatHeight(m, locale()), name = m => m[S.lang] || m.en, height = H(w.heightM);
+    const row = (m, cls) => h`<div class="ms ${cls}">${raw(A.milestone(m.id))}<span><b>${cap(name(m))}</b><small>${H(m.heightM)}</small></span></div>`;
+    const dots = IM.MILESTONES.filter(m => m.id !== "moon").map(m => ({ pos: IM.stripPos(m.heightM), passed: !!w.passed && m.heightM <= w.passed.heightM }));
+    return { theme: "t-blue", cls: "impact", html: h`${head}
+      <div class="total-card">
+        <p class="big-total" id="bigTotal" aria-hidden="true">${fmt(I.animated ? I.total : 0)}</p>
+        <p class="total-label" aria-hidden="true">${t("impact.totalLabel")}</p>
+        <p class="sr-only">${fmt(I.total)} ${t("impact.totalLabel")}</p>
+      </div>
+      ${w.moonLine ? h`<p class="moon-line">${t("impact.moonBags")}</p>` : ""}
+      <section class="tower-card" aria-labelledby="towerLine">
+        <p class="tower-line" id="towerLine">${w.passed ? t("impact.towerPassed", { height, passed: name(w.passed) }) : t("impact.towerStart", { height })}</p>
+        ${row(w.next || w.passed, "next")}
+        <div class="stack-wrap${I.animated ? "" : " grow-in"}">${raw(A.stack(w.progress))}</div>
+        ${w.passed && w.next ? row(w.passed, "passed") : ""}
+        <p class="next-stop">${w.next ? t("impact.nextStop", { next: name(w.next) }) : t("impact.reachedMoon")}</p>
+      </section>
+      <div class="strip-card">${raw(A.strip(dots, IM.stripPos(w.heightM), { earth: t("impact.earth"), moon: t("impact.moon") }, t("impact.strip", { height })))}</div>
+      <p class="footnote">${t("impact.assumption")}</p>
+      ${nav("impact")}`,
+      after: () => { if (!I.animated) { I.animated = true; countUp(document.getElementById("bigTotal"), I.total); } } };
+  };
+  /* The big number counts up from 0 in about 1.5 s, or shows at once when the phone asks for less motion. */
+  function countUp(el, to) {
+    if (!el) return;
+    if (!(to > 0) || (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) { el.textContent = fmt(to); return; }
+    const start = performance.now(), ms = 1500;
+    const step = now => {
+      if (!el.isConnected) return;
+      const k = Math.min(1, (now - start) / ms);
+      el.textContent = fmt(Math.round(to * (1 - Math.pow(1 - k, 3))));
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+  /* A fresh total each time the screen opens; pick-ups still waiting on this phone are sent first. */
+  function startImpact() {
+    const v = visit;
+    if (DEMO) { S.impact = { visit: v, status: "ok", total: demoTotal, animated: false }; return; }
+    S.impact = { visit: v, status: "loading", total: null, animated: false };
+    sendTickets()
+      .then(() => fetch("/api/counter", { cache: "no-store" }))
+      .then(r => (r.ok ? r.json() : Promise.reject(new Error("counter"))))
+      .then(j => {
+        if (typeof j.pickups !== "number") throw new Error("counter");
+        S.pickups = j.pickups; S.counterAt = Date.now();
+        if (S.impact && S.impact.visit === v) Object.assign(S.impact, { status: "ok", total: j.pickups });
+      })
+      .catch(() => { if (S.impact && S.impact.visit === v) S.impact.status = "error"; })
+      .then(() => { if (S.impact && S.impact.visit === v && S.view && S.view.name === "impact") render(false); });
+  }
+
   /* ---------- Moving between screens (the phone's back button works too) ---------- */
   const okRound = () => !!(S.scan && S.pending && S.scan.kind === "found");
   const GUARD = {
@@ -644,15 +728,18 @@
     explore: () => true, usage: () => true,
     bin: () => !!S.pending,
     unlocked: () => !!S.earned,
-    finale: () => S.binned >= TOTAL
+    finale: () => S.binned >= TOTAL,
+    impact: () => true
   };
   const fallback = () => (S.profile ? "home" : "welcome");
   /* Screens an address like …/#jacket may open directly (a reload, a bookmark, a typed address). */
-  const OPEN_BY_ADDRESS = ["home", "jacket", "me", "finale", "grownups", "photos", "sources", "explore", "usage"];
+  const OPEN_BY_ADDRESS = ["home", "jacket", "impact", "me", "finale", "grownups", "photos", "sources", "explore", "usage"];
+  let visit = 0;   // counts screen openings: the Impact screen reads a fresh total on each one
   const fromAddress = () => { const name = location.hash.slice(1); return OPEN_BY_ADDRESS.includes(name) && GUARD[name]({}) ? name : fallback(); };
   function go(name, params = {}, { replace = false } = {}) {
     if (!screens[name] || !GUARD[name](params)) { name = fallback(); params = {}; replace = true; }
     leave();
+    visit++;
     S.view = { name, params };
     try { history[replace ? "replaceState" : "pushState"]({ name, params }, "", "#" + name); } catch {}
     render(true);
@@ -664,12 +751,13 @@
     if (!GUARD[name](params)) { name = fallback(); params = {}; }
     if (!known || name !== e.state.name) { try { history.replaceState({ name, params }, "", "#" + name); } catch {} }
     leave();
+    visit++;
     S.view = { name, params };
     render(true);
   });
   function render(focus) {
     const { name, params } = S.view;
-    const keep = document.activeElement && document.activeElement.id;
+    const active = document.activeElement, keep = active && active.id, keepHeading = !!active && active.tagName === "H1";
     const v = screens[name](params || {});
     app.className = "screen " + v.theme + (v.cls ? " " + v.cls : "");
     app.innerHTML = v.html.s;
@@ -680,6 +768,7 @@
     if (v.after) v.after();
     if (focus && h1) h1.focus({ preventScroll: true });
     else if (keep && document.getElementById(keep)) document.getElementById(keep).focus({ preventScroll: true });
+    else if (keepHeading && h1) h1.focus({ preventScroll: true });
   }
   function leave() { clearInterval(usageTimer); if (window.JACKET3D) window.JACKET3D.unmount(); stopCamera(); stopSpeech(); const c = document.getElementById("confetti"); if (c) c.textContent = ""; }
 
@@ -733,7 +822,8 @@
       KEYS.forEach(k => { try { localStorage.removeItem(PREFIX + k); } catch {} });
       location.replace(location.pathname + location.search);
     },
-    reload: () => location.reload()
+    reload: () => location.reload(),
+    impactRetry: () => { S.impact = null; render(false); }
   };
 
   function setLang(l) {
@@ -748,12 +838,16 @@
     const p = S.pending;
     if (!p) return go(fallback(), {}, { replace: true });
     S.log.push({ date: new Date().toISOString(), type: p.type || "other" });
+    // The shared total goes up by 1 on the server with this piece's ticket, sent in the background: the patch never waits.
+    if (DEMO) { demoTotal += 1; S.pickups = demoTotal; }
+    else if (p.ticket) S.tickets = S.tickets.concat(p.ticket).slice(-50);
     if (S.log.length > 2000) S.log = S.log.slice(-2000);
     if (S.binned < TOTAL) { S.binned += 1; S.lastNew = S.binned; S.earned = { n: S.binned }; }
     else S.earned = { extra: true };
     S.pending = null; S.scan = null;
     persist();
     go("unlocked", {}, { replace: true });
+    sendTickets();
   }
 
   /* ---------- Camera and scanner ---------- */
@@ -838,12 +932,12 @@
     if (token !== camToken || !S.view || S.view.name !== "scan") return;   // the child left the camera meanwhile
     setBusy(false);
     if (j.error) return showRetry("error", image, j.error);
-    if (typeof j.total === "number") { S.counter = j.total; S.counterAt = Date.now(); }
+    if (typeof j.total === "number") S.counter = j.total;   // pieces found (Live usage); pick-ups only change with a ticket
     const r = j.result || {};
     if (j.retake) return showRetry("photo", image, r.message);
     if (r.dangerous) { S.scan = { kind: "danger", image, result: r }; return go("danger", {}, { replace: true }); }
     if (r.is_trash === "yes") {
-      S.pending = { item: String(r.item || "").slice(0, 40), type: r.type || "other", bin: BINS.includes(r.bin) ? r.bin : "black", saved: false };
+      S.pending = { item: String(r.item || "").slice(0, 40), type: r.type || "other", bin: BINS.includes(r.bin) ? r.bin : "black", saved: false, ticket: typeof j.ticket === "string" ? j.ticket : null };
       S.scan = { kind: "found", image, result: r };
       persist();
       return go("found", {}, { replace: true });
@@ -852,14 +946,32 @@
   }
   function showRetry(kind, image, message) { S.scan = { kind, image, message }; go("retry", {}, { replace: true }); }
 
+  /* ---------- Pick-ups waiting to be counted: sent one by one; if the phone is offline they wait for the next try ---------- */
+  let sending = null;
+  function sendTickets() {
+    if (DEMO || !S.tickets.length) return Promise.resolve();
+    if (sending) return sending;
+    sending = (async () => {
+      while (S.tickets.length) {
+        let r, j = {};
+        try { r = await fetch("/api/pickup", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ticket: S.tickets[0] }) }); j = await r.json().catch(() => ({})); }
+        catch { break; }                                              // offline: try again later
+        if (!(r.ok || r.status === 400 || r.status === 410)) break;   // the server can't count right now
+        S.tickets = S.tickets.slice(1); persist();                   // counted, already counted, or never countable
+        if (r.ok && typeof j.pickups === "number") { S.pickups = j.pickups; S.counterAt = Date.now(); }
+      }
+    })().finally(() => { sending = null; });
+    return sending;
+  }
+
   /* ---------- The counter shared by everyone ---------- */
   function refreshCounter() {
-    if (DEMO) { if (S.counter == null) S.counter = 1287; return; }
+    if (DEMO) { S.pickups = demoTotal; return; }
     if (Date.now() - S.counterAt < 60000) return;
     S.counterAt = Date.now();
     fetch("/api/counter").then(r => (r.ok ? r.json() : null)).then(j => {
-      if (!j || typeof j.total !== "number") return;
-      S.counter = j.total;
+      if (!j || typeof j.pickups !== "number") return;
+      S.pickups = j.pickups; S.counter = j.total;
       const el = document.getElementById("counter");
       if (el) el.querySelector("p").innerHTML = counterText().s;
     }).catch(() => {});
@@ -882,7 +994,7 @@
     const d = DEMO_RESULTS[demoN++ % DEMO_RESULTS.length];
     const result = { photo_problem: d.photo_problem || "none", is_trash: d.is_trash, type: d.type, bin: d.bin, dangerous: !!d.dangerous, item: d.item ? L(d.item) : "", message: d.message ? L(d.message) : "" };
     const retake = result.photo_problem !== "none", counts = !retake && result.is_trash === "yes";
-    return { result, retake, counts, total: counts ? (S.counter || 1287) + 1 : null };
+    return { result, retake, counts: counts && !result.dangerous, ticket: null };
   }
   /* Without a camera, demo mode "photographs" the drawn scene from the design. */
   function demoPhoto() {
@@ -961,6 +1073,7 @@
     }
     // A piece found before the page was closed is still in the child's hand: it waits on Home to be binned.
     if (S.pending && !S.pending.saved) { S.pending.saved = true; persist(); }
+    sendTickets();   // pick-ups confirmed while offline are counted now
     const name = fromAddress();
     S.view = { name, params: {} };
     try { history.replaceState({ name, params: {} }, "", "#" + name); } catch {}

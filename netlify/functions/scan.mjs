@@ -1,7 +1,9 @@
 /* POST /api/scan {image: "data:image/jpeg;base64,...", lang: "en" | "es" | "pt"}
-   -> { result: {photo_problem, is_trash, type, bin, dangerous, item, message}, counts, retake, total }
-   The photo goes to Claude and is forgotten: it is never written to storage or logs. */
-import { json, today, playerId, read, add, PHOTOS_PER_DAY, PHOTOS_PER_PLAYER_PER_DAY } from "../lib/common.mjs";
+   -> { result: {photo_problem, is_trash, type, bin, dangerous, item, message}, counts, retake, total, ticket }
+   The photo goes to Claude and is forgotten: it is never written to storage or logs.
+   counts/total: litter found, for the Live usage screen. ticket: for litter that is safe to pick up; the phone
+   sends it to POST /api/pickup when the child confirms the piece is in the bin, adding 1 to the pick-up total. */
+import { json, today, playerId, read, add, makeTicket, PHOTOS_PER_DAY, PHOTOS_PER_PLAYER_PER_DAY } from "../lib/common.mjs";
 import { scan } from "../lib/scanner.mjs";
 
 const MAX_CHARS = 1_400_000; // ~1 MB of JPEG; the page shrinks photos first (≤ 1024 px)
@@ -42,7 +44,7 @@ export default async (req, context) => {
   try { r = await scan(m[2], m[1], lang); }
   catch (e) { return err(502, t.ai, e.code || "ai_failed"); }
 
-  if (r.photo_problem !== "none") return json(200, { result: { ...r, message: t[r.photo_problem] }, counts: false, retake: true });
+  if (r.photo_problem !== "none") return json(200, { result: { ...r, message: t[r.photo_problem] }, counts: false, retake: true, ticket: null });
   const counts = r.is_trash === "yes";
   let total = null;
   if (counts) {
@@ -50,7 +52,10 @@ export default async (req, context) => {
     // For the Live usage screen: pieces found today and by type. Only numbers, nothing about who.
     await Promise.all([add(`items/${day}`), add(`types/${r.type}`)]).catch(() => {});
   }
-  return json(200, { result: r, counts, retake: false, total });
+  // Litter that is safe to pick up also gets a one-time ticket: the pick-up total (Home, Impact) goes up only
+  // when the child confirms it is in the bin (POST /api/pickup). Dangerous finds never get one.
+  const pickable = counts && !r.dangerous;
+  return json(200, { result: r, counts, retake: false, total, ticket: pickable ? makeTicket() : null });
 };
 
 export const config = { path: "/api/scan" };

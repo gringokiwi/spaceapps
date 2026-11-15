@@ -1,5 +1,5 @@
 /* Shared pieces (adapted from isla-skills: netlify/lib/config.mjs and store.mjs, without payments). */
-import { createHash } from "node:crypto";
+import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { readFileSync, writeFileSync, renameSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 
@@ -11,6 +11,36 @@ export const PHOTOS_PER_PLAYER_PER_DAY = () => int("PHOTOS_PER_PLAYER_PER_DAY", 
 export const json = (status, body) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
 export const today = () => new Date().toISOString().slice(0, 10);
+
+/* The shared total of confirmed pick-ups ("It's in the bin!"), shown on Home and on the Impact screen.
+   A fresh key: the old "counter/items" counted at scan time, dangerous finds included. */
+export const PICKUPS = "pickups/total";
+
+/* Pick-up tickets. /api/scan hands one out for each piece of litter that is safe to pick up;
+   /api/pickup counts it once, when the child confirms the piece is in the bin. A ticket is only
+   a random id and an expiry, signed by the server: nothing about the child, the place or the photo.
+   The signing key comes from PICKUP_SECRET, or else from the API key, so it survives redeploys. */
+export const TICKET_DAYS = 14;   // long enough for "No bin nearby? Save it for later"
+function ticketKey() {
+  const base = process.env.PICKUP_SECRET || process.env.ANTHROPIC_API_KEY;
+  return base ? createHash("sha256").update("debris pick-up ticket v1:" + base).digest() : null;
+}
+export function makeTicket(now = Date.now()) {
+  const key = ticketKey();
+  if (!key) return null;
+  const id = randomBytes(12).toString("hex"), exp = now + TICKET_DAYS * 86400000;
+  return `${id}.${exp}.${createHmac("sha256", key).update(`${id}.${exp}`).digest("base64url")}`;
+}
+export function checkTicket(ticket, now = Date.now()) {
+  const m = /^([0-9a-f]{24})\.(\d{13})\.([A-Za-z0-9_-]{43})$/.exec(String(ticket || ""));
+  const key = ticketKey();
+  if (!m || !key) return { ok: false, why: "bad" };
+  const want = createHmac("sha256", key).update(`${m[1]}.${m[2]}`).digest(), got = Buffer.from(m[3], "base64url");
+  if (got.length !== want.length || !timingSafeEqual(got, want)) return { ok: false, why: "bad" };
+  const exp = Number(m[2]);
+  if (exp < now) return { ok: false, why: "expired" };
+  return { ok: true, id: m[1], exp, usedKey: `pickups/used/${new Date(exp).toISOString().slice(0, 10)}/${m[1]}` };
+}
 
 /* The IP is only used hashed with the day, to count photos per player. It is never stored in clear. */
 export function playerId(req, context) {
@@ -41,7 +71,7 @@ export function memoryStore() {
 
 /* The counters in one JSON file, for a Node server with a disk that survives redeploys (a Railway volume).
    Writes are grouped and atomic (a temporary file, then a rename). Per-day photo counts older than
-   yesterday are dropped, so the file stays small. */
+   yesterday, and marks of expired tickets, are dropped, so the file stays small. */
 export function fileStore(file) {
   let data = {};
   try { data = JSON.parse(readFileSync(file, "utf8")) || {}; } catch { data = {}; }
@@ -49,7 +79,11 @@ export function fileStore(file) {
   function flush() {
     if (timer) { clearTimeout(timer); timer = null; }
     const keep = new Set([today(), new Date(Date.now() - 86400000).toISOString().slice(0, 10)]);
-    for (const k of Object.keys(data)) { const m = /^(?:photos|players|items)\/(\d{4}-\d{2}-\d{2})/.exec(k); if (m && !keep.has(m[1])) delete data[k]; }
+    for (const k of Object.keys(data)) {
+      const daily = /^(?:photos|players|items)\/(\d{4}-\d{2}-\d{2})/.exec(k), used = /^pickups\/used\/(\d{4}-\d{2}-\d{2})\//.exec(k);
+      if (daily && !keep.has(daily[1])) delete data[k];
+      else if (used && used[1] < today()) delete data[k];   // an expired ticket can't be counted again anyway
+    }
     try { mkdirSync(dirname(file), { recursive: true }); writeFileSync(file + ".tmp", JSON.stringify(data)); renameSync(file + ".tmp", file); }
     catch (e) { console.error("Couldn't save the counters:", e.message); }
   }
