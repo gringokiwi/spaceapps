@@ -416,15 +416,15 @@ button.counter p { flex-grow: 1; }
 
 /* Nhac! Bernúncia eats the piece, the explorer wakes up */
 .feast { gap: 14px; }
-.feast-stage { position: relative; display: flex; justify-content: center; padding-top: 18px; }
+.feast-stage { position: relative; display: flex; justify-content: center; padding-top: 30px; }
 .bern-big { width: 100%; max-width: 340px; height: auto; }
-.nhac { position: absolute; left: 2%; top: 0; font-size: 48px; color: var(--yellow); letter-spacing: 0; transform: rotate(-10deg); opacity: 0;
+.nhac { position: absolute; right: 2%; top: 0; font-size: 48px; color: var(--yellow); letter-spacing: 0; transform: rotate(8deg); opacity: 0;
   text-shadow: 3px 3px 0 var(--navy), -2px -2px 0 var(--navy), 2px -2px 0 var(--navy), -2px 2px 0 var(--navy); }
 .feast-stage.fed .nhac { opacity: 1; animation: nhacPop .5s cubic-bezier(.2, 1.6, .4, 1) both; }
 .feast.is-played .nhac { animation: none; }
-@keyframes nhacPop { from { transform: scale(.3) rotate(-30deg); } to { transform: rotate(-10deg); } }
+@keyframes nhacPop { from { transform: scale(.3) rotate(30deg); } to { transform: rotate(8deg); } }
 .feast:not(.is-played) .bn-snack { transform-box: fill-box; transform-origin: center; animation: snackIn .5s cubic-bezier(.5, 0, .9, .6) .05s both; }
-@keyframes snackIn { 0% { opacity: 1; transform: translate(0, -24px) rotate(-20deg); } 85% { opacity: 1; transform: translate(22px, 104px) rotate(25deg) scale(.8); } 100% { opacity: 0; transform: translate(24px, 112px) scale(.3); } }
+@keyframes snackIn { 0% { opacity: 1; transform: translate(0, -10px) rotate(-20deg); } 85% { opacity: 1; transform: translate(-4px, 74px) rotate(20deg) scale(.8); } 100% { opacity: 0; transform: translate(-6px, 80px) scale(.3); } }
 .feast:not(.is-played) .feast-say { animation: lineIn .45s ease-out 1s both; }
 .wake { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
 .wake-patch { position: relative; width: 116px; }

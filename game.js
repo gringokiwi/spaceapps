@@ -43,8 +43,8 @@
         scan: "Scan litter", holding: "You're holding: {item}", holdingSub: "Bin it to earn your next patch.", binNow: "Bin my litter", finale: "See the finale", finaleSub: "All 13 patches are on your jacket." },
       steps: { names: ["Scan", "Story", "Bin it", "Patch"], label: "Step {i} of 4: {name}" },
       stepsBoi: ["Scan", "Bin it", "Wake up", "Story"],
-      teller: { chooseTitle: "Choose your storyteller", optionSpace: "Space Explorer", optionBoi: "Boi de Mamão", boiTag: "From Florianópolis", go: "Let's go!", settingLabel: "Storyteller",
-        credit: "Inspired by the boi de mamão tradition of Florianópolis and Santa Catarina." },
+      teller: { chooseTitle: "Choose your storyteller", optionSpace: "Space Explorer", optionBoi: "The Bull", boiTag: "From Florianópolis", go: "Let's go!", settingLabel: "Storyteller",
+        credit: "Inspired by the traditional bull dance of Florianópolis and Santa Catarina." },
       scan: { close: "Close and go home", hint: "Fit one piece of litter inside the frame", shutter: "Take the photo", privacy: "No people or faces in the photo. We check it, then delete it.",
         looking: "Eagle is looking…", noCamera: "Tap the button to take a photo with your camera.", choose: "Choose a photo instead", starting: "Starting the camera…" },
       found: { back: "Back to the camera", safe: "Litter · safe to pick up", photoAlt: "Your photo",
@@ -105,8 +105,8 @@
         scan: "Escanear basura", holding: "Tienes en la mano: {item}", holdingSub: "Échala en la caneca para ganar tu próximo parche.", binNow: "Botar mi basura", finale: "Ver el gran final", finaleSub: "Los 13 parches están en tu chaqueta." },
       steps: { names: ["Escanear", "Historia", "A la caneca", "Parche"], label: "Paso {i} de 4: {name}" },
       stepsBoi: ["Escanear", "A la caneca", "Despertar", "Historia"],
-      teller: { chooseTitle: "Elige quién cuenta la historia", optionSpace: "Explorador espacial", optionBoi: "Boi de Mamão", boiTag: "De Florianópolis", go: "¡Vamos!", settingLabel: "Quién cuenta la historia",
-        credit: "Inspirado en la tradición del boi de mamão de Florianópolis y Santa Catarina." },
+      teller: { chooseTitle: "Elige quién cuenta la historia", optionSpace: "Explorador espacial", optionBoi: "El Toro", boiTag: "De Florianópolis", go: "¡Vamos!", settingLabel: "Quién cuenta la historia",
+        credit: "Inspirado en la danza tradicional del toro de Florianópolis y Santa Catarina." },
       scan: { close: "Cerrar e ir al inicio", hint: "Pon un pedazo de basura dentro del marco", shutter: "Tomar la foto", privacy: "Sin personas ni caras en la foto. La revisamos y luego la borramos.",
         looking: "Eagle está mirando…", noCamera: "Toca el botón para tomar una foto con tu cámara.", choose: "Mejor elegir una foto", starting: "Encendiendo la cámara…" },
       found: { back: "Volver a la cámara", safe: "Basura · se puede recoger", photoAlt: "Tu foto",
@@ -841,7 +841,7 @@
       <h1 tabindex="-1">${f.title}</h1>
       ${boi ? h`<div class="party" aria-hidden="true">
         <div class="dance-row">${range(TOTAL).map(i => raw(A.patch(i, chapter(i).body)))}</div>
-        <div class="party-cast">${raw(A.boi({ pose: "dance", cls: "boi-dancing" }))}${raw(A.bernuncia({ fed: TOTAL, cls: "bern-party" }))}</div>
+        <div class="party-cast">${raw(A.boi({ pose: "dance", cls: "boi-dancing" }))}${raw(A.bernuncia({ fed: TOTAL, mirror: true, cls: "bern-party" }))}</div>
       </div>` : ""}
       ${listenBtn("finale")}
       ${boi ? B(S.boi.finale).map(p => h`<p class="script"${la}>${p}</p>`) : f.script.map(p => h`<p class="script">${p}</p>`)}
