@@ -57,7 +57,7 @@
       retry: { no: "That's not litter", unsure: "Hmm, I'm not sure", photo: "Let's try another photo", error: "Something went wrong", again: "Try again", home: "Back to home" },
       jacket: { title: "My explorer jacket", hint: "Tap a patch to hear its story again.", locked: "{place} · locked", newTag: "new", scan: "Scan to unlock the next one", opening: "Hear the opening story again" },
       me: { buddy: "Crew buddy: {name}", change: "Change", log: "My cleanup log", binned: "binned", plastic: "plastic", paper: "paper", cans: "cans", language: "Language",
-        grownups: "For grown-ups", safety: "Safety rules", photos: "How photos are handled", sources: "Where the stories come from", privacy: "No accounts, no payments, no ads. Nothing here is stored with a child's name.",
+        grownups: "For grown-ups", safety: "Safety rules", photos: "How photos are handled", sources: "Where the stories come from", explore: "Explore all the stories", privacy: "No accounts, no payments, no ads. Nothing here is stored with a child's name.",
         reset: "Start over on this phone", resetConfirm: "Start over? This clears the nickname, patches and cleanup log on this phone." },
       photos: { title: "How photos are handled", body: [
         "When a child takes a photo, the phone makes it smaller and sends it once to our scanner. The scanner asks Claude, an AI made by Anthropic, whether the photo shows litter and which bin it goes in.",
@@ -65,6 +65,7 @@
         "Photos of people, faces or screens don't count. Eagle asks for another photo instead.",
         "The nickname, crew buddy, patches and cleanup log stay on this phone. There are no accounts, payments or ads.",
         "To keep the AI affordable, each phone can send a limited number of photos a day. The server keeps only counts, never the photo or the address it came from."] },
+      explore: { title: "All the stories", hint: "For teachers, parents and judges: open any chapter without scanning. Your patches stay the same.", back: "Back to all the stories" },
       sources: { title: "Where the stories come from", intro: "Every chapter comes from the team's storyboard, “Abandoned but Not Forgotten”. These are the pages its facts come from." },
       finale: { kicker: "You did it!", count: { one: "You picked up 1 piece of litter!", other: "You picked up {n} pieces of litter!" }, map: "Where they rest today", patches: "Your patches", home: "Back to home",
         mapLabel: "A map of the 13 resting places: 4 on the Moon, 5 on Mars, and 4 more out in space." },
@@ -108,7 +109,7 @@
       retry: { no: "Eso no es basura", unsure: "Mmm, no estoy seguro", photo: "Probemos con otra foto", error: "Algo falló", again: "Intentar otra vez", home: "Volver al inicio" },
       jacket: { title: "Mi chaqueta de exploración", hint: "Toca un parche para escuchar su historia otra vez.", locked: "{place} · bloqueado", newTag: "nuevo", scan: "Escanea para desbloquear el siguiente", opening: "Escuchar otra vez el comienzo" },
       me: { buddy: "Viaja contigo: {name}", change: "Cambiar", log: "Mi registro de limpieza", binned: "botados", plastic: "plástico", paper: "papel", cans: "latas", language: "Idioma",
-        grownups: "Para adultos", safety: "Reglas de seguridad", photos: "Qué pasa con las fotos", sources: "De dónde vienen las historias", privacy: "Sin cuentas, sin pagos, sin anuncios. Nada se guarda con el nombre de un niño o una niña.",
+        grownups: "Para adultos", safety: "Reglas de seguridad", photos: "Qué pasa con las fotos", sources: "De dónde vienen las historias", explore: "Explorar todas las historias", privacy: "Sin cuentas, sin pagos, sin anuncios. Nada se guarda con el nombre de un niño o una niña.",
         reset: "Empezar de nuevo en este teléfono", resetConfirm: "¿Empezar de nuevo? Esto borra el apodo, los parches y el registro de este teléfono." },
       photos: { title: "Qué pasa con las fotos", body: [
         "Cuando un niño o una niña toma una foto, el teléfono la achica y la envía una sola vez a nuestro escáner. El escáner le pregunta a Claude, una IA hecha por Anthropic, si la foto muestra basura y en qué caneca va.",
@@ -116,6 +117,7 @@
         "Las fotos de personas, caras o pantallas no cuentan. Eagle pide otra foto.",
         "El apodo, quien viaja contigo, los parches y el registro de limpieza se quedan en este teléfono. No hay cuentas, pagos ni anuncios.",
         "Para que la IA no cueste demasiado, cada teléfono puede enviar un número limitado de fotos al día. El servidor solo guarda conteos, nunca la foto ni la dirección de donde vino."] },
+      explore: { title: "Todas las historias", hint: "Para profes, familias y jurados: abre cualquier capítulo sin escanear. Tus parches no cambian.", back: "Volver a todas las historias" },
       sources: { title: "De dónde vienen las historias", intro: "Cada capítulo viene del guion del equipo, «Abandoned but Not Forgotten». Estas son las páginas de donde salen sus datos." },
       finale: { kicker: "¡Lo lograste!", count: { one: "¡Recogiste 1 pedazo de basura!", other: "¡Recogiste {n} pedazos de basura!" }, map: "Dónde descansan hoy", patches: "Tus parches", home: "Volver al inicio",
         mapLabel: "Un mapa de los 13 lugares de descanso: 4 en la Luna, 5 en Marte y 4 más en el espacio." },
@@ -159,7 +161,7 @@
       retry: { no: "Isso não é lixo", unsure: "Hmm, não tenho certeza", photo: "Vamos tentar outra foto", error: "Algo deu errado", again: "Tentar de novo", home: "Voltar ao início" },
       jacket: { title: "Minha jaqueta de exploração", hint: "Toque num emblema para ouvir a história de novo.", locked: "{place} · bloqueado", newTag: "novo", scan: "Escaneie para desbloquear o próximo", opening: "Ouvir o começo de novo" },
       me: { buddy: "Viaja com você: {name}", change: "Mudar", log: "Meu registro de limpeza", binned: "na lixeira", plastic: "plástico", paper: "papel", cans: "latas", language: "Idioma",
-        grownups: "Para adultos", safety: "Regras de segurança", photos: "O que acontece com as fotos", sources: "De onde vêm as histórias", privacy: "Sem contas, sem pagamentos, sem anúncios. Nada fica guardado com o nome de uma criança.",
+        grownups: "Para adultos", safety: "Regras de segurança", photos: "O que acontece com as fotos", sources: "De onde vêm as histórias", explore: "Explorar todas as histórias", privacy: "Sem contas, sem pagamentos, sem anúncios. Nada fica guardado com o nome de uma criança.",
         reset: "Começar de novo neste celular", resetConfirm: "Começar de novo? Isso apaga o apelido, os emblemas e o registro deste celular." },
       photos: { title: "O que acontece com as fotos", body: [
         "Quando uma criança tira uma foto, o celular diminui a imagem e a envia uma única vez para o nosso scanner. O scanner pergunta ao Claude, uma IA feita pela Anthropic, se a foto mostra lixo e em qual lixeira ele vai.",
@@ -167,6 +169,7 @@
         "Fotos de pessoas, rostos ou telas não contam. O Eagle pede outra foto.",
         "O apelido, quem viaja com você, os emblemas e o registro de limpeza ficam neste celular. Não há contas, pagamentos nem anúncios.",
         "Para a IA não custar caro demais, cada celular pode enviar um número limitado de fotos por dia. O servidor guarda só contagens, nunca a foto nem o endereço de onde ela veio."] },
+      explore: { title: "Todas as histórias", hint: "Para professores, famílias e jurados: abra qualquer capítulo sem escanear. Seus emblemas não mudam.", back: "Voltar para todas as histórias" },
       sources: { title: "De onde vêm as histórias", intro: "Cada capítulo vem do roteiro da equipe, “Abandoned but Not Forgotten”. Estas são as páginas de onde vêm os fatos." },
       finale: { kicker: "Você conseguiu!", count: { one: "Você recolheu 1 pedaço de lixo!", other: "Você recolheu {n} pedaços de lixo!" }, map: "Onde elas estão hoje", patches: "Seus emblemas", home: "Voltar ao início",
         mapLabel: "Um mapa dos 13 lugares de descanso: 4 na Lua, 5 em Marte e mais 4 no espaço." },
@@ -264,9 +267,9 @@
     <button type="button" class="btn-link" data-go="grownups">${t("welcome.grownups")}</button>` });
 
   screens.opening = ({ from }) => {
-    const i = L(S.content.intro), replay = from === "jacket";
+    const i = L(S.content.intro), replay = from === "jacket" || from === "explore";
     return { theme: "t-blue", cls: "opening", html: h`
-      ${replay ? h`<div class="top">${backBtn(t("back"), goAttrs("jacket"))}</div>` : ""}
+      ${replay ? h`<div class="top">${backBtn(t("back"), goAttrs(from))}</div>` : ""}
       <span class="kicker">${t("opening.kicker")}</span>
       <h1 tabindex="-1">${i.title}</h1>
       ${listenBtn("intro")}
@@ -274,7 +277,7 @@
       <div class="hook-card"><b>${t("opening.hook")}</b><p>${i.hook}</p></div>
       ${say(i.pickup)}
       <div class="grow"></div>
-      ${replay ? h`<button type="button" class="btn btn-primary" data-go="jacket">${t("story.toJacket")}</button>`
+      ${replay ? h`<button type="button" class="btn btn-primary" ${raw(goAttrs(from))}>${from === "explore" ? t("explore.back") : t("story.toJacket")}</button>`
         : h`<button type="button" class="btn btn-primary" data-act="openingDone">${t("opening.go")}</button>`}` };
   };
 
@@ -398,7 +401,7 @@
         <p class="sources"><b>${t("story.sources")}:</b> ${ch.links.map((l, i) => h`${i ? ", " : ""}<a href="${safeUrl(l.url)}" target="_blank" rel="noopener noreferrer">${l.name}</a>`)}</p>
         <div class="grow"></div>
         ${round ? h`<button type="button" class="btn btn-primary" data-go="bin">${t("story.binNow")}</button>`
-          : h`<button type="button" class="btn btn-outline" ${raw(goAttrs(from))}>${from === "finale" ? t("story.toFinale") : t("story.toJacket")}</button>`}
+          : h`<button type="button" class="btn btn-outline" ${raw(goAttrs(from))}>${from === "finale" ? t("story.toFinale") : from === "explore" ? t("explore.back") : t("story.toJacket")}</button>`}
       </div>` };
   };
 
@@ -490,6 +493,7 @@
   const grownupsCard = from => h`<section class="card card-navy grownups"><h2>${t("me.grownups")}</h2>
       <button type="button" class="row-link" ${raw(goAttrs("safety", { from }))}>${t("me.safety")}${ico("chevron", { size: 20, width: 2.6 })}</button>
       <button type="button" class="row-link" ${raw(goAttrs("photos", { from }))}>${t("me.photos")}${ico("chevron", { size: 20, width: 2.6 })}</button>
+      <button type="button" class="row-link" ${raw(goAttrs("explore", { from }))}>${t("me.explore")}${ico("chevron", { size: 20, width: 2.6 })}</button>
       <button type="button" class="row-link" ${raw(goAttrs("sources", { from }))}>${t("me.sources")}${ico("chevron", { size: 20, width: 2.6 })}</button>
       <p class="fine">${t("me.privacy")}</p>
       ${from === "me" ? h`<button type="button" class="row-link quiet" data-act="reset">${t("me.reset")}</button>` : ""}
@@ -526,6 +530,22 @@
     <div class="grow"></div>
     <button type="button" class="btn btn-outline" ${raw(goAttrs(from))}>${t("back")}</button>` });
 
+  /* Every chapter open, without scanning (for teachers, parents and judges). It never changes the player's patches. */
+  screens.explore = ({ from = S.profile ? "me" : "grownups" }) => {
+    S.exploreFrom = from;
+    const cards = range(TOTAL).map(i => {
+      const ch = chapter(i), c = L(ch);
+      return h`<button type="button" class="patch-card" ${raw(goAttrs("story", { n: i, from: "explore" }))}>${raw(A.patch(i, ch.body))}<span>${c.short}</span></button>`;
+    });
+    return { theme: "t-blue", cls: "jacket", html: h`
+      <div class="top">${backBtn(t("back"), goAttrs(from))}</div>
+      <div class="row-between end"><h1 tabindex="-1">${t("explore.title")}</h1><span class="count">${TOTAL}</span></div>
+      <p class="sub">${t("explore.hint")}</p>
+      <div class="patches">${cards}</div>
+      <button type="button" class="btn-link" ${raw(goAttrs("opening", { from: "explore" }))}>${t("jacket.opening")}</button>
+      <div class="grow"></div>` };
+  };
+
   screens.sources = ({ from = "me" }) => ({ theme: "t-cream", cls: "info", html: h`
     <div class="top">${backBtn(t("back"), goAttrs(from))}</div>
     <h1 tabindex="-1">${t("sources.title")}</h1>
@@ -560,14 +580,15 @@
     found: okRound,
     danger: () => !!(S.scan && S.scan.kind === "danger"),
     retry: () => !!(S.scan && ["no", "unsure", "photo", "error"].includes(S.scan.kind)),
-    story: p => Number.isInteger(p.n) && p.n >= 1 && p.n <= TOTAL && (p.n <= S.binned || (!!S.pending && p.n === S.binned + 1)),
+    story: p => Number.isInteger(p.n) && p.n >= 1 && p.n <= TOTAL && (p.from === "explore" || p.n <= S.binned || (!!S.pending && p.n === S.binned + 1)),
+    explore: () => true,
     bin: () => !!S.pending,
     unlocked: () => !!S.earned,
     finale: () => S.binned >= TOTAL
   };
   const fallback = () => (S.profile ? "home" : "welcome");
   /* Screens an address like …/#jacket may open directly (a reload, a bookmark, a typed address). */
-  const OPEN_BY_ADDRESS = ["home", "jacket", "me", "finale", "grownups", "photos", "sources"];
+  const OPEN_BY_ADDRESS = ["home", "jacket", "me", "finale", "grownups", "photos", "sources", "explore"];
   const fromAddress = () => { const name = location.hash.slice(1); return OPEN_BY_ADDRESS.includes(name) && GUARD[name]({}) ? name : fallback(); };
   function go(name, params = {}, { replace = false } = {}) {
     if (!screens[name] || !GUARD[name](params)) { name = fallback(); params = {}; replace = true; }
