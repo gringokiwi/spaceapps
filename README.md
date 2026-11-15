@@ -2,7 +2,9 @@
 
 *Every piece left behind has a story.*
 
-A web game for kids aged 7 to 12, made for NASA Space Apps. They pick up litter on Earth and scan it with a phone. Each piece they bin unlocks the next chapter of the team's story, **Abandoned but Not Forgotten**: 13 machines people left on the Moon, on Mars and out in space. Each chapter earns a patch for their explorer jacket.
+A web game for kids aged 7 to 13, made for NASA Space Apps. They pick up litter on Earth and scan it with a phone. Each piece they bin unlocks the next chapter of the team's story, **Abandoned but Not Forgotten**: 13 machines people left on the Moon, on Mars and out in space. Each chapter earns a patch for their explorer jacket.
+
+What it does, in plain English: [`FEATURES.md`](FEATURES.md). Screenshots and recordings: [`media/`](media/README.md).
 
 The screens follow the team's design canvas, *Debris App Screens*. The story is the team's storyboard, word for word: [`docs/abandoned-but-not-forgotten-storyboard.md`](docs/abandoned-but-not-forgotten-storyboard.md).
 
