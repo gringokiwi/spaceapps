@@ -1,14 +1,14 @@
 {
- "note": "The bull storyteller (boi de mamão, in Portuguese), from the team's spec 'Boi de Mamão Storyteller: Spec and Script' (Nov 15, 2026). In English he is 'the Bull'; only the Portuguese lines say 'Boi'. Lines are in English (en) and Portuguese (pt); Spanish players see the English lines until Spanish is written. The chapter facts never change: they stay in content.json. The spec spells the litter eater 'Bernúncia' ('Bernunça' is also used); game.js swaps the name in one place (BERNUNCIA). Lines under 'added' are not in the spec: they were written for screens the spec doesn't cover, and need the team's check.",
+ "note": "The bull storyteller (boi de mamão, in Portuguese), from the team's spec 'Boi de Mamão Storyteller: Spec and Script' (Nov 15, 2026). The English lines are for Americans and use no Portuguese: the Bull (Boi), the Dragon (Bernúncia), the Tall Lady (Maricota), the Little Horse (Cavalinho) and 'Chomp!' ('Nhac!'). Only the Portuguese lines use the Portuguese names. Lines are in English (en) and Portuguese (pt); Spanish players see the English lines until Spanish is written. The chapter facts never change: they stay in content.json. The spec spells the litter eater 'Bernúncia' ('Bernunça' is also used); game.js swaps the name in one place (BERNUNCIA). Lines under 'added' are not in the spec: they were written for screens the spec doesn't cover, and need the team's check.",
  "verse": {
   "pt": ["Olha o boi, olha o boi chegando,", "Com histórias do céu pra contar!", "Com luva na mão, vai catando,", "Que a Bernúncia vem pra almoçar!"],
-  "en": ["Here comes the Bull, here comes the Bull,", "With stories from the sky to share!", "Gloves on your hands, pick up the trash,", "Bernúncia's hungry, feed her there!"]
+  "en": ["Here comes the Bull, here comes the Bull,", "With stories from the sky to share!", "Gloves on your hands, pick up the trash,", "The Dragon's hungry, feed her there!"]
  },
  "opening": {
   "en": [
-   "Olá! I'm the Bull. Did you know even astronauts left trash behind? Over 90 bags of it, on the Moon!",
+   "Hi! I'm the Bull. Did you know even astronauts left trash behind? Over 90 bags of it, on the Moon!",
    "But they also left something special: amazing machines that went quiet when their work was done. I know how that feels. Sometimes I fall asleep in the middle of the party, and everyone has to wake me up!",
-   "So here's the deal. Every time you pick up a piece of litter and feed it to Bernúncia, I'll wake up one of those sleeping explorers and tell you its story."
+   "So here's the deal. Every time you pick up a piece of litter and feed it to the Dragon, I'll wake up one of those sleeping explorers and tell you its story."
   ],
   "pt": [
    "Olá! Eu sou o Boi. Sabia que até os astronautas deixaram lixo pra trás? Mais de 90 sacos, lá na Lua!",
@@ -16,15 +16,15 @@
    "Então vamos combinar: cada vez que você pegar um lixo e der pra Bernúncia, eu acordo um desses exploradores adormecidos e conto a história dele."
   ]
  },
- "firstPickup": { "en": "Find your first piece of litter. Bernúncia is waiting!", "pt": "Encontre seu primeiro lixo. A Bernúncia está esperando!" },
+ "firstPickup": { "en": "Find your first piece of litter. The Dragon is waiting!", "pt": "Encontre seu primeiro lixo. A Bernúncia está esperando!" },
  "chapters": [
   { "n": 1, "en": "This little robot reached the Moon before any person did. It tested the ground, like checking the floor before a dance!", "pt": "Esse robozinho chegou à Lua antes de qualquer pessoa. Ele testou o chão, como quem confere o terreiro antes de dançar!" },
-  { "n": 2, "en": "Maricota is very tall, but Eagle's legs reached the Moon first! It left a mirror we still use today.", "pt": "A Maricota é bem alta, mas as pernas da Eagle chegaram à Lua primeiro! Ela deixou um espelho que usamos até hoje." },
+  { "n": 2, "en": "Our Tall Lady is taller than Eagle, but Eagle's legs reached the Moon first! It left a mirror we still use today.", "pt": "A Maricota é bem alta, mas as pernas da Eagle chegaram à Lua primeiro! Ela deixou um espelho que usamos até hoje." },
   { "n": 3, "en": "These astronauts visited an old robot friend, Surveyor 3, and made the Moon shake!", "pt": "Esses astronautas visitaram um velho amigo robô, o Surveyor 3, e fizeram a Lua tremer!" },
-  { "n": 4, "en": "A car on the Moon! Even Cavalinho never galloped that far.", "pt": "Um carro na Lua! Nem o Cavalinho galopou tão longe!" },
-  { "n": 5, "en": "This one is still travelling, carrying a message for anyone out there. Boa viagem, Pioneer!", "pt": "Esse ainda está viajando, levando uma mensagem pra quem estiver lá fora. Boa viagem, Pioneer!" },
-  { "n": 6, "en": "The first to land safely on Mars! It's so cold there, even Bernúncia would shiver.", "pt": "O primeiro a pousar com segurança em Marte! Lá é tão frio que até a Bernúncia ia tremer." },
-  { "n": 7, "en": "It landed bouncing inside giant airbags, boing, boing, like dancing at the festa!", "pt": "Pousou quicando dentro de airbags gigantes, boing, boing, como quem dança na festa!" },
+  { "n": 4, "en": "A car on the Moon! Even our Little Horse never galloped that far.", "pt": "Um carro na Lua! Nem o Cavalinho galopou tão longe!" },
+  { "n": 5, "en": "This one is still traveling, carrying a message for anyone out there. Have a good trip, Pioneer!", "pt": "Esse ainda está viajando, levando uma mensagem pra quem estiver lá fora. Boa viagem, Pioneer!" },
+  { "n": 6, "en": "The first to land safely on Mars! It's so cold there, even the Dragon would shiver.", "pt": "O primeiro a pousar com segurança em Marte! Lá é tão frio que até a Bernúncia ia tremer." },
+  { "n": 7, "en": "It landed bouncing inside giant airbags, boing, boing, like dancing at a party!", "pt": "Pousou quicando dentro de airbags gigantes, boing, boing, como quem dança na festa!" },
   { "n": 8, "en": "It wasn't built to land, but it landed on an asteroid anyway. What courage!", "pt": "Ele não foi feito pra pousar, mas pousou num asteroide mesmo assim. Que coragem!" },
   { "n": 9, "en": "Twins! Like two bulls dancing on opposite sides of Mars.", "pt": "Gêmeos! Como dois bois dançando em lados opostos de Marte." },
   { "n": 10, "en": "Kepler looked at the stars and found planets everywhere. More planets than I have fans!", "pt": "O Kepler olhou para as estrelas e achou planetas por todo lado. Mais planetas do que eu tenho fãs!" },
@@ -34,10 +34,10 @@
  ],
  "pickups": {
   "en": [
-   "Nhac! Bernúncia gobbled it up! Wake up, {next}!",
-   "Yum! Bernúncia's tummy is glowing. Who's waking up? {next}!",
-   "Nhac, nhac! Thank you for cleaning up! Let's wake up {next}!",
-   "Bernúncia says thank you! Now, {next}, time to wake up!"
+   "Chomp! The Dragon gobbled it up! Wake up, {next}!",
+   "Yum! The Dragon's tummy is glowing. Who's waking up? {next}!",
+   "Chomp, chomp! Thank you for cleaning up! Let's wake up {next}!",
+   "The Dragon says thank you! Now, {next}, time to wake up!"
   ],
   "pt": [
    "Nhac! A Bernúncia comeu tudinho! Acorda, {next}!",
@@ -46,12 +46,13 @@
    "A Bernúncia agradece! Agora, {next}, hora de acordar!"
   ]
  },
- "allAwake": { "en": "Nhac! Every explorer is awake! Time for the big finale!", "pt": "Nhac! Todos os exploradores acordaram! Hora do grande final!" },
+ "sound": { "en": "Chomp!", "pt": "Nhac!" },
+ "allAwake": { "en": "Chomp! Every explorer is awake! Time for the big finale!", "pt": "Nhac! Todos os exploradores acordaram! Hora do grande final!" },
  "finale": {
   "en": [
-   "You did it! Every explorer is awake, and Bernúncia's tummy is full!",
+   "You did it! Every explorer is awake, and the Dragon's tummy is full!",
    "These machines went quiet a long time ago, but they're not forgotten. Some are still helping scientists today. And just like them, our planet needs people who don't forget it.",
-   "Obrigado for looking after Earth. See you at the next festa!"
+   "Thank you for looking after Earth. See you at the next party!"
   ],
   "pt": [
    "Você conseguiu! Todos os exploradores acordaram, e a barriga da Bernúncia está cheia!",
@@ -61,7 +62,7 @@
  },
  "added": {
   "title": { "en": "Here comes the Bull!", "pt": "Olha o boi chegando!" },
-  "found": { "en": "Nice find! Put it in the bin, and Bernúncia will gobble it up!", "pt": "Que achado! Coloque na lixeira, e a Bernúncia vai comer tudinho!" },
-  "homeNext": { "en": "Find another piece of litter. Bernúncia is hungry!", "pt": "Encontre mais um lixo. A Bernúncia está com fome!" }
+  "found": { "en": "Nice find! Put it in the bin, and the Dragon will gobble it up!", "pt": "Que achado! Coloque na lixeira, e a Bernúncia vai comer tudinho!" },
+  "homeNext": { "en": "Find another piece of litter. The Dragon is hungry!", "pt": "Encontre mais um lixo. A Bernúncia está com fome!" }
  }
 }

@@ -55,7 +55,7 @@
         sec: { where: "Where it is now", was: "What it was", left: "What was left behind", did: "What it did", why: "Why it was left there", help: "Still helping us" } },
       bin: { back: "Back to the story", title: { white: "Pop it in the white bin", green: "Pop it in the green bin", black: "Pop it in the black bin", special_dropoff: "Give it to a grown-up" },
         meaning: { white: "White is for recycling.", green: "Green is for food scraps.", black: "Black is for everything else.", special_dropoff: "It needs a special drop-off point. A grown-up will take it there." },
-        thenTap: "Then tap the button.", thenTapPatch: "Then tap the button to earn your patch.", legend: "Bin colours",
+        thenTap: "Then tap the button.", thenTapPatch: "Then tap the button to earn your patch.", legend: "Bin colors",
         names: { white: ["White", "Recycling"], green: ["Green", "Food scraps"], black: ["Black", "Everything else"], special_dropoff: ["Special", "With a grown-up"] },
         art: "A {color} bin with litter dropping into it", done: "It's in the bin!", doneSpecial: "A grown-up has it!", later: "No bin nearby? Save it for later" },
       unlocked: { title: "Patch unlocked!", line: "One less piece of litter on Earth, and one more story on your jacket.", of: "{n} of {total} patches earned", jacket: "See my jacket", again: "Scan another piece", finale: "See the finale",
@@ -294,8 +294,8 @@
   /* ---------- The storyteller: the Space Explorer (the storyboard) or the Boi de Mamão (boi.json, the team's spec) ----------
      The facts in every chapter are the same for both; only the narrator, the pick-up moment and a few lines change.
      The Boi's lines are in English and Portuguese: Spanish players see the English lines until Spanish is written. */
-  const BERNUNCIA = "Bernúncia";   // the spelling the team agrees on ("Bernúncia" or "Bernunça"): change it here, and every Boi line follows
-  const NHAC = "Nhac!";
+  const BERNUNCIA = "Bernúncia";   // the Portuguese spelling the team agrees on ("Bernúncia" or "Bernunça"): change it here, and every Portuguese line follows
+  // The English lines (also shown to Spanish players for now) are for Americans and use no Portuguese: the Bull, the Dragon, "Chomp!"
   const isBoi = () => S.teller === "boi" && !!S.boi;
   const boiLang = () => (S.lang === "pt" ? "pt" : "en");
   const B = obj => (obj && (obj[boiLang()] || obj.en)) || "";
@@ -312,7 +312,7 @@
     const both = o => !!o && ["en", "pt"].every(k => o[k] != null && o[k].length > 0);
     const ok = !!b && Array.isArray(b.chapters) && b.chapters.length === TOTAL && b.chapters.every((c, i) => c && c.n === i + 1 && both(c))
       && both(b.verse) && both(b.opening) && both(b.firstPickup) && both(b.pickups) && both(b.allAwake) && both(b.finale)
-      && !!b.added && both(b.added.title) && both(b.added.found) && both(b.added.homeNext)
+      && both(b.sound) && !!b.added && both(b.added.title) && both(b.added.found) && both(b.added.homeNext)
       && ["en", "pt"].every(k => b.pickups[k].every(x => typeof x === "string" && x.includes("{next}")));
     if (!ok) return null;
     return BERNUNCIA === "Bernúncia" ? b : JSON.parse(JSON.stringify(b).replace(/Bernúncia/g, BERNUNCIA));
@@ -408,7 +408,8 @@
     const end = replay ? h`<button type="button" class="btn btn-primary" ${raw(goAttrs(from))}>${from === "explore" ? t("explore.back") : t("story.toJacket")}</button>`
       : h`<button type="button" class="btn btn-primary" data-act="openingDone">${t("opening.go")}</button>`;
     if (isBoi()) {
-      // The Boi dances in while the verse appears (and plays), then talks to the child. The safety rules still come next.
+      // The Bull dances in while the verse appears (and plays), then talks to the child. The safety rules still come next.
+      // Each language shows its own verse only: Americans see the English one, Brazilians the Portuguese one.
       const b = S.boi, la = boiAttr(), talk = B(b.opening);
       return { theme: "t-blue", cls: "opening boi-opening", html: h`
         ${top}
@@ -416,8 +417,7 @@
         <h1 tabindex="-1"${la}>${B(b.added.title)}</h1>
         <div class="boi-stage">${raw(A.boi({ pose: "dance", cls: "boi-dance-in" }))}</div>
         <div class="verse"><span class="verse-note" aria-hidden="true">♪</span>
-          <div class="verse-pt" lang="pt">${b.verse.pt.map(l => h`<p>${l}</p>`)}</div>
-          ${boiLang() !== "pt" ? h`<div class="verse-tr" lang="en">${b.verse.en.map(l => h`<p>${l}</p>`)}</div>` : ""}
+          <div class="verse-main"${la}>${B(b.verse).map(l => h`<p>${l}</p>`)}</div>
         </div>
         ${listenBtn("intro")}
         ${talk.slice(0, 2).map(p => h`<p class="script"${la}>${p}</p>`)}
@@ -619,7 +619,7 @@
   let feastTimers = [];
   screens.feast = () => {
     const e = S.earned, played = !!e.played, fed = Math.min(S.binned, TOTAL), cls = "feast" + (played ? " is-played" : "");
-    const stage = h`<div class="feast-stage${played ? " fed" : ""}" id="feastStage">${raw(A.bernuncia({ fed: played || e.extra ? fed : fed - 1, animated: !played, cls: "bern-big" }))}<h1 class="nhac" tabindex="-1">${NHAC}</h1></div>`;
+    const stage = h`<div class="feast-stage${played ? " fed" : ""}" id="feastStage">${raw(A.bernuncia({ fed: played || e.extra ? fed : fed - 1, animated: !played, cls: "bern-big" }))}<h1 class="nhac" tabindex="-1"${boiAttr()}>${B(S.boi.sound)}</h1></div>`;
     if (e.extra) return { theme: "t-blue", cls, html: h`
       ${stage}
       <div class="feast-say">${sayBoi(tn("unlocked.extraLine", S.log.length), false)}</div>
@@ -1246,7 +1246,7 @@
     if (key === "intro") {
       if (!isBoi()) { const i = L(S.content.intro); return [i.title, ...i.script, t("opening.hook"), i.hook, i.pickup].map(mine); }
       const b = S.boi;
-      return [boi(B(b.added.title)), ...b.verse.pt.map(text => ({ text, lang: "pt" })), ...(boiLang() === "pt" ? [] : b.verse.en.map(boi)), ...B(b.opening).map(boi), boi(B(b.firstPickup))];
+      return [boi(B(b.added.title)), ...B(b.verse).map(boi), ...B(b.opening).map(boi), boi(B(b.firstPickup))];
     }
     if (key === "finale") { const f = L(S.content.finale); return [mine(f.title), ...(isBoi() ? B(S.boi.finale).map(boi) : f.script.map(mine))]; }
     const n = +key.split(":")[1], c = chText(n);
