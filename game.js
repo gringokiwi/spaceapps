@@ -2,6 +2,8 @@
    The screens follow the design canvas "Debris App Screens". The story is the team's storyboard,
    "Abandoned but Not Forgotten" (content.json, from docs/abandoned-but-not-forgotten-storyboard.md).
    One round: scan a piece of litter → hear the next chapter → bin it → earn that chapter's patch.
+   Two storytellers tell the same facts: the Space Explorer (the storyboard) or the Boi de Mamão (boi.json, the team's spec
+   "Boi de Mamão Storyteller"). With the Boi: scan → bin it → Bernúncia eats the piece → the explorer wakes → its chapter.
    Everything about the player stays on this phone (localStorage), so closing the app loses nothing.
    Photos are shrunk, sent once to the scanner (/api/scan) and forgotten.
    ?demo in the address: no server and no AI, Eagle pretends to scan (handy for showing the app). */

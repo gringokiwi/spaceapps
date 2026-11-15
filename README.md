@@ -23,6 +23,22 @@ No payments, no accounts, no ads. The scanner is adapted from Litter Spotter in 
 6. After chapter 13: the **finale**, with the pieces collected, every patch and a map of the 13 resting places. Children can keep scanning after that; nothing is ever lost.
 7. **Impact** (in the menu) shows how much litter everyone has picked up: a big total that counts up, and a "Litter to the Moon" tower that stacks every piece at 10 cm and compares it with famous tall things on the way to the Moon (see the team's spec, *Impact Screen Spec: Litter to the Moon*). Only confirmed pick-ups count: a piece adds 1 to the shared total when a child taps "It's in the bin!", never for a scan alone, a dangerous find or a find the child rejects.
 
+## Two storytellers: Space Explorer and Boi de Mamão
+
+After "Let's go!" on first launch, the child chooses who tells the story (the team's spec, *Boi de Mamão Storyteller: Spec and Script*). **Space Explorer** is the storyboard above and is chosen to start with. **Boi de Mamão** comes from Florianópolis's folk tradition: in the play the Boi falls down and goes quiet, and everyone helps bring it back to life. Here, the machines left in space have gone quiet too, and each piece of litter the child picks up wakes one of them.
+
+- The facts in every chapter are the same with both storytellers, word for word. Only the narrator, the pick-up moment and a few lines change.
+- **Opening:** the Boi dances in while the verse appears (in Portuguese, with the English translation) and a short festive tune plays. Then he talks to the child. The safety rules come next, as in the space version.
+- **A round with the Boi:** scan → bin it → **Bernúncia** gobbles the piece ("Nhac!"), her tummy glows a little brighter, and the Boi says one of his four pick-up lines (they take turns) → the explorer wakes up with a little dance → its chapter opens with one Boi line first, then the same facts.
+- **Chapter 2:** Maricota, the very tall woman of the play, stands next to Eagle the lander.
+- **Finale:** the 13 explorers dance with the Boi, Bernúncia's tummy glows at full brightness, then the same ending with a button to Impact.
+- **Languages:** the Boi's lines are in English and Portuguese (`boi.json`). Spanish players see the English lines (marked as English for screen readers) until Spanish is written. The storyteller is separate from the language.
+- **Switching:** Me → Storyteller (and Explore all the stories, for teachers and judges). Switching keeps every patch, the jacket and the cleanup log. Players from before this change stay with the space story and never see the choice screen.
+- **Drawings and sound:** the Boi, Bernúncia and Maricota are original drawings in the app's style (`art.js`), inspired by the tradition, not copied from any group's costumes. The "Nhac!" and the festive tune are made on the phone with Web Audio: an original tune, no recordings. Sound only starts after a tap and stops when the screen changes; a phone on silent may play nothing. "Nhac!" is always written on the screen too.
+- **Spelling:** the spec spells it *Bernúncia* (*Bernunça* is also used). To change it everywhere, change `BERNUNCIA` at the top of the storyteller code in `game.js`.
+- If `boi.json` doesn't load, the app runs with the space story only.
+- Credit, shown on the choice screen, in Me and in "Where the stories come from": *Inspired by the boi de mamão tradition of Florianópolis and Santa Catarina.*
+
 Add `?demo` to the address to show the app without the scanner: Eagle pretends to scan (no camera needed), and demo progress is kept apart from real progress. On the Impact screen, demo mode shows sample data with a "Demo data" label: 1,284 pieces, or any total with `?demo&total=N`.
 
 ## Files
@@ -32,6 +48,7 @@ Add `?demo` to the address to show the app without the scanner: Eagle pretends t
 | `index.html`, `style.css`, `game.js` | The app: screens, the round, camera, read-aloud, and every word on screen in English, Spanish and Portuguese |
 | `art.js` | The drawings as SVG: Eagle, the crew buddies, the 13 chapter patches, the bins, the finale map, the Impact milestones, tower and Earth-to-Moon strip |
 | `impact.js` | The Impact screen's milestones (the spec's `MILESTONES`, unchanged) and maths: tower height, milestone passed and next, progress between them, the log-scale strip, and heights in each language's number format |
+| `boi.json` | The Boi de Mamão storyteller's lines in English and Portuguese, from the team's spec: the verse, the opening, the 13 chapter intros, Bernúncia's pick-up lines and the finale. Lines under `added` (the opening's title, the Boi's line on the find screen and on Home between pieces) are not in the spec |
 | `content.json` | The story in English, Spanish and Portuguese: opening scene, 13 chapters, finale. English is the storyboard word for word. `links` are the storyboard's sources; `image` can hold a NASA picture per chapter |
 | `docs/abandoned-but-not-forgotten-storyboard.md` | The team's storyboard, exported from the team's doc |
 | `img/chapters/` | NASA images for the chapters go here (e.g. `img/chapters/1.jpg`, then set `"image": "img/chapters/1.jpg"` in `content.json`). Until then each chapter shows its patch |
@@ -87,6 +104,7 @@ Then open http://localhost:3000 (or http://localhost:3000/?demo without a key).
 - Whole app in Chromium with a fake camera (phone 390 × 844, 320 × 640 in Spanish, desktop): onboarding, a full round, chapters 1, 2 and 13 checked against the storyboard, danger, retake, not litter, server error, save for later across a reload, jacket, cleanup log, Spanish and Portuguese, special drop-off, the finale and a 14th piece, no camera (file picker), demo mode with no server, the back button, no sideways scroll, and buttons at least 44 px.
 - `server.mjs`: the app's files are served and everything else is hidden (server code, `node_modules`, `.git`, `..` tricks), the API routes, the 2 MB body limit, security headers, and counters kept across a restart. The whole browser test above also passes behind it.
 - Impact: the tower maths against the spec's examples and every boundary (0, 1, 5, 11, 12, 379, 380, 96/97, 1,284, Everest, the ISS, the Moon) and number formats; tickets on the server (one +1 per confirmed pick-up, a second phone sees it, replayed, simultaneous, forged and expired tickets don't count, dangerous finds get none); in the browser, the count-up, reduce-motion, the spec's lines in English, Portuguese and Spanish, the Moon line at 96/97, the Demo data label, `?total` ignored outside demo, an offline pick-up counted later, and no location requested.
+- Boi de Mamão storyteller, in the browser: the choice screen (Space Explorer chosen to start with), the Boi's opening in English, Portuguese and Spanish, the safety rules still before the first scan, a full round (find → bin → Bernúncia eats → the explorer wakes → the chapter with its Boi line first), one ticket per pick-up counted once, the Back button showing Bernúncia settled with no second "Nhac!", the pick-up lines taking turns, Maricota in chapter 2, switching in Me keeping all progress, the finale and its Impact button, a 14th piece, reduce-motion, 320 px, and the facts of all 13 chapters identical with both storytellers in all three languages. Also: without `boi.json` the app runs with the space story, and a player from before lands on Home with the space story.
 - **Not yet**: the real Claude key with real photos, and NASA pictures for the chapters.
 
 ## The 3D explorer jacket

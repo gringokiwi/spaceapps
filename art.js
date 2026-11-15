@@ -318,7 +318,7 @@ ${boiHeadArt(pose === "talk" ? "talk" : "smile")}`;
      animated: every state is drawn, and the page switches them with the classes s-idle, s-open and s-chew. */
   function bernGlow(fed) {
     const k = Math.max(0, Math.min(13, Math.floor(fed) || 0));
-    return { fill: k ? r1(.3 + .7 * k / 13) : 0, r1: k >= 1 ? .5 : 0, r2: k >= 5 ? .34 : 0, r3: k >= 9 ? .22 : 0, sp: k >= 13 ? 1 : 0 };
+    return { fill: k ? Math.round((.3 + .7 * k / 13) * 100) / 100 : 0, r1: k >= 1 ? .5 : 0, r2: k >= 5 ? .34 : 0, r3: k >= 9 ? .22 : 0, sp: k >= 13 ? 1 : 0 };
   }
   function bernArt({ state = "idle", fed = 0, animated = false } = {}) {
     const g = bernGlow(fed), has = s => animated || state === s;
