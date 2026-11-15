@@ -278,7 +278,6 @@ noscript p { color: var(--cream); padding: 40px 20px; font-size: 18px; text-alig
 .patch-card.is-new { box-shadow: 0 0 0 3px var(--peach); }
 .patch-card.locked { background: transparent; border: 3px dashed var(--lav); color: var(--mist); }
 .patch-card .q { width: 84px; height: 84px; max-width: 100%; border-radius: 50%; background: var(--blue2); color: var(--ice); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 38px; }
-.jacket .btn-link { color: var(--cream); }
 .jacket .btn-primary { font-size: 20px; }
 
 /* ---------- Me and grown-ups ---------- */

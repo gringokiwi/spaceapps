@@ -43,7 +43,7 @@ Every screen has a rule (`GUARD`). If it fails, the app goes Home (or Welcome be
 | `grownups`, `photos`, `sources`, `explore`, `usage`, `impact` **address** | always | back |
 | `finale` **address** | all 13 patches | Home, Impact (Bull), any chapter |
 
-A round: **Space** scan → found → chapter → bin → patch. **The Bull** scan → found → bin → the Dragon eats ("Chomp!") → the explorer wakes up → chapter. The step pill follows the same order (`ROUND` in `game.js`).
+A round: **Space** scan → found → chapter → bin → patch. **The Bull** scan → found → bin → the Dragon eats ("Chomp!") → the explorer wakes up → chapter. The step pill follows the same order (`TELLERS` in `game.js` holds what differs between the two storytellers).
 
 ## Rules the tests check
 

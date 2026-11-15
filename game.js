@@ -283,13 +283,8 @@
   const ico = (name, o) => raw(A.icon(name, o));
   const backBtn = (label, attrs) => h`<button type="button" class="circle-btn" aria-label="${label}" ${raw(attrs)}>${ico("back", { width: 2.6 })}</button>`;
   const goAttrs = (name, params = {}) => `data-go="${esc(name)}"` + (params.n ? ` data-n="${+params.n}"` : "") + (params.from ? ` data-from="${esc(params.from)}"` : "");
-  /* Where each screen sits in a round, for the step pill. The Bull's round bins first, then the Dragon eats, then the story. */
-  const ROUND = {
-    space: { scan: 1, danger: 1, retry: 1, found: 2, story: 2, bin: 3, unlocked: 4 },
-    boi: { scan: 1, danger: 1, retry: 1, found: 2, bin: 2, feast: 3, story: 4 }
-  };
-  function steps(screen) {
-    const names = isBoi() ? t("stepsBoi") : t("steps.names"), i = ROUND[isBoi() ? "boi" : "space"][screen];
+  function steps(screen) {   // the step pill: where this screen sits in the storyteller's round (screens outside a round have none)
+    const tl = teller(), names = t(tl.steps), i = tl.round[screen];
     if (!i) return "";
     return h`<div class="steps" role="img" aria-label="${t("steps.label", { i, name: names[i - 1] })}">${names.map((nm, k) =>
       k + 1 < i ? h`<span class="dot done"></span>` : k + 1 === i ? h`<span class="cur">${k + 1} ${nm}</span>` : h`<span class="dot"></span>`)}</div>`;
@@ -323,12 +318,18 @@
   const boiLang = () => (S.lang === "pt" ? "pt" : "en");
   const B = obj => (obj && (obj[boiLang()] || obj.en)) || "";
   const boiAttr = () => (boiLang() !== S.lang ? raw(` lang="${boiLang()}"`) : "");   // a Spanish page marks the English Boi lines as English
-  const sayBoi = (text, boiWords = true) => sayRow(A.boiHead({ mood: "talk", cls: "say-boi" }), text, boiWords ? boiAttr() : "");
+  // boiWords: the text is one of the Bull's lines (boi.json), so a Spanish page marks it as English; UI text passes false
+  const sayBoi = (text, boiWords = false) => sayRow(A.boiHead({ mood: "talk", cls: "say-boi" }), text, boiWords ? boiAttr() : "");
   const narrate = (text, boiWords) => (isBoi() ? sayBoi(text, boiWords) : say(text));   // the storyteller says it: the Bull, or Eagle
+  /* What differs between the two storytellers. round: where each screen sits in a round, for the step pill (the Bull's round
+     bins first, then the Dragon eats, then the story); moment: the screen that plays when a piece goes in the bin. */
   const TELLERS = [
-    { k: "space", name: "teller.optionSpace", card: () => A.eagle(), head: () => A.eagleHead({ mood: "smile" }) },
-    { k: "boi", name: "teller.optionBoi", tag: "teller.boiTag", card: () => A.boiCard(), head: () => A.boiHead({ mood: "smile" }) }
+    { k: "space", name: "teller.optionSpace", card: () => A.eagle(), head: () => A.eagleHead({ mood: "smile" }),
+      steps: "steps.names", round: { scan: 1, danger: 1, retry: 1, found: 2, story: 2, bin: 3, unlocked: 4 }, moment: "unlocked" },
+    { k: "boi", name: "teller.optionBoi", tag: "teller.boiTag", card: () => A.boiCard(), head: () => A.boiHead({ mood: "smile" }),
+      steps: "stepsBoi", round: { scan: 1, danger: 1, retry: 1, found: 2, bin: 2, feast: 3, story: 4 }, moment: "feast" }
   ];
+  const teller = () => TELLERS[isBoi() ? 1 : 0];
   // The Boi's line after Bernúncia eats: the four lines take turns (by chapter, so a reload says the same), {next} is the explorer waking up
   function pickupLine(n) {
     if (n >= TOTAL) return B(S.boi.allAwake);
@@ -449,7 +450,7 @@
         ${talk.slice(0, 2).map(p => h`<p class="script"${la}>${p}</p>`)}
         <div class="boi-nap">${raw(A.boi({ pose: "sleep" }))}</div>
         ${talk.slice(2).map(p => h`<p class="script"${la}>${p}</p>`)}
-        ${sayBoi(B(b.firstPickup))}
+        ${sayBoi(B(b.firstPickup), true)}
         <div class="grow"></div>
         ${end}`, after: () => { if (fromTap()) sound.festa(); } };
     }
@@ -566,9 +567,10 @@
   };
 
   screens.story = ({ n, from = "round" }) => {
-    if (from === "round" && !(S.pending && n === S.binned + 1)) from = "jacket";   // Back after the piece was binned: just the chapter
+    // Which round this chapter belongs to now. Back, or a storyteller switch, can bring back an old one: then it is just a chapter
+    if (from === "round" ? isBoi() || !(S.pending && n === S.binned + 1) : from === "boi" && !isBoi()) from = "jacket";
     const ch = chapter(n), c = L(ch), round = from === "round", boiRound = from === "boi", img = safeImg(ch.image);
-    const backTo = round ? (S.scan && S.scan.kind === "found" ? "found" : "home") : boiRound ? (isBoi() ? "feast" : "home") : from;
+    const backTo = round ? (S.scan && S.scan.kind === "found" ? "found" : "home") : boiRound ? "feast" : from;
     const back = backBtn(t(backTo === "found" ? "found.back" : "back"), goAttrs(backTo, backTo === "feast" ? { n } : {}));
     const end = round ? btn("bin", t("story.binNow"))
       : boiRound ? h`${n >= TOTAL ? btn("finale", t("unlocked.finale")) : btn("scan", t("unlocked.again"))}${btn("jacket", t("unlocked.jacket"), "outline")}`
@@ -585,7 +587,7 @@
         </div>
       </div>
       <div class="story-body">
-        ${isBoi() ? h`<div class="boi-intro">${sayBoi(B(S.boi.chapters[n - 1]))}${n === 2 ? h`<div class="tall-friends">${raw(A.tallFriends())}</div>` : ""}</div>` : ""}
+        ${isBoi() ? h`<div class="boi-intro">${sayBoi(B(S.boi.chapters[n - 1]), true)}${n === 2 ? h`<div class="tall-friends">${raw(A.tallFriends())}</div>` : ""}</div>` : ""}
         ${img ? h`<figure class="story-photo"><img src="${img}" alt="${c.title}"><figcaption>${t("story.credit", { by: ch.credit || "NASA" })}</figcaption></figure>` : ""}
         ${listenBtn("chapter:" + n)}
         ${c.sections.map(section)}
@@ -651,14 +653,14 @@
     const after = first ? () => playFeast(n) : null;
     if (extra) return { theme: "t-blue", cls, html: h`
       ${stage}
-      <div class="feast-say">${sayBoi(tn("unlocked.extraLine", extra), false)}</div>
+      <div class="feast-say">${sayBoi(tn("unlocked.extraLine", extra))}</div>
       <div class="grow"></div>
       ${btn("scan", t("unlocked.again"))}${btn("finale", t("unlocked.finale"), "outline")}`, after };
     const c = chText(n);
     return { theme: "t-blue", cls, html: h`
       <div class="top center">${steps("feast")}</div>
       ${stage}
-      <div class="feast-say">${sayBoi(pickupLine(n))}</div>
+      <div class="feast-say">${sayBoi(pickupLine(n), true)}</div>
       <div class="wake${first ? "" : " awake"}" id="wake">
         <div class="wake-patch">${patchOf(n)}<span class="zzz" aria-hidden="true">z z z</span></div>
         <b class="patch-name">${c.short}</b>
@@ -950,8 +952,8 @@
     story: p => Number.isInteger(p.n) && p.n >= 1 && p.n <= TOTAL && (p.from === "explore" || p.n <= S.binned || (!!S.pending && p.n === S.binned + 1)),
     explore: () => true, usage: () => true,
     bin: () => !!S.pending,
-    unlocked: p => !isBoi() && earnedOk(p),
-    feast: p => isBoi() && earnedOk(p),
+    unlocked: p => teller().moment === "unlocked" && earnedOk(p),
+    feast: p => teller().moment === "feast" && earnedOk(p),
     finale: () => S.binned >= TOTAL,
     impact: () => true
   };
@@ -1099,7 +1101,7 @@
     else S.earned = { extra: S.log.length };
     S.pending = null; S.scan = null;
     persist();
-    go(isBoi() ? "feast" : "unlocked", S.earned, { replace: true });
+    go(teller().moment, S.earned, { replace: true });
     sendTickets();
   }
 
