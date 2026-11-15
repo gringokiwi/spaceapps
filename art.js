@@ -313,42 +313,68 @@ ${boiHeadArt(pose === "talk" ? "talk" : "smile")}`;
       : shadow + figure;
   }
 
-  /* Bernúncia, the friendly litter eater, in a 270 × 150 box (y from 30). States: idle, open, chew.
+  /* Bernúncia, the litter eater of the boi de mamão: a long body of bright striped cloth carried by children (their legs
+     and sneakers show underneath) and a huge beak of a mouth that opens wide. Friendly and funny, never scary.
+     In a 300 × 160 box (y from 20), facing left. States: idle (mouth a little open, smiling), open (wide), chew (closed).
      Her round tummy glows brighter with every piece she eats (fed: 0 to 13; three halo levels, sparkles when full).
      animated: every state is drawn, and the page switches them with the classes s-idle, s-open and s-chew. */
   function bernGlow(fed) {
     const k = Math.max(0, Math.min(13, Math.floor(fed) || 0));
     return { fill: k ? Math.round((.3 + .7 * k / 13) * 100) / 100 : 0, r1: k >= 1 ? .5 : 0, r2: k >= 5 ? .34 : 0, r3: k >= 9 ? .22 : 0, sp: k >= 13 ? 1 : 0 };
   }
+  let bernIds = 0;   // each drawing gets its own clip-path ids, so two Bernúncias on a page never share one
   function bernArt({ state = "idle", fed = 0, animated = false } = {}) {
-    const g = bernGlow(fed), has = s => animated || state === s;
-    const BODY = "#2F9E73", HEAD = "#3DBB83", MOUTH = "#7A1E3A", GLOW = "#FFD84D";
-    const spike = d => `<path d="${d}" fill="${ORANGE}" stroke="${OUT}" stroke-width="3" stroke-linejoin="round"/>`;
-    const star = (x, y) => `<path d="M${x} ${y - 8} l2.4 5.6 5.6 2.4 -5.6 2.4 -2.4 5.6 -2.4 -5.6 -5.6 -2.4 5.6 -2.4z" fill="${HIDE}"/>`;
-    let legs = ""; for (const x of [104, 136, 178, 210]) legs += `<path d="M${x} 148 V161" stroke="${NAVY}" stroke-width="7" stroke-linecap="round"/><ellipse cx="${x - 3}" cy="165" rx="9" ry="5" fill="${HIDE}" stroke="${OUT}" stroke-width="2.5"/><path d="M${x - 9} 165 h9" stroke="${PINK}" stroke-width="2.5" stroke-linecap="round"/>`;
-    let fringe = ""; for (let x = 86; x <= 226; x += 11.6) fringe += `<circle cx="${r1(x)}" cy="150" r="6" fill="${YELLOW}" stroke="${OUT}" stroke-width="2.5"/>`;
-    const eyes = has("idle") || has("open") ? `<g class="bn-eyes">
-<path d="M36 70 l-4 -6 M44 67.5 v-7 M52 70 l4 -6 M64 68 l-4 -6 M72 65.5 v-7 M80 68 l4 -6" stroke="${OUT}" stroke-width="3" stroke-linecap="round"/>
-<circle cx="44" cy="80" r="12.5" fill="#FFFFFF" stroke="${OUT}" stroke-width="3"/><circle cx="72" cy="78" r="12.5" fill="#FFFFFF" stroke="${OUT}" stroke-width="3"/>
-<circle cx="41" cy="82" r="6.6" fill="${OUT}"/><circle cx="69" cy="80" r="6.6" fill="${OUT}"/><circle cx="38.6" cy="79.4" r="2.4" fill="#FFFFFF"/><circle cx="66.6" cy="77.4" r="2.4" fill="#FFFFFF"/></g>` : "";
-    return `<ellipse cx="140" cy="172" rx="112" ry="6" fill="${NAVY}" opacity=".3"/>
-${legs}${fringe}
-${spike("M86 94 Q95 72 104 92 Z")}${spike("M110 80 Q120 55 130 80 Z")}${spike("M161 79 Q171 54 181 79 Z")}${spike("M209 86 Q219 63 229 86 Z")}
-${spike("M246 80 Q250 58 266 60 Q256 68 260 82 Q252 78 246 80 Z")}
-<path d="M68 136 Q62 96 96 90 Q118 62 146 86 Q170 62 196 88 Q220 70 238 96 Q256 92 254 74 Q268 98 248 118 Q244 146 214 150 L92 150 Q70 150 68 136 Z" fill="${BODY}" stroke="${OUT}" stroke-width="4" stroke-linejoin="round"/>
-<circle cx="154" cy="112" r="7" fill="${PINK}"/><circle cx="190" cy="104" r="6" fill="#A07EFF"/><circle cx="224" cy="114" r="5.5" fill="${YELLOW}"/><circle cx="180" cy="132" r="5" fill="${PINK}"/><circle cx="208" cy="134" r="4.5" fill="#A07EFF"/><circle cx="168" cy="96" r="4" fill="${YELLOW}"/>
-<circle data-part="r3" cx="118" cy="124" r="46" fill="${GLOW}" opacity="${g.r3}"/><circle data-part="r2" cx="118" cy="124" r="37" fill="${GLOW}" opacity="${g.r2}"/><circle data-part="r1" cx="118" cy="124" r="29" fill="${GLOW}" opacity="${g.r1}"/>
-<circle cx="118" cy="124" r="22" fill="${HIDE}" stroke="${OUT}" stroke-width="3.5"/><circle data-part="fill" cx="118" cy="124" r="20" fill="${GLOW}" opacity="${g.fill}"/>
-<ellipse cx="110" cy="116" rx="6" ry="3.6" fill="#FFFFFF" opacity=".85" transform="rotate(-35 110 116)"/>
-<g data-part="sp" opacity="${g.sp}">${star(150, 92)}${star(92, 150)}${star(146, 152)}</g>
-${spike("M34 70 Q35 47 51 62 Z")}${spike("M50 62 Q58 38 69 60 Z")}${spike("M68 62 Q82 42 85 69 Z")}
-<ellipse cx="26" cy="110" rx="24" ry="18" fill="none" stroke="${OUT}" stroke-width="8"/><circle cx="56" cy="98" r="40" fill="none" stroke="${OUT}" stroke-width="8"/>
-<ellipse cx="26" cy="110" rx="24" ry="18" fill="${HEAD}"/><circle cx="56" cy="98" r="40" fill="${HEAD}"/>
-<ellipse cx="10" cy="103" rx="2.6" ry="3.6" fill="${OUT}"/><ellipse cx="20" cy="100" rx="2.6" ry="3.6" fill="${OUT}"/>
-${eyes}
-${has("idle") ? `<g class="bn-closed"><circle cx="76" cy="104" r="6.5" fill="${PINK}" opacity=".85"/><path d="M8 114 Q44 150 88 112 Q48 130 8 114 Z" fill="${MOUTH}" stroke="${OUT}" stroke-width="3" stroke-linejoin="round"/><rect x="40" y="119.5" width="7.5" height="7" rx="2" fill="#FFFFFF" stroke="${OUT}" stroke-width="1.5"/><rect x="48.5" y="119.5" width="7.5" height="7" rx="2" fill="#FFFFFF" stroke="${OUT}" stroke-width="1.5"/></g>` : ""}
-${has("open") ? `<g class="bn-open"><path d="M6 104 Q46 92 90 106 Q86 158 50 160 Q12 156 6 104 Z" fill="${MOUTH}" stroke="${OUT}" stroke-width="3.5" stroke-linejoin="round"/><ellipse cx="48" cy="146" rx="22" ry="9" fill="${PINK}"/><rect x="38" y="97" width="8" height="8" rx="2" fill="#FFFFFF" stroke="${OUT}" stroke-width="1.5"/><rect x="50" y="98" width="8" height="8" rx="2" fill="#FFFFFF" stroke="${OUT}" stroke-width="1.5"/></g>` : ""}
-${has("chew") ? `<g class="bn-chew"><path d="M32 83 Q44 70 56 83 M60 81 Q72 68 84 81" fill="none" stroke="${OUT}" stroke-width="4.5" stroke-linecap="round"/><circle cx="78" cy="104" r="9.5" fill="${PINK}" opacity=".85"/><circle cx="14" cy="118" r="7" fill="${PINK}" opacity=".6"/><path d="M14 120 q6 7 12 0 q6 7 12 0 q6 7 12 0 q6 7 12 0 q6 7 12 0 q6 7 12 0" fill="none" stroke="${OUT}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>` : ""}
+    const g = bernGlow(fed), has = s => animated || state === s, id = "bn" + (++bernIds);
+    const MOUTH = "#9E1F45", GLOW = "#FFF1A6", TURQ = "#3EC1D3", SUN = "#FFD84D", RED = "#E0553B", PURPLE = "#A07EFF";
+    const BODY = "M100 132 Q92 98 110 82 Q128 62 156 60 Q176 60 190 68 Q206 58 232 58 Q270 60 280 102 Q286 134 262 143 L116 143 Q102 143 100 132 Z";
+    const UPPER = "M118 100 L118 72 Q114 58 94 58 Q52 64 16 78 Q4 83 5 91 Q7 98 18 98 Z";
+    const LOWER = "M118 104 L20 104 Q9 104 9 110 Q10 118 24 118 Q72 125 116 125 Z";
+    const hx = 114, hy = 102;   // the jaws' hinge
+    const rp = (x, y, deg) => { const a = deg * Math.PI / 180, dx = x - hx, dy = y - hy; return [r1(hx + dx * Math.cos(a) - dy * Math.sin(a)), r1(hy + dx * Math.sin(a) + dy * Math.cos(a))]; };
+    const star = (x, y) => `<path d="M${x} ${y - 8} l2.4 5.6 5.6 2.4 -5.6 2.4 -2.4 5.6 -2.4 -5.6 -5.6 -2.4 5.6 -2.4z" fill="#FFFFFF"/>`;
+    const eye = (x, y, happy) => happy
+      ? `<circle cx="${x}" cy="${y}" r="14" fill="${TURQ}" stroke="${OUT}" stroke-width="3"/><circle cx="${x}" cy="${y}" r="10" fill="#FFFFFF"/>
+<path d="M${x - 7} ${y + 3} Q${x} ${y - 7} ${x + 7} ${y + 3}" fill="none" stroke="${OUT}" stroke-width="4" stroke-linecap="round"/>`
+      : `<path d="M${x - 9} ${y - 12} l-4 -5 M${x} ${y - 15} v-7 M${x + 9} ${y - 12} l4 -5" stroke="${OUT}" stroke-width="3" stroke-linecap="round"/>
+<circle cx="${x}" cy="${y}" r="14" fill="${TURQ}" stroke="${OUT}" stroke-width="3"/><circle cx="${x}" cy="${y}" r="10" fill="#FFFFFF"/>
+<circle cx="${x - 3}" cy="${y + 1}" r="5.8" fill="${OUT}"/><circle cx="${x - 5}" cy="${y - 1.5}" r="2" fill="#FFFFFF"/>`;
+    // One state of the head: inside the mouth, the lower jaw and tongue, the upper jaw with stripes, teeth, nostrils and eyes
+    function head(cls, up, lo, happy) {
+      const [ax, ay] = rp(18, 97, up), [bx, by] = rp(22, 105, lo);
+      return `<g class="${cls}">
+<path d="M${hx} ${hy - 5} L${ax} ${ay} Q${r1((ax + bx) / 2 + 8)} ${r1((ay + by) / 2)} ${bx} ${by} L${hx} ${hy + 5} Z" fill="${MOUTH}"/>
+<g transform="rotate(${lo} ${hx} ${hy})"><ellipse cx="66" cy="104" rx="38" ry="7" fill="${PINK}"/><path d="${LOWER}" fill="${HIDE}" stroke="${OUT}" stroke-width="4" stroke-linejoin="round"/></g>
+<g transform="rotate(${up} ${hx} ${hy})">
+<rect x="30" y="94" width="8" height="9.5" rx="3" fill="#FFFFFF" stroke="${OUT}" stroke-width="2"/><rect x="42" y="95" width="8" height="9.5" rx="3" fill="#FFFFFF" stroke="${OUT}" stroke-width="2"/>
+<clipPath id="${id}${cls}"><path d="${UPPER}"/></clipPath>
+<path d="${UPPER}" fill="${SUN}"/>
+<g clip-path="url(#${id}${cls})" fill="none" stroke-width="7"><path d="M122 66 Q70 66 2 86" stroke="${RED}"/><path d="M122 80 Q70 78 2 98" stroke="${ORANGE}"/></g>
+<path d="${UPPER}" fill="none" stroke="${OUT}" stroke-width="4" stroke-linejoin="round"/>
+<ellipse cx="20" cy="84" rx="2.6" ry="3.6" fill="${OUT}"/><ellipse cx="31" cy="80.5" rx="2.6" ry="3.6" fill="${OUT}"/>
+${eye(76, 58, happy)}${eye(101, 52, happy)}
+</g>
+<circle cx="104" cy="111" r="${happy ? 11 : 7}" fill="${PINK}" opacity=".8"/></g>`;
+    }
+    let stripes = "";
+    [PURPLE, TURQ, "#2F9E73", SUN, ORANGE, RED, PINK].forEach((c, i) => { const y = 54 + i * 13.5; stripes += `<path d="M86 ${y + 36} Q124 ${y + 6} 156 ${y + 4} Q176 ${y + 4} 190 ${y + 12} Q206 ${y + 2} 232 ${y + 2} Q272 ${y + 4} 296 ${y + 50}" stroke="${c}"/>`; });
+    let legs = "";
+    [[136, PINK], [192, TURQ], [246, SUN]].forEach(([x, shoe]) => { for (const [dx, lean] of [[-6, -3], [6, 3]]) legs += `<path d="M${x + dx} 140 L${x + dx + lean} 161" stroke="${NAVY}" stroke-width="7" stroke-linecap="round"/><ellipse cx="${x + dx + lean - 3}" cy="165" rx="8.5" ry="5" fill="${shoe}" stroke="${OUT}" stroke-width="2.5"/>`; });
+    let fringe = ""; for (let x = 120; x <= 264; x += 10.8) fringe += `<circle cx="${r1(x)}" cy="144" r="5.5" fill="${TURQ}" stroke="${OUT}" stroke-width="2.2"/>`;
+    const tail = [["M278 96 c8 -6 10 -16 18 -18", RED], ["M280 102 c8 -2 10 -8 16 -5", SUN], ["M278 108 c9 4 10 12 17 14", PURPLE]]
+      .map(([d, c]) => `<path d="${d}" fill="none" stroke="${OUT}" stroke-width="8.5" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${c}" stroke-width="5" stroke-linecap="round"/>`).join("");
+    let collar = ""; for (let i = 0; i <= 5; i++) { const t = i / 5; collar += `<circle cx="${r1(119 - 6 * Math.sin(t * Math.PI))}" cy="${r1(68 + t * 62)}" r="7.5" fill="${[PINK, SUN, TURQ][i % 3]}" stroke="${OUT}" stroke-width="2.5"/>`; }
+    return `<ellipse cx="166" cy="172" rx="124" ry="6" fill="${NAVY}" opacity=".3"/>
+${legs}${fringe}${tail}
+<clipPath id="${id}b"><path d="${BODY}"/></clipPath>
+<path d="${BODY}" fill="${SUN}"/>
+<g clip-path="url(#${id}b)" fill="none" stroke-width="14.5">${stripes}</g>
+<path d="${BODY}" fill="none" stroke="${OUT}" stroke-width="4" stroke-linejoin="round"/>
+<circle data-part="r3" cx="192" cy="110" r="46" fill="${GLOW}" opacity="${g.r3}"/><circle data-part="r2" cx="192" cy="110" r="37" fill="${GLOW}" opacity="${g.r2}"/><circle data-part="r1" cx="192" cy="110" r="29" fill="${GLOW}" opacity="${g.r1}"/>
+<circle cx="192" cy="110" r="21" fill="${HIDE}" stroke="${OUT}" stroke-width="3.5"/><circle data-part="fill" cx="192" cy="110" r="19" fill="${SUN}" opacity="${g.fill}"/>
+<ellipse cx="185" cy="103" rx="6" ry="3.6" fill="#FFFFFF" opacity=".85" transform="rotate(-35 185 103)"/>
+<g data-part="sp" opacity="${g.sp}">${star(232, 82)}${star(156, 126)}${star(222, 136)}</g>
+${has("idle") ? head("bn-closed", 3, -8, false) : ""}${has("open") ? head("bn-open", 16, -30, false) : ""}${has("chew") ? head("bn-chew", -1, 2, true) : ""}
+${collar}
 ${animated ? `<g class="bn-snack"><rect x="14" y="8" width="24" height="15" rx="3" fill="#E8457A" stroke="${OUT}" stroke-width="2"/><path d="M14 11 l-6 -4 v17 l6 -4 Z M38 11 l6 -4 v17 l-6 -4 Z" fill="#C92F63" stroke="${OUT}" stroke-width="1.5" stroke-linejoin="round"/></g>` : ""}`;
   }
 
@@ -378,9 +404,9 @@ ${flower(63, 12, 4, PINK)}
   const boi = ({ pose = "wave", label = "", cls = "" } = {}) => `<svg class="${cls}" viewBox="0 0 200 220" ${aria(label)}>${boiArt(pose)}</svg>`;
   const boiHead = ({ mood = "smile", label = "", cls = "" } = {}) => `<svg class="${cls}" viewBox="6 4 188 114" ${aria(label)}>${boiHeadArt(mood)}</svg>`;
   const bernuncia = ({ state = "idle", fed = 0, animated = false, label = "", cls = "" } = {}) =>
-    `<svg class="bern s-${state}${cls ? " " + cls : ""}" viewBox="0 30 270 150" ${aria(label)}>${bernArt({ state, fed, animated })}</svg>`;
+    `<svg class="bern s-${state}${cls ? " " + cls : ""}" viewBox="0 20 300 160" ${aria(label)}>${bernArt({ state, fed, animated })}</svg>`;
   // The choice card: the Boi waving, with Bernúncia peeking in behind
-  const boiCard = (label = "") => `<svg viewBox="0 0 240 220" ${aria(label)}><g transform="translate(150 96) scale(.66)">${bernArt({})}</g><g transform="translate(-10 0)">${boiArt("wave")}</g></svg>`;
+  const boiCard = (label = "") => `<svg viewBox="0 0 240 220" ${aria(label)}><g transform="translate(104 90) scale(.64)">${bernArt({})}</g><g transform="translate(-6 14) scale(.9)">${boiArt("wave")}</g></svg>`;
   // Chapter 2: Maricota is very tall, but Eagle's legs reached the Moon first
   const tallFriends = (label = "") => `<svg viewBox="0 0 300 250" ${aria(label)}><path d="M8 243 H292" stroke="${LAV}" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 8"/>
 <g transform="translate(40 0)">${maricotaArt()}</g><g transform="translate(150 104) scale(.64)">${eagleArt({ look: "center" })}</g></svg>`;
