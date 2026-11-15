@@ -230,10 +230,10 @@
     teller: load("teller") === "boi" ? "boi" : "space",   // who tells the story: "space" (the storyboard) or "boi" (the Boi de Mamão)
     tellerChosen: !!load("tellerChosen", false),
     boi: null,        // the Boi's lines (boi.json); if they don't load, the app runs with the space story only
-    content: null, counter: null, pickups: null, counterAt: 0, impact: null,   // counter: pieces found (Live usage); pickups: confirmed in the bin (Home, Impact)
+    content: null, pickups: null, counterAt: 0, impact: null,   // pickups: confirmed in the bin (Home, Impact)
     view: null,       // { name, params }
     scan: null,       // this round's photo and answer: { kind, image, result, message }. Never saved.
-    earned: null      // what was just earned, for the Unlocked screen: { n } or { extra: true }
+    earned: null      // the newest pick-up moment: { n } (patch earned) or { extra } (pieces binned), and whether it has played
   };
   if (!S.profile || typeof S.profile.nick !== "string") S.profile = null;
   if (S.pending && !BINS.includes(S.pending.bin)) S.pending = null;
@@ -273,8 +273,13 @@
   const ico = (name, o) => raw(A.icon(name, o));
   const backBtn = (label, attrs) => h`<button type="button" class="circle-btn" aria-label="${label}" ${raw(attrs)}>${ico("back", { width: 2.6 })}</button>`;
   const goAttrs = (name, params = {}) => `data-go="${esc(name)}"` + (params.n ? ` data-n="${+params.n}"` : "") + (params.from ? ` data-from="${esc(params.from)}"` : "");
-  function steps(i) {
-    const names = isBoi() ? t("stepsBoi") : t("steps.names");
+  /* Where each screen sits in a round, for the step pill. The Bull's round bins first, then the Dragon eats, then the story. */
+  const ROUND = {
+    space: { scan: 1, danger: 1, retry: 1, found: 2, story: 2, bin: 3, unlocked: 4 },
+    boi: { scan: 1, danger: 1, retry: 1, found: 2, bin: 2, feast: 3, story: 4 }
+  };
+  function steps(screen) {
+    const names = isBoi() ? t("stepsBoi") : t("steps.names"), i = ROUND[isBoi() ? "boi" : "space"][screen];
     return h`<div class="steps" role="img" aria-label="${t("steps.label", { i, name: names[i - 1] })}">${names.map((nm, k) =>
       k + 1 < i ? h`<span class="dot done"></span>` : k + 1 === i ? h`<span class="cur">${k + 1} ${nm}</span>` : h`<span class="dot"></span>`)}</div>`;
   }
@@ -508,7 +513,7 @@
       <div class="scan-media"><video id="cam" playsinline muted autoplay hidden></video><div class="scan-art" id="scanArt">${raw(A.scene())}</div></div>
       <div class="scan-dim" aria-hidden="true"></div>
       <div class="scan-ui">
-        <div class="top"><button type="button" class="circle-btn" data-go="home" aria-label="${t("scan.close")}">${ico("close", { width: 2.6 })}</button>${steps(1)}</div>
+        <div class="top"><button type="button" class="circle-btn" data-go="home" aria-label="${t("scan.close")}">${ico("close", { width: 2.6 })}</button>${steps("scan")}</div>
         <h1 class="scan-hint" tabindex="-1">${t("scan.hint")}</h1>
         <div class="scan-frame-wrap">${raw(A.frame())}</div>
         <div class="scan-bottom">
@@ -527,7 +532,7 @@
   screens.found = () => {
     const p = S.pending, next = S.binned + 1, extra = next > TOTAL, boi = isBoi();
     return { theme: "t-cream", cls: "found", html: h`
-      <div class="top">${backBtn(t("found.back"), 'data-act="rescan"')}${steps(2)}</div>
+      <div class="top">${backBtn(t("found.back"), 'data-act="rescan"')}${steps("found")}</div>
       ${photo(S.scan.image, h`<span class="badge badge-green">${ico("check", { size: 18, width: 3 })}${t("found.safe")}</span>`)}
       <div class="titles">
         <h1 tabindex="-1">${cap(p.item || t("types." + p.type))}</h1>
@@ -536,13 +541,13 @@
       <div class="grow say-end">${boi ? (extra ? sayBoi(t("found.extra"), false) : sayBoi(B(S.boi.added.found))) : say(extra ? t("found.extra") : t("found.bubble." + chapter(next).body))}</div>
       ${extra || boi ? h`<button type="button" class="btn btn-primary" data-go="bin">${t("found.binIt")}</button>`
         : h`<button type="button" class="btn btn-primary" ${raw(goAttrs("story", { n: next, from: "round" }))}>${t("found.hear")}</button>`}
-      <button type="button" class="btn-link" data-act="rescan">${t("found.wrong")}</button>` };
+      <button type="button" class="btn-link" data-act="wrong">${t("found.wrong")}</button>` };
   };
 
   screens.story = ({ n, from = "round" }) => {
     const ch = chapter(n), c = L(ch), round = from === "round", boiRound = from === "boi", img = safeImg(ch.image);
     const back = round ? (S.scan && S.scan.kind === "found" ? backBtn(t("found.back"), goAttrs("found")) : backBtn(t("back"), goAttrs("home")))
-      : boiRound ? backBtn(t("back"), goAttrs(S.earned && S.earned.n === n && isBoi() ? "feast" : "home")) : backBtn(t("back"), goAttrs(from));
+      : boiRound ? backBtn(t("back"), isBoi() ? goAttrs("feast", { n }) : goAttrs("home")) : backBtn(t("back"), goAttrs(from));
     const end = round ? h`<button type="button" class="btn btn-primary" data-go="bin">${t("story.binNow")}</button>`
       : boiRound ? (n >= TOTAL ? h`<button type="button" class="btn btn-primary" data-go="finale">${t("unlocked.finale")}</button><button type="button" class="btn btn-outline" data-go="jacket">${t("unlocked.jacket")}</button>`
         : h`<button type="button" class="btn btn-primary" data-go="scan">${t("unlocked.again")}</button><button type="button" class="btn btn-outline" data-go="jacket">${t("unlocked.jacket")}</button>`)
@@ -552,7 +557,7 @@
       : h`<section class="sec"><h2>${t("story.sec." + sec.k)}</h2>${sec.list ? h`<ul>${sec.list.map(x => h`<li>${x}</li>`)}</ul>` : h`<p>${sec.t}</p>`}</section>`;
     return { theme: "t-cream", cls: "story", html: h`
       <div class="story-head">
-        <div class="top">${back}${round ? steps(2) : boiRound ? steps(4) : ""}</div>
+        <div class="top">${back}${round || boiRound ? steps("story") : ""}</div>
         <div class="story-title">
           <div class="story-text"><span class="chip">${t("story.chapter", { n, tag: c.tag })}</span><h1 tabindex="-1">${c.title}</h1><span class="where">${c.place}</span></div>
           <div class="story-patch">${raw(A.patch(n, ch.body, t("story.patchAlt", { short: c.short })))}</div>
@@ -576,7 +581,7 @@
     const back = boi && found ? backBtn(t("back"), goAttrs("found"))
       : inRound ? backBtn(t("bin.back"), goAttrs("story", { n: S.binned + 1, from: "round" })) : backBtn(t("back"), goAttrs("home"));
     return { theme: "t-cream", cls: "bin", html: h`
-      <div class="top">${back}${steps(boi ? 2 : 3)}</div>
+      <div class="top">${back}${steps("bin")}</div>
       <div class="titles"><h1 tabindex="-1">${t("bin.title." + p.bin)}</h1><p class="sub">${t("bin.meaning." + p.bin)} ${extra ? t("bin.thenTap") : t("bin.thenTapPatch")}</p></div>
       <div class="bin-art">${raw(A.bin(p.bin, t("bin.art", { color })))}</div>
       <div class="legend${p.bin === "special_dropoff" ? " four" : ""}" role="list" aria-label="${t("bin.legend")}">${["white", "green", "black"].map(k => binChip(k, k === p.bin))}${p.bin === "special_dropoff" ? binChip("special_dropoff", true) : ""}</div>
@@ -585,17 +590,23 @@
       <button type="button" class="btn-link" data-act="later">${t("bin.later")}</button>` };
   };
 
-  screens.unlocked = () => {
-    const e = S.earned;
-    if (e.extra) return { theme: "t-blue", cls: "unlocked", html: h`
+  /* The moment a piece goes in the bin. Each one is its own history entry, { n } (the patch it earned) or { extra } (a piece
+     after all 13), so Back always shows the right one. It plays (confetti, or the Dragon eating) only the first time. */
+  const earnedOk = p => (Number.isInteger(p.n) && p.n >= 1 && p.n <= S.binned) || (Number.isInteger(p.extra) && p.extra > TOTAL && p.extra <= S.log.length);
+  const fresh = p => !!S.earned && !S.earned.played && S.earned.n === p.n && S.earned.extra === p.extra;
+  const playedNow = () => { if (S.earned) S.earned.played = true; };
+
+  screens.unlocked = ({ n, extra }) => {
+    const after = fresh({ n, extra }) ? () => { playedNow(); confetti(); } : null;
+    if (extra) return { theme: "t-blue", cls: "unlocked", html: h`
       ${raw(A.sparkles())}
-      <div class="grow center-col">${raw(A.eagle({ label: "Eagle", cls: "mid-eagle" }))}<h1 tabindex="-1">${t("unlocked.extraTitle")}</h1><p class="line">${tn("unlocked.extraLine", S.log.length)}</p></div>
+      <div class="grow center-col">${raw(A.eagle({ label: "Eagle", cls: "mid-eagle" }))}<h1 tabindex="-1">${t("unlocked.extraTitle")}</h1><p class="line">${tn("unlocked.extraLine", extra)}</p></div>
       <button type="button" class="btn btn-primary" data-go="scan">${t("unlocked.again")}</button>
-      <button type="button" class="btn btn-outline" data-go="finale">${t("unlocked.finale")}</button>`, after: confetti };
-    const n = e.n, ch = chapter(n), c = L(ch), last = n >= TOTAL;
+      <button type="button" class="btn btn-outline" data-go="finale">${t("unlocked.finale")}</button>`, after };
+    const ch = chapter(n), c = L(ch), last = n >= TOTAL;
     return { theme: "t-blue", cls: "unlocked", html: h`
       ${raw(A.sparkles())}
-      <div class="top center">${steps(4)}</div>
+      <div class="top center">${steps("unlocked")}</div>
       <div class="center-col">
         <div class="big-patch">${raw(A.patch(n, ch.body, t("story.patchAlt", { short: c.short })))}</div>
         <h1 tabindex="-1">${t("unlocked.title")}</h1>
@@ -610,28 +621,29 @@
       <div class="grow"></div>
       ${last ? h`<button type="button" class="btn btn-primary" data-go="finale">${t("unlocked.finale")}</button><button type="button" class="btn btn-outline" data-go="jacket">${t("unlocked.jacket")}</button>`
         : h`<button type="button" class="btn btn-primary" data-go="jacket">${t("unlocked.jacket")}</button><button type="button" class="btn btn-outline" data-go="scan">${t("unlocked.again")}</button>`}`,
-      after: confetti };
+      after };
   };
 
-  /* The Boi's pick-up moment: Bernúncia gobbles the confirmed piece ("Nhac!"), her tummy glows a little brighter, the Boi says
-     his line and the next explorer wakes up with a little dance; then its chapter opens. It plays once per pick-up:
-     coming Back to this screen shows it settled, with no second "Nhac!". */
+  /* The Bull's pick-up moment: the Dragon (Bernúncia) gobbles the confirmed piece ("Chomp!"), her tummy glows a little brighter,
+     the Bull says his line and the next explorer wakes up with a little dance; then its chapter opens. It plays once per
+     pick-up: coming Back to this screen shows it settled, with no second "Chomp!". */
   let feastTimers = [];
-  screens.feast = () => {
-    const e = S.earned, played = !!e.played, fed = Math.min(S.binned, TOTAL), cls = "feast" + (played ? " is-played" : "");
-    const stage = h`<div class="feast-stage${played ? " fed" : ""}" id="feastStage">${raw(A.bernuncia({ fed: played || e.extra ? fed : fed - 1, animated: !played, cls: "bern-big" }))}<h1 class="nhac" tabindex="-1"${boiAttr()}>${B(S.boi.sound)}</h1></div>`;
-    if (e.extra) return { theme: "t-blue", cls, html: h`
+  screens.feast = ({ n, extra }) => {
+    const first = fresh({ n, extra }), cls = "feast" + (first ? "" : " is-played");
+    const stage = h`<div class="feast-stage${first ? "" : " fed"}" id="feastStage">${raw(A.bernuncia({ fed: n ? (first ? n - 1 : n) : TOTAL, animated: first, cls: "bern-big" }))}<h1 class="nhac" tabindex="-1"${boiAttr()}>${B(S.boi.sound)}</h1></div>`;
+    const after = first ? () => playFeast(n) : null;
+    if (extra) return { theme: "t-blue", cls, html: h`
       ${stage}
-      <div class="feast-say">${sayBoi(tn("unlocked.extraLine", S.log.length), false)}</div>
+      <div class="feast-say">${sayBoi(tn("unlocked.extraLine", extra), false)}</div>
       <div class="grow"></div>
       <button type="button" class="btn btn-primary" data-go="scan">${t("unlocked.again")}</button>
-      <button type="button" class="btn btn-outline" data-go="finale">${t("unlocked.finale")}</button>`, after: playFeast };
-    const n = e.n, ch = chapter(n), c = L(ch);
+      <button type="button" class="btn btn-outline" data-go="finale">${t("unlocked.finale")}</button>`, after };
+    const ch = chapter(n), c = L(ch);
     return { theme: "t-blue", cls, html: h`
-      <div class="top center">${steps(3)}</div>
+      <div class="top center">${steps("feast")}</div>
       ${stage}
       <div class="feast-say">${sayBoi(pickupLine(n))}</div>
-      <div class="wake${played ? " awake" : ""}" id="wake">
+      <div class="wake${first ? "" : " awake"}" id="wake">
         <div class="wake-patch">${raw(A.patch(n, ch.body, t("story.patchAlt", { short: c.short })))}<span class="zzz" aria-hidden="true">z z z</span></div>
         <b class="patch-name">${c.short}</b>
         <div class="progress" role="img" aria-label="${t("unlocked.of", { n, total: TOTAL })}">
@@ -640,18 +652,16 @@
         </div>
       </div>
       <div class="grow"></div>
-      <button type="button" class="btn btn-primary" ${raw(goAttrs("story", { n, from: "boi" }))}>${t("found.hear")}</button>`, after: playFeast };
+      <button type="button" class="btn btn-primary" ${raw(goAttrs("story", { n, from: "boi" }))}>${t("found.hear")}</button>`, after };
   };
-  function playFeast() {
-    const e = S.earned;
-    if (!e || e.played) return;
-    e.played = true;
+  function playFeast(n) {
+    playedNow();
     const stage = document.getElementById("feastStage"), svg = stage && stage.querySelector(".bern"), wake = document.getElementById("wake");
-    const glow = A.bernGlow(Math.min(S.binned, TOTAL));
+    const glow = A.bernGlow(n || TOTAL);
     const mouth = st => { if (svg) { svg.classList.remove("s-idle", "s-open", "s-chew"); svg.classList.add("s-" + st); } };
     const brighter = () => { if (svg) svg.querySelectorAll("[data-part]").forEach(el => { el.style.opacity = glow[el.dataset.part]; }); };
     const ate = () => { if (stage) stage.classList.add("fed"); sound.nhac(); };
-    const awake = () => { if (wake) wake.classList.add("awake"); if (!e.extra) sound.wake(); };
+    const awake = () => { if (wake) wake.classList.add("awake"); if (n) sound.wake(); };
     if (reducedMotion()) { brighter(); ate(); if (wake) wake.classList.add("awake"); return; }
     const at = (ms, fn) => feastTimers.push(setTimeout(fn, ms));
     at(180, () => mouth("open"));
@@ -663,7 +673,7 @@
   screens.danger = () => {
     const r = S.scan.result || {}, item = r.item ? lower(r.item) : t("danger.fallback");
     return { theme: "t-cream", cls: "danger", html: h`
-      <div class="top"><span></span>${steps(1)}</div>
+      <div class="top"><span></span>${steps("danger")}</div>
       ${photo(S.scan.image, h`<span class="badge badge-yellow">${ico("warning", { size: 18, width: 2.6 })}${t("danger.badge")}</span>`)}
       <div class="titles"><h1 tabindex="-1">${t("danger.title")}</h1><p class="sub">${splitBold(t("danger.looks"), "item", item)}</p></div>
       <ol class="steps-list">${t("danger.steps").map((s, i) => h`<li><span class="num" aria-hidden="true">${i + 1}</span><span>${s}</span></li>`)}</ol>
@@ -675,7 +685,7 @@
   screens.retry = () => {
     const sc = S.scan;
     return { theme: "t-cream", cls: "retry", html: h`
-      <div class="top">${backBtn(t("retry.home"), goAttrs("home"))}${steps(1)}</div>
+      <div class="top">${backBtn(t("retry.home"), goAttrs("home"))}${steps("retry")}</div>
       ${sc.image ? photo(sc.image) : ""}
       <h1 tabindex="-1">${t("retry." + sc.kind)}</h1>
       <div class="grow say-end">${say(sc.message || t("errors.generic"), { mood: sc.kind === "error" ? "worried" : "smile", look: "center" })}</div>
@@ -774,7 +784,6 @@
 
   /* Every chapter open, without scanning (for teachers, parents and judges). It never changes the player's patches. */
   screens.explore = ({ from = S.profile ? "me" : "grownups" }) => {
-    S.exploreFrom = from;
     const cards = range(TOTAL).map(i => {
       const ch = chapter(i), c = L(ch);
       return h`<button type="button" class="patch-card" ${raw(goAttrs("story", { n: i, from: "explore" }))}>${raw(A.patch(i, ch.body))}<span>${c.short}</span></button>`;
@@ -929,8 +938,8 @@
     story: p => Number.isInteger(p.n) && p.n >= 1 && p.n <= TOTAL && (p.from === "explore" || p.n <= S.binned || (!!S.pending && p.n === S.binned + 1)),
     explore: () => true, usage: () => true,
     bin: () => !!S.pending,
-    unlocked: () => !!S.earned,
-    feast: () => !!S.earned && isBoi(),
+    unlocked: earnedOk,
+    feast: p => isBoi() && earnedOk(p),
     finale: () => S.binned >= TOTAL,
     impact: () => true
   };
@@ -1041,6 +1050,7 @@
     shoot: () => shoot(),
     choose: () => { const f = document.getElementById("filePick"); if (f) f.click(); },
     rescan: () => { if (S.pending && !S.pending.saved) S.pending = null; S.scan = null; persist(); go("scan", {}, { replace: true }); },
+    wrong: () => { S.pending = null; S.scan = null; persist(); go("scan", {}, { replace: true }); },   // "That's not right": the piece on show is dropped, even one saved for later
     binned: () => binIt(),
     later: () => { if (S.pending) { S.pending.saved = true; persist(); } go("home"); },
     reset: () => {
@@ -1068,11 +1078,11 @@
     if (DEMO) { demoTotal += 1; S.pickups = demoTotal; }
     else if (p.ticket) S.tickets = S.tickets.concat(p.ticket).slice(-50);
     if (S.log.length > 2000) S.log = S.log.slice(-2000);
-    if (S.binned < TOTAL) { S.binned += 1; S.lastNew = S.binned; S.earned = { n: S.binned }; }
-    else S.earned = { extra: true };
+    const earned = S.binned < TOTAL ? { n: (S.lastNew = ++S.binned) } : { extra: S.log.length };
+    S.earned = { ...earned, played: false };
     S.pending = null; S.scan = null;
     persist();
-    go(isBoi() ? "feast" : "unlocked", {}, { replace: true });
+    go(isBoi() ? "feast" : "unlocked", earned, { replace: true });
     sendTickets();
   }
 
@@ -1158,7 +1168,6 @@
     if (token !== camToken || !S.view || S.view.name !== "scan") return;   // the child left the camera meanwhile
     setBusy(false);
     if (j.error) return showRetry("error", image, j.error);
-    if (typeof j.total === "number") S.counter = j.total;   // pieces found (Live usage); pick-ups only change with a ticket
     const r = j.result || {};
     if (j.retake) return showRetry("photo", image, r.message);
     if (r.dangerous) { S.scan = { kind: "danger", image, result: r }; return go("danger", {}, { replace: true }); }
@@ -1197,7 +1206,7 @@
     S.counterAt = Date.now();
     fetch("/api/counter").then(r => (r.ok ? r.json() : null)).then(j => {
       if (!j || typeof j.pickups !== "number") return;
-      S.pickups = j.pickups; S.counter = j.total;
+      S.pickups = j.pickups;
       const el = document.getElementById("counter");
       if (el) el.querySelector("p").innerHTML = counterText().s;
     }).catch(() => {});

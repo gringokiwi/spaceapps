@@ -1,5 +1,10 @@
 /* debris: the look from the design canvas "Debris App Screens".
    Launch Blue, Lander Orange, navy and cream; Nunito; chunky buttons that press down. */
+/* Nunito (SIL Open Font License, fonts/OFL.txt), served by the app itself: no requests to Google from a child's phone */
+@font-face { font-family: "Nunito"; font-style: normal; font-weight: 600; font-display: swap; src: url("fonts/nunito-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Nunito"; font-style: normal; font-weight: 700; font-display: swap; src: url("fonts/nunito-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Nunito"; font-style: normal; font-weight: 800; font-display: swap; src: url("fonts/nunito-latin-800-normal.woff2") format("woff2"); }
+@font-face { font-family: "Nunito"; font-style: normal; font-weight: 900; font-display: swap; src: url("fonts/nunito-latin-900-normal.woff2") format("woff2"); }
 :root {
   --blue: #1F43C4; --navy: #0B1A5C; --orange: #FF7A1A; --cream: #FFF4E8; --peach: #FFC98F;
   --slate: #3A4470; --ink: #1D1A3F; --white: #FFFFFF; --soft: #EEF1FB;
@@ -83,7 +88,7 @@ noscript p { color: var(--cream); padding: 40px 20px; font-size: 18px; text-alig
 .card-navy { background: var(--navy); color: var(--cream); border-radius: 24px; padding: 18px; }
 .card-blue2 { background: #2F55D6; color: var(--cream); flex-direction: row; align-items: center; padding: 14px 16px; }
 .card-blue2 p { font-weight: 700; font-size: 15px; line-height: 1.3; }
-.card-blue2 b { color: var(--peach); font-weight: 900; }
+.card-blue2 b { color: #FFD7A8; font-weight: 900; }   /* a lighter peach: 4.6:1 on this blue (peach was 4.1:1) */
 .card-blue2 .ico { color: var(--peach); flex: none; }
 .card-peach { background: var(--peach); color: var(--navy); flex-direction: row; align-items: center; justify-content: space-between; }
 
@@ -409,7 +414,7 @@ button.counter p { flex-grow: 1; }
 /* Bernúncia: her mouth (s-idle, s-open, s-chew) and her glowing tummy */
 .bern .bn-open, .bern .bn-chew { display: none; }
 .bern.s-open .bn-open, .bern.s-chew .bn-chew { display: inline; }
-.bern.s-open .bn-closed, .bern.s-chew .bn-closed, .bern.s-chew .bn-eyes { display: none; }
+.bern.s-open .bn-closed, .bern.s-chew .bn-closed { display: none; }
 .bern [data-part] { transition: opacity .7s ease; }
 .bn-snack { opacity: 0; }
 

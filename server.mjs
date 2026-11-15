@@ -22,14 +22,14 @@ setStore(store);
 
 /* Only the app's own files are served: never the server code, node_modules or anything hidden. */
 const FILES = new Set(["index.html", "style.css", "game.js", "art.js", "impact.js", "jacket3d.js", "content.json", "boi.json"]);
-const FOLDERS = ["img/", "docs/"];
+const FOLDERS = ["img/", "docs/", "fonts/"];
 const TYPES = { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json; charset=utf-8",
-  ".svg": "image/svg+xml", ".glb": "model/gltf-binary", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".md": "text/markdown; charset=utf-8" };
+  ".svg": "image/svg+xml", ".glb": "model/gltf-binary", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".md": "text/markdown; charset=utf-8", ".woff2": "font/woff2" };
 const SECURITY = {
   "X-Content-Type-Options": "nosniff",
   "Referrer-Policy": "strict-origin-when-cross-origin",
   "Permissions-Policy": "camera=(self), microphone=(), geolocation=()",
-  "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
+  "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
 };
 
 const API = { "/api/scan": scan, "/api/counter": counter, "/api/pickup": pickup };
@@ -83,7 +83,11 @@ async function file(req, res, pathname) {
   let st;
   try { st = await fsp.stat(full); } catch { return send(res, 404, "Not found."); }
   if (!st.isFile()) return send(res, 404, "Not found.");
-  res.writeHead(200, { "Content-Type": TYPES[path.extname(full).toLowerCase()] || "application/octet-stream", "Content-Length": st.size, "Cache-Control": "no-cache", ...SECURITY });
+  // A file the phone already has comes back as "304 Not Modified" (no body), so a repeat visit doesn't download it again
+  const etag = `W/"${st.size.toString(36)}-${Math.floor(st.mtimeMs).toString(36)}"`;
+  const headers = { "Content-Type": TYPES[path.extname(full).toLowerCase()] || "application/octet-stream", "Cache-Control": "no-cache", ETag: etag, "Last-Modified": st.mtime.toUTCString(), ...SECURITY };
+  if (String(req.headers["if-none-match"] || "").split(/\s*,\s*/).includes(etag)) { res.writeHead(304, headers); return res.end(); }
+  res.writeHead(200, { ...headers, "Content-Length": st.size });
   if (req.method === "HEAD") return res.end();
   createReadStream(full).on("error", () => res.destroy()).pipe(res);
 }
