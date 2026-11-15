@@ -20,10 +20,10 @@ const store = storeDir ? fileStore(path.join(storeDir, "debris-counters.json")) 
 setStore(store);
 
 /* Only the app's own files are served: never the server code, node_modules or anything hidden. */
-const FILES = new Set(["index.html", "style.css", "game.js", "art.js", "content.json"]);
+const FILES = new Set(["index.html", "style.css", "game.js", "art.js", "jacket3d.js", "content.json"]);
 const FOLDERS = ["img/", "docs/"];
 const TYPES = { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json; charset=utf-8",
-  ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".md": "text/markdown; charset=utf-8" };
+  ".svg": "image/svg+xml", ".glb": "model/gltf-binary", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".md": "text/markdown; charset=utf-8" };
 const SECURITY = {
   "X-Content-Type-Options": "nosniff",
   "Referrer-Policy": "strict-origin-when-cross-origin",

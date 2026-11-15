@@ -81,3 +81,18 @@ Then open http://localhost:3000 (or http://localhost:3000/?demo without a key).
 - Whole app in Chromium with a fake camera (phone 390 × 844, 320 × 640 in Spanish, desktop): onboarding, a full round, chapters 1, 2 and 13 checked against the storyboard, danger, retake, not litter, server error, save for later across a reload, jacket, cleanup log, Spanish and Portuguese, special drop-off, the finale and a 14th piece, no camera (file picker), demo mode with no server, the back button, no sideways scroll, and buttons at least 44 px.
 - `server.mjs`: the app's files are served and everything else is hidden (server code, `node_modules`, `.git`, `..` tricks), the API routes, the 2 MB body limit, security headers, and counters kept across a restart. The whole browser test above also passes behind it.
 - **Not yet**: the real Claude key with real photos, and NASA pictures for the chapters.
+
+## The 3D explorer jacket
+
+The jacket screen shows a 3D jacket (`jacket3d.js` + `img/jacket.glb`). Every patch earned is stuck on it; a new one flies in and gets stamped on. Patches 1–6 go on the front, 7–8 on the sleeves and 9–13 on the back, and the child can drag the jacket to spin it. It loads only when the jacket screen opens. If a phone can't run 3D, the patch cards below work on their own.
+
+- `src/jacket.blend`: the designer's model. `img/jacket.glb` is exported from it (jacket only, no patches, one level of smoothing).
+- `src/jacket3d.src.js`: the code. `jacket3d.js` is built from it with three.js r160 (MIT licence):
+
+```bash
+npm install --no-save three@0.160.0 esbuild@0.21.5
+```
+
+```bash
+npx esbuild src/jacket3d.src.js --bundle --minify --format=iife --target=es2019 --outfile=jacket3d.js
+```

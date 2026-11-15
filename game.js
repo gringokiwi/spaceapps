@@ -16,7 +16,7 @@
 
   /* ---------- Saving on this phone (if the browser blocks it, the game still works without saving) ---------- */
   const PREFIX = DEMO ? "debris.demo." : "debris.";
-  const KEYS = ["lang", "profile", "binned", "log", "pending", "lastNew", "introDone", "safetyDone", "finaleSeen"];
+  const KEYS = ["lang", "profile", "binned", "log", "pending", "lastNew", "introDone", "safetyDone", "finaleSeen", "jacketSeen"];
   const load = (k, d) => { try { const v = localStorage.getItem(PREFIX + k); return v == null ? d : JSON.parse(v); } catch { return d; } };
   const save = (k, v) => { try { localStorage.setItem(PREFIX + k, JSON.stringify(v)); } catch {} };
 
@@ -55,7 +55,7 @@
       danger: { badge: "Ask an adult", title: "Stop! Don't touch it.", looks: "I think I see: {item}. It could hurt you.", fallback: "something sharp", eagle: "Eagle looking careful",
         steps: ["Take a step back.", "Tell a grown-up where it is.", "Find something safer to scan."], bubble: "Good spotting! Sharp things never count for a patch, so you never have to touch them.", again: "Scan something else", home: "Back to home" },
       retry: { no: "That's not litter", unsure: "Hmm, I'm not sure", photo: "Let's try another photo", error: "Something went wrong", again: "Try again", home: "Back to home" },
-      jacket: { title: "My explorer jacket", hint: "Tap a patch to hear its story again.", locked: "{place} · locked", newTag: "new", scan: "Scan to unlock the next one", opening: "Hear the opening story again" },
+      jacket: { title: "My explorer jacket", hint: "Tap a patch to hear its story again.", spin: "Drag the jacket to spin it!", locked: "{place} · locked", newTag: "new", scan: "Scan to unlock the next one", opening: "Hear the opening story again" },
       me: { buddy: "Crew buddy: {name}", change: "Change", log: "My cleanup log", binned: "binned", plastic: "plastic", paper: "paper", cans: "cans", language: "Language",
         grownups: "For grown-ups", safety: "Safety rules", photos: "How photos are handled", sources: "Where the stories come from", explore: "Explore all the stories", privacy: "No accounts, no payments, no ads. Nothing here is stored with a child's name.",
         reset: "Start over on this phone", resetConfirm: "Start over? This clears the nickname, patches and cleanup log on this phone." },
@@ -107,7 +107,7 @@
       danger: { badge: "Pídele ayuda a un adulto", title: "¡Alto! No lo toques.", looks: "Creo que veo: {item}. Te puede lastimar.", fallback: "algo cortante", eagle: "Eagle con cuidado",
         steps: ["Da un paso atrás.", "Dile a un adulto dónde está.", "Busca algo más seguro para escanear."], bubble: "¡Bien visto! Las cosas cortantes nunca cuentan para un parche, así que nunca tienes que tocarlas.", again: "Escanear otra cosa", home: "Volver al inicio" },
       retry: { no: "Eso no es basura", unsure: "Mmm, no estoy seguro", photo: "Probemos con otra foto", error: "Algo falló", again: "Intentar otra vez", home: "Volver al inicio" },
-      jacket: { title: "Mi chaqueta de exploración", hint: "Toca un parche para escuchar su historia otra vez.", locked: "{place} · bloqueado", newTag: "nuevo", scan: "Escanea para desbloquear el siguiente", opening: "Escuchar otra vez el comienzo" },
+      jacket: { title: "Mi chaqueta de exploración", hint: "Toca un parche para escuchar su historia otra vez.", spin: "¡Arrastra la chaqueta para girarla!", locked: "{place} · bloqueado", newTag: "nuevo", scan: "Escanea para desbloquear el siguiente", opening: "Escuchar otra vez el comienzo" },
       me: { buddy: "Viaja contigo: {name}", change: "Cambiar", log: "Mi registro de limpieza", binned: "botados", plastic: "plástico", paper: "papel", cans: "latas", language: "Idioma",
         grownups: "Para adultos", safety: "Reglas de seguridad", photos: "Qué pasa con las fotos", sources: "De dónde vienen las historias", explore: "Explorar todas las historias", privacy: "Sin cuentas, sin pagos, sin anuncios. Nada se guarda con el nombre de un niño o una niña.",
         reset: "Empezar de nuevo en este teléfono", resetConfirm: "¿Empezar de nuevo? Esto borra el apodo, los parches y el registro de este teléfono." },
@@ -159,7 +159,7 @@
       danger: { badge: "Chame um adulto", title: "Pare! Não toque.", looks: "Acho que estou vendo: {item}. Pode te machucar.", fallback: "algo cortante", eagle: "Eagle com cuidado",
         steps: ["Dê um passo para trás.", "Conte para um adulto onde está.", "Procure algo mais seguro para escanear."], bubble: "Bem observado! Coisas cortantes nunca valem emblema, então você nunca precisa tocar nelas.", again: "Escanear outra coisa", home: "Voltar ao início" },
       retry: { no: "Isso não é lixo", unsure: "Hmm, não tenho certeza", photo: "Vamos tentar outra foto", error: "Algo deu errado", again: "Tentar de novo", home: "Voltar ao início" },
-      jacket: { title: "Minha jaqueta de exploração", hint: "Toque num emblema para ouvir a história de novo.", locked: "{place} · bloqueado", newTag: "novo", scan: "Escaneie para desbloquear o próximo", opening: "Ouvir o começo de novo" },
+      jacket: { title: "Minha jaqueta de exploração", hint: "Toque num emblema para ouvir a história de novo.", spin: "Arraste a jaqueta para girar!", locked: "{place} · bloqueado", newTag: "novo", scan: "Escaneie para desbloquear o próximo", opening: "Ouvir o começo de novo" },
       me: { buddy: "Viaja com você: {name}", change: "Mudar", log: "Meu registro de limpeza", binned: "na lixeira", plastic: "plástico", paper: "papel", cans: "latas", language: "Idioma",
         grownups: "Para adultos", safety: "Regras de segurança", photos: "O que acontece com as fotos", sources: "De onde vêm as histórias", explore: "Explorar todas as histórias", privacy: "Sem contas, sem pagamentos, sem anúncios. Nada fica guardado com o nome de uma criança.",
         reset: "Começar de novo neste celular", resetConfirm: "Começar de novo? Isso apaga o apelido, os emblemas e o registro deste celular." },
@@ -482,13 +482,34 @@
       : h`<button type="button" class="btn btn-primary" data-go="scan">${ico("camera", { size: 28, width: 2.4 })}${t("jacket.scan")}</button>`;
     return { theme: "t-blue", cls: "jacket", html: h`
       <div class="row-between end"><h1 tabindex="-1">${t("jacket.title")}</h1><span class="count">${t("home.patches", { n, total: TOTAL })}</span></div>
+      <div class="jacket3d" id="jacket3d" aria-hidden="true" hidden></div>
+      <p class="sub jacket3d-hint" id="jacket3dHint" hidden>${t("jacket.spin")}</p>
       <p class="sub">${t("jacket.hint")}</p>
       <div class="patches">${cards}</div>
       <button type="button" class="btn-link" ${raw(goAttrs("opening", { from: "jacket" }))}>${t("jacket.opening")}</button>
       <div class="grow"></div>
       ${cta}
-      ${nav("jacket")}` };
+      ${nav("jacket")}`, after: showJacket3d };
   };
+
+  /* The 3D jacket (jacket3d.js, loaded only when this screen opens). Patches earned since the last
+     visit get stuck on with an animation. If 3D can't run on this phone, the patch cards are enough. */
+  let jacket3dScript = null;
+  function showJacket3d() {
+    const el = document.getElementById("jacket3d");
+    if (!el || !window.WebGLRenderingContext) return;
+    if (!jacket3dScript) jacket3dScript = new Promise((ok, fail) => {
+      const s = document.createElement("script"); s.src = "jacket3d.js"; s.onload = ok; s.onerror = () => { jacket3dScript = null; fail(); };
+      document.head.appendChild(s);
+    });
+    jacket3dScript.then(() => {
+      if (!el.isConnected || !window.JACKET3D) return;
+      const n = S.binned, seen = int(load("jacketSeen", Math.max(0, n - 1)), 0, n);
+      const reduced = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+      return window.JACKET3D.mount(el, { earned: n, fresh: range(n).filter(i => i > seen), reduced,
+        patchSvg: i => A.patch(i, chapter(i).body), onStuck: i => save("jacketSeen", Math.max(i, int(load("jacketSeen", 0), 0, TOTAL))) });
+    }).then(ok => { const hint = document.getElementById("jacket3dHint"); if (ok && hint) hint.hidden = false; }).catch(() => {});
+  }
 
   const grownupsCard = from => h`<section class="card card-navy grownups"><h2>${t("me.grownups")}</h2>
       <button type="button" class="row-link" ${raw(goAttrs("safety", { from }))}>${t("me.safety")}${ico("chevron", { size: 20, width: 2.6 })}</button>
@@ -621,7 +642,7 @@
     if (focus && h1) h1.focus({ preventScroll: true });
     else if (keep && document.getElementById(keep)) document.getElementById(keep).focus({ preventScroll: true });
   }
-  function leave() { stopCamera(); stopSpeech(); const c = document.getElementById("confetti"); if (c) c.textContent = ""; }
+  function leave() { if (window.JACKET3D) window.JACKET3D.unmount(); stopCamera(); stopSpeech(); const c = document.getElementById("confetti"); if (c) c.textContent = ""; }
 
   /* ---------- Taps ---------- */
   app.addEventListener("click", e => {

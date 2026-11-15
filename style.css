@@ -336,3 +336,7 @@ noscript p { color: var(--cream); padding: 40px 20px; font-size: 18px; text-alig
   .story-patch { width: 84px; }
   .wordmark { font-size: 72px; }
 }
+
+/* The 3D explorer jacket, above the patch cards */
+.jacket3d { height: min(300px, 42vh); margin: -6px -8px -4px; }
+.jacket3d-hint { margin-top: 0; font-size: 14px; text-align: center; }
