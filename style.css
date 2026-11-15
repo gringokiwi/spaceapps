@@ -372,3 +372,100 @@ button.counter p { flex-grow: 1; }
 .tiles.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 #usage { display: flex; flex-direction: column; gap: 12px; }
 .tiles .wide { grid-column: 1 / -1; }
+
+/* ---------- The Boi de Mamão storyteller ---------- */
+/* Choose your storyteller: two big cards */
+.teller-form { display: flex; flex-direction: column; gap: 16px; }
+.teller h1 { font-size: 34px; }
+.teller-cards { border: 0; margin: 0; padding: 0; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.teller-card { position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 8px 16px; border: 4px solid transparent; border-radius: 24px; background: var(--navy); color: var(--cream); text-align: center; cursor: pointer; }
+.teller-card input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.teller-card.on { border-color: var(--orange); }
+.teller-card.on::after { content: "✓"; position: absolute; top: 8px; right: 8px; width: 30px; height: 30px; border-radius: 50%; background: var(--orange); color: var(--navy); font-weight: 900; font-size: 18px; line-height: 30px; text-align: center; }
+.teller-card:focus-within { outline: 3px solid var(--peach); outline-offset: 3px; }
+.teller-art { display: flex; justify-content: center; align-items: flex-end; width: 100%; height: 150px; }
+.teller-art svg { width: 100%; height: 100%; }
+.teller-card b { font-weight: 900; font-size: 20px; line-height: 1.15; }
+.teller-tag { background: var(--orange); color: var(--navy); border-radius: 999px; padding: 4px 10px; font-weight: 900; font-size: 13px; line-height: 1.2; }
+
+/* The Boi talking */
+.say-boi { width: 96px; height: 59px; flex: none; }
+
+/* The Boi's opening: he dances in, the verse appears line by line */
+.boi-stage { display: flex; justify-content: center; }
+.boi-stage svg { width: 210px; max-width: 58vw; height: auto; }
+.boi-dance-in { transform-origin: 50% 100%; animation: danceIn 1.3s cubic-bezier(.3, 1.3, .5, 1) both, sway 1.2s ease-in-out 1.3s infinite alternate; }
+@keyframes danceIn { 0% { transform: translateX(130%) rotate(14deg); } 55% { transform: translateX(-10px) rotate(-7deg); } 75% { transform: translateX(6px) rotate(5deg); } 100% { transform: none; } }
+@keyframes sway { from { transform: rotate(-4deg); } to { transform: rotate(4deg) translateY(-4px); } }
+.verse { position: relative; background: var(--navy); border-radius: 20px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
+.verse-note { position: absolute; right: 14px; top: 8px; font-size: 26px; color: var(--orange); }
+.verse p { font-weight: 800; font-style: italic; font-size: 18px; line-height: 1.35; color: var(--peach); padding-right: 22px; animation: lineIn .5s ease-out both; }
+.verse-tr p { font-size: 15px; font-weight: 700; color: var(--mist); animation-delay: 2.2s; }
+.verse-pt p:nth-child(1) { animation-delay: .5s; } .verse-pt p:nth-child(2) { animation-delay: .9s; }
+.verse-pt p:nth-child(3) { animation-delay: 1.3s; } .verse-pt p:nth-child(4) { animation-delay: 1.7s; }
+@keyframes lineIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.boi-nap { display: flex; justify-content: center; }
+.boi-nap svg { width: 150px; height: auto; }
+
+/* Bernúncia: her mouth (s-idle, s-open, s-chew) and her glowing tummy */
+.bern .bn-open, .bern .bn-chew { display: none; }
+.bern.s-open .bn-open, .bern.s-chew .bn-chew { display: inline; }
+.bern.s-open .bn-closed, .bern.s-chew .bn-closed, .bern.s-chew .bn-eyes { display: none; }
+.bern [data-part] { transition: opacity .7s ease; }
+.bn-snack { opacity: 0; }
+
+/* Nhac! Bernúncia eats the piece, the explorer wakes up */
+.feast { gap: 14px; }
+.feast-stage { position: relative; display: flex; justify-content: center; padding-top: 18px; }
+.bern-big { width: 100%; max-width: 340px; height: auto; }
+.nhac { position: absolute; left: 2%; top: 0; font-size: 48px; color: var(--yellow); letter-spacing: 0; transform: rotate(-10deg); opacity: 0;
+  text-shadow: 3px 3px 0 var(--navy), -2px -2px 0 var(--navy), 2px -2px 0 var(--navy), -2px 2px 0 var(--navy); }
+.feast-stage.fed .nhac { opacity: 1; animation: nhacPop .5s cubic-bezier(.2, 1.6, .4, 1) both; }
+.feast.is-played .nhac { animation: none; }
+@keyframes nhacPop { from { transform: scale(.3) rotate(-30deg); } to { transform: rotate(-10deg); } }
+.feast:not(.is-played) .bn-snack { transform-box: fill-box; transform-origin: center; animation: snackIn .5s cubic-bezier(.5, 0, .9, .6) .05s both; }
+@keyframes snackIn { 0% { opacity: 1; transform: translate(0, -24px) rotate(-20deg); } 85% { opacity: 1; transform: translate(22px, 104px) rotate(25deg) scale(.8); } 100% { opacity: 0; transform: translate(24px, 112px) scale(.3); } }
+.feast:not(.is-played) .feast-say { animation: lineIn .45s ease-out 1s both; }
+.wake { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+.wake-patch { position: relative; width: 116px; }
+.wake-patch svg { width: 100%; height: auto; filter: grayscale(1) brightness(.75); transform: rotate(-12deg) scale(.92); transition: filter .5s, transform .5s; }
+.wake.awake .wake-patch svg { filter: none; transform: none; }
+.wake.awake .wake-patch { animation: wakeDance 1s ease-in-out both; }
+.feast.is-played .wake-patch { animation: none; }
+@keyframes wakeDance { 20% { transform: translateY(-14px) rotate(-12deg); } 40% { transform: rotate(10deg); } 60% { transform: translateY(-10px) rotate(-8deg); } 80% { transform: rotate(5deg); } 100% { transform: none; } }
+.zzz { position: absolute; right: -18px; top: -4px; font-weight: 900; font-size: 22px; color: var(--ice); transition: opacity .3s; }
+.wake.awake .zzz { opacity: 0; }
+
+/* A story told by the Boi: his line first; in chapter 2, Maricota next to Eagle */
+.boi-intro { display: flex; flex-direction: column; gap: 10px; }
+.tall-friends { background: var(--blue); border-radius: 20px; padding: 10px 16px 4px; }
+.tall-friends svg { width: 100%; max-width: 300px; height: auto; margin: 0 auto; }
+
+/* Me and Explore: Storyteller */
+.teller-set { gap: 10px; }
+.teller-pick { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.teller-pick button { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 4px; min-height: 48px; padding: 8px 6px 10px; border: 3px solid transparent; border-radius: 16px; background: var(--soft); color: var(--navy); text-align: center; }
+.teller-pick button[aria-pressed="true"] { border-color: var(--blue); background: var(--white); }
+.teller-pick svg { width: 80px; height: 50px; }
+.teller-pick b { display: block; font-weight: 900; font-size: 15px; line-height: 1.2; }
+.teller-pick small { display: block; font-weight: 800; font-size: 12px; color: var(--slate); }
+.patch-card .q.zz { font-size: 24px; letter-spacing: 1px; }
+
+/* The Boi's finale: the 13 explorers dance with him, Bernúncia's tummy is full */
+.party { display: flex; flex-direction: column; gap: 6px; }
+.dance-row { display: flex; justify-content: center; gap: 3px; }
+.dance-row > svg { flex: 1 1 0; min-width: 0; max-width: 30px; height: auto; animation: hop .6s ease-in-out infinite alternate; }
+.dance-row > svg:nth-child(even) { animation-delay: .3s; }
+@keyframes hop { from { transform: translateY(0) rotate(-8deg); } to { transform: translateY(-8px) rotate(8deg); } }
+.party-cast { display: flex; align-items: flex-end; justify-content: center; gap: 4px; }
+.party-cast .boi-dancing { width: 42%; max-width: 170px; height: auto; transform-origin: 50% 100%; animation: sway 1.1s ease-in-out infinite alternate; }
+.party-cast .bern-party { width: 58%; max-width: 240px; height: auto; }
+.finale .btn-link { color: var(--cream); }
+
+@media (max-width: 380px) {
+  .teller h1 { font-size: 30px; }
+  .teller-card b { font-size: 17px; }
+  .teller-art { height: 120px; }
+  .say-boi { width: 80px; height: 49px; }
+  .nhac { font-size: 40px; }
+}

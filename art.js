@@ -8,16 +8,17 @@
 
   /* ---------- Eagle the lander ---------- */
   function eagle({ label = "", tip = CREAM, look = "center", mood = "happy", cls = "" } = {}) {
+    return `<svg class="${cls}" viewBox="0 0 200 220" ${aria(label)}>${eagleArt({ tip, look, mood })}</svg>`;
+  }
+  function eagleArt({ tip = CREAM, look = "center", mood = "happy" } = {}) {
     const dx = look === "right" ? 3 : 0, dy = look === "right" ? 1 : 0;
-    return `<svg class="${cls}" viewBox="0 0 200 220" ${aria(label)}>
-<ellipse cx="100" cy="210" rx="82" ry="9" fill="${NAVY}" opacity=".35"/>
+    return `<ellipse cx="100" cy="210" rx="82" ry="9" fill="${NAVY}" opacity=".35"/>
 <path d="M54 148 L30 196 M146 148 L170 196 M100 160 L100 198" stroke="#D9560B" stroke-width="13" stroke-linecap="round" fill="none"/>
 <ellipse cx="27" cy="201" rx="17" ry="8" fill="#B6450A"/><ellipse cx="173" cy="201" rx="17" ry="8" fill="#B6450A"/><ellipse cx="100" cy="203" rx="14" ry="7" fill="#B6450A"/>
 <rect x="34" y="114" width="132" height="48" rx="18" fill="#D9560B"/>
 <rect x="48" y="126" width="22" height="24" rx="6" fill="#FFC98F" opacity=".55"/><rect x="130" y="126" width="22" height="24" rx="6" fill="#FFC98F" opacity=".55"/>
 <path d="M84 160 L116 160 L123 175 Q100 181 77 175 Z" fill="#B6450A"/>
-${head({ tip, dx, dy, mood })}
-</svg>`;
+${head({ tip, dx, dy, mood })}`;
   }
   /* The head on its own (Safety, Found, Danger), drawn in the same coordinates. */
   function head({ tip, dx = 0, dy = 0, mood = "happy" }) {
@@ -233,5 +234,157 @@ ${dots.map(d => `<circle cx="${X(d.pos)}" cy="30" r="4.5" fill="${d.passed ? ORA
 </svg>`;
   }
 
-  window.ART = { eagle, eagleHead, buddy, BUDDIES, patch, icon, play, scene, frame, bin, sparkles, map, milestone, stack, strip };
+  /* ---------- The Boi de Mamão storyteller (boi.json, from the team's spec) ----------
+     Original characters in the app's cartoony style (flat colours, thick outlines, big friendly eyes), inspired by the
+     boi de mamão tradition of Florianópolis and Santa Catarina. They are not copied from any group's costumes.
+     No ids or gradients, so any number of them can share a page. */
+  const OUT = INK, FABRIC = "#E0553B", HIDE = "#FFF4E8", SPOT = "#A0603E", MUZZLE = "#FFA3B8", HORN = "#FFE3B0", SHOE = "#5A3A2E", YELLOW = "#F2B33D", PINK = "#FF7A9C", LAV = "#8FA3EA";
+  const RIBBON = ["#C9D3FA", "#D9673A", NAVY];   // from the Boi's horns: Moon grey, Mars red, deep-space blue
+  const r1 = n => +n.toFixed(1);
+  // A chita-style flower and leaf for the Boi's fabric
+  function flower(x, y, r, petal = "#FFC98F") {
+    let s = "";
+    for (let a = -90; a < 270; a += 72) s += `<circle cx="${r1(x + r * Math.cos(a * Math.PI / 180))}" cy="${r1(y + r * Math.sin(a * Math.PI / 180))}" r="${r1(r * .62)}" fill="${petal}"/>`;
+    return s + `<circle cx="${x}" cy="${y}" r="${r1(r * .52)}" fill="${YELLOW}" stroke="${OUT}" stroke-width="1.5"/>`;
+  }
+  const leaf = (x, y, rot) => `<ellipse cx="${x}" cy="${y}" rx="7" ry="3.2" fill="#2F9E73" transform="rotate(${rot} ${x} ${y})"/>`;
+  const limb = (d, color, w = 10) => `<path d="${d}" fill="none" stroke="${OUT}" stroke-width="${w + 7}" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${color}" stroke-width="${w}" stroke-linecap="round"/>`;
+  const hoof = (x, y) => `<ellipse cx="${x}" cy="${y}" rx="8" ry="7" fill="${SHOE}" stroke="${OUT}" stroke-width="3"/>`;
+  const zzz = (x, y, s) => `<path d="M${x} ${y} h${s} l-${s} ${r1(s * 1.15)} h${s}" fill="none" stroke="${LAV}" stroke-width="${r1(Math.max(2.5, s / 5))}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const note = (x, y, c) => `<g fill="${c}" stroke="${c}"><ellipse cx="${x}" cy="${y}" rx="6" ry="4.6" transform="rotate(-20 ${x} ${y})" stroke="none"/><path d="M${x + 5} ${y - 1} V${y - 24} q8 4 10 12" fill="none" stroke-width="3" stroke-linecap="round"/></g>`;
+
+  /* The Boi's head, centred near (100, 66) in a 200 × 220 box. Moods: smile, talk, sleep. */
+  function boiHeadArt(mood = "smile") {
+    // Three ribbons tied to each horn tip, fluttering out and down (outlined, so each shows on any background)
+    const ribbons = (x, y, d) => [[-12, 4, -8, 22, -22, 30], [-16, -2, -22, 14, -30, 14], [-4, 12, 2, 28, -8, 42]].map(([a, b, c, e, f, g], i) => {
+      const path = `M${x} ${y} c${d * a} ${b} ${d * c} ${e} ${d * f} ${g}`;
+      return `<path d="${path}" fill="none" stroke="${OUT}" stroke-width="8.5" stroke-linecap="round"/><path d="${path}" fill="none" stroke="${RIBBON[i]}" stroke-width="5" stroke-linecap="round"/>`;
+    }).join("") + `<circle cx="${x}" cy="${y}" r="4.5" fill="${YELLOW}" stroke="${OUT}" stroke-width="2.5"/>`;
+    const eyes = mood === "sleep"
+      ? `<path d="M77 63 Q86 70 95 63 M105 63 Q114 70 123 63" fill="none" stroke="${OUT}" stroke-width="4" stroke-linecap="round"/>`
+      : `<circle cx="86" cy="62" r="10.5" fill="#FFFFFF" stroke="${OUT}" stroke-width="3"/><circle cx="114" cy="62" r="10.5" fill="#FFFFFF" stroke="${OUT}" stroke-width="3"/>
+<circle cx="87.5" cy="63.5" r="6" fill="${OUT}"/><circle cx="115.5" cy="63.5" r="6" fill="${OUT}"/><circle cx="85.4" cy="61" r="2.1" fill="#FFFFFF"/><circle cx="113.4" cy="61" r="2.1" fill="#FFFFFF"/>`;
+    const mouth = mood === "talk" ? `<path d="M90 95 Q100 110 110 95 Z" fill="${OUT}" stroke="${OUT}" stroke-width="2" stroke-linejoin="round"/><ellipse cx="100" cy="102" rx="5" ry="2.4" fill="${PINK}"/>`
+      : mood === "sleep" ? `<path d="M95 98 Q100 101 105 98" fill="none" stroke="${OUT}" stroke-width="3.2" stroke-linecap="round"/>`
+      : `<path d="M89 96 Q100 106 111 96" fill="none" stroke="${OUT}" stroke-width="3.6" stroke-linecap="round"/>`;
+    const face = "M64 46 Q100 24 136 46 Q146 72 132 94 Q100 110 68 94 Q54 72 64 46 Z";
+    return `<path d="M74 46 Q50 46 42 14 Q60 30 80 36 Z" fill="${HORN}" stroke="${OUT}" stroke-width="3.5" stroke-linejoin="round"/>
+<path d="M126 46 Q150 46 158 14 Q140 30 120 36 Z" fill="${HORN}" stroke="${OUT}" stroke-width="3.5" stroke-linejoin="round"/>
+${ribbons(43, 16, 1)}${ribbons(157, 16, -1)}
+<path d="M63 52 Q41 44 32 57 Q42 73 65 67 Z" fill="${HIDE}" stroke="${OUT}" stroke-width="3.5" stroke-linejoin="round"/><path d="M58 56 Q46 54 42 59 Q48 65 59 63 Z" fill="${MUZZLE}"/>
+<path d="M137 52 Q159 44 168 57 Q158 73 135 67 Z" fill="${HIDE}" stroke="${OUT}" stroke-width="3.5" stroke-linejoin="round"/><path d="M142 56 Q154 54 158 59 Q152 65 141 63 Z" fill="${MUZZLE}"/>
+<path d="${face}" fill="${HIDE}"/>
+<path d="M107 44 Q130 37 136 53 Q134 71 118 72 Q103 63 107 44 Z" fill="${SPOT}"/>
+<path d="${face}" fill="none" stroke="${OUT}" stroke-width="4" stroke-linejoin="round"/>
+<path d="M100 37 l2.6 5.4 5.9 .8 -4.3 4.1 1 5.9 -5.2 -2.8 -5.2 2.8 1 -5.9 -4.3 -4.1 5.9 -.8 z" fill="#FFD84D" stroke="${OUT}" stroke-width="2" stroke-linejoin="round"/>
+${eyes}
+<ellipse cx="100" cy="90" rx="25" ry="14.5" fill="${MUZZLE}" stroke="${OUT}" stroke-width="3.5"/>
+<ellipse cx="91" cy="87" rx="3" ry="4" fill="${OUT}"/><ellipse cx="109" cy="87" rx="3" ry="4" fill="${OUT}"/>
+${mouth}`;
+  }
+
+  /* The whole Boi, in a 200 × 220 box. Poses: wave, talk, dance, sleep. */
+  function boiArt(pose = "wave") {
+    const shadow = `<ellipse cx="100" cy="212" rx="76" ry="7" fill="${NAVY}" opacity=".35"/>`;
+    if (pose === "sleep") return `${shadow}
+<path d="M24 206 Q26 148 106 146 Q186 148 188 206 Z" fill="${FABRIC}" stroke="${OUT}" stroke-width="4" stroke-linejoin="round"/>
+${flower(92, 172, 8)}${leaf(106, 182, 30)}${flower(132, 166, 7, HIDE)}${flower(164, 186, 7.5)}${leaf(150, 192, -30)}
+<path d="M26 196 Q106 206 186 196 L188 206 Q106 214 24 206 Z" fill="${YELLOW}" stroke="${OUT}" stroke-width="3" stroke-linejoin="round"/>
+<g transform="translate(-14 114) scale(.78) rotate(-14 100 66)">${boiHeadArt("sleep")}</g>
+${zzz(132, 96, 12)}${zzz(152, 70, 16)}${zzz(174, 40, 20)}`;
+    const arms = {
+      wave: limb("M150 122 Q170 112 174 90", FABRIC) + hoof(175, 84) + limb("M50 122 Q34 134 32 152", FABRIC) + hoof(32, 157)
+        + `<path d="M186 74 q7 5 6 14 M192 62 q12 8 10 24" fill="none" stroke="${HIDE}" stroke-width="3.5" stroke-linecap="round"/>`,
+      talk: limb("M50 122 Q32 130 28 148", FABRIC) + hoof(27, 153) + limb("M150 122 Q168 130 172 148", FABRIC) + hoof(173, 153),
+      dance: limb("M50 120 Q30 108 26 86", FABRIC) + hoof(25, 80) + limb("M150 120 Q170 108 174 86", FABRIC) + hoof(175, 80)
+    }[pose] || "";
+    const feet = pose === "dance"
+      ? `<ellipse cx="78" cy="207" rx="13" ry="7" fill="${SHOE}" stroke="${OUT}" stroke-width="3"/><ellipse cx="132" cy="198" rx="13" ry="7" fill="${SHOE}" stroke="${OUT}" stroke-width="3" transform="rotate(-24 132 198)"/>`
+      : `<ellipse cx="80" cy="207" rx="13" ry="7" fill="${SHOE}" stroke="${OUT}" stroke-width="3"/><ellipse cx="120" cy="207" rx="13" ry="7" fill="${SHOE}" stroke="${OUT}" stroke-width="3"/>`;
+    let collar = ""; for (let x = 62; x <= 139; x += 12.8) collar += `<circle cx="${r1(x)}" cy="108" r="7.5" fill="${YELLOW}" stroke="${OUT}" stroke-width="2.5"/>`;
+    const figure = `${feet}
+<path d="M46 108 Q100 92 154 108 Q164 152 176 196 Q100 214 24 196 Q36 152 46 108 Z" fill="${FABRIC}" stroke="${OUT}" stroke-width="4" stroke-linejoin="round"/>
+${flower(72, 136, 8.5)}${leaf(86, 146, 35)}${flower(126, 128, 7.5, HIDE)}${leaf(112, 136, -30)}${flower(98, 164, 9.5)}${leaf(80, 172, -25)}${flower(146, 168, 7.5, HIDE)}${flower(52, 174, 7.5, HIDE)}${leaf(128, 178, 25)}
+<path d="M27 184 Q100 202 173 184 L176 196 Q100 214 24 196 Z" fill="${YELLOW}" stroke="${OUT}" stroke-width="3" stroke-linejoin="round"/>
+${collar}${arms}
+${boiHeadArt(pose === "talk" ? "talk" : "smile")}`;
+    return pose === "dance"
+      ? `${shadow}<g transform="rotate(-6 100 208)">${figure}</g>${note(18, 52, HIDE)}${note(178, 40, "#FFC98F")}${note(186, 150, HIDE)}`
+      : shadow + figure;
+  }
+
+  /* Bernúncia, the friendly litter eater, in a 270 × 150 box (y from 30). States: idle, open, chew.
+     Her round tummy glows brighter with every piece she eats (fed: 0 to 13; three halo levels, sparkles when full).
+     animated: every state is drawn, and the page switches them with the classes s-idle, s-open and s-chew. */
+  function bernGlow(fed) {
+    const k = Math.max(0, Math.min(13, Math.floor(fed) || 0));
+    return { fill: k ? r1(.3 + .7 * k / 13) : 0, r1: k >= 1 ? .5 : 0, r2: k >= 5 ? .34 : 0, r3: k >= 9 ? .22 : 0, sp: k >= 13 ? 1 : 0 };
+  }
+  function bernArt({ state = "idle", fed = 0, animated = false } = {}) {
+    const g = bernGlow(fed), has = s => animated || state === s;
+    const BODY = "#2F9E73", HEAD = "#3DBB83", MOUTH = "#7A1E3A", GLOW = "#FFD84D";
+    const spike = d => `<path d="${d}" fill="${ORANGE}" stroke="${OUT}" stroke-width="3" stroke-linejoin="round"/>`;
+    const star = (x, y) => `<path d="M${x} ${y - 8} l2.4 5.6 5.6 2.4 -5.6 2.4 -2.4 5.6 -2.4 -5.6 -5.6 -2.4 5.6 -2.4z" fill="${HIDE}"/>`;
+    let legs = ""; for (const x of [104, 136, 178, 210]) legs += `<path d="M${x} 148 V161" stroke="${NAVY}" stroke-width="7" stroke-linecap="round"/><ellipse cx="${x - 3}" cy="165" rx="9" ry="5" fill="${HIDE}" stroke="${OUT}" stroke-width="2.5"/><path d="M${x - 9} 165 h9" stroke="${PINK}" stroke-width="2.5" stroke-linecap="round"/>`;
+    let fringe = ""; for (let x = 86; x <= 226; x += 11.6) fringe += `<circle cx="${r1(x)}" cy="150" r="6" fill="${YELLOW}" stroke="${OUT}" stroke-width="2.5"/>`;
+    const eyes = has("idle") || has("open") ? `<g class="bn-eyes">
+<path d="M36 70 l-4 -6 M44 67.5 v-7 M52 70 l4 -6 M64 68 l-4 -6 M72 65.5 v-7 M80 68 l4 -6" stroke="${OUT}" stroke-width="3" stroke-linecap="round"/>
+<circle cx="44" cy="80" r="12.5" fill="#FFFFFF" stroke="${OUT}" stroke-width="3"/><circle cx="72" cy="78" r="12.5" fill="#FFFFFF" stroke="${OUT}" stroke-width="3"/>
+<circle cx="41" cy="82" r="6.6" fill="${OUT}"/><circle cx="69" cy="80" r="6.6" fill="${OUT}"/><circle cx="38.6" cy="79.4" r="2.4" fill="#FFFFFF"/><circle cx="66.6" cy="77.4" r="2.4" fill="#FFFFFF"/></g>` : "";
+    return `<ellipse cx="140" cy="172" rx="112" ry="6" fill="${NAVY}" opacity=".3"/>
+${legs}${fringe}
+${spike("M86 94 Q95 72 104 92 Z")}${spike("M110 80 Q120 55 130 80 Z")}${spike("M161 79 Q171 54 181 79 Z")}${spike("M209 86 Q219 63 229 86 Z")}
+${spike("M246 80 Q250 58 266 60 Q256 68 260 82 Q252 78 246 80 Z")}
+<path d="M68 136 Q62 96 96 90 Q118 62 146 86 Q170 62 196 88 Q220 70 238 96 Q256 92 254 74 Q268 98 248 118 Q244 146 214 150 L92 150 Q70 150 68 136 Z" fill="${BODY}" stroke="${OUT}" stroke-width="4" stroke-linejoin="round"/>
+<circle cx="154" cy="112" r="7" fill="${PINK}"/><circle cx="190" cy="104" r="6" fill="#A07EFF"/><circle cx="224" cy="114" r="5.5" fill="${YELLOW}"/><circle cx="180" cy="132" r="5" fill="${PINK}"/><circle cx="208" cy="134" r="4.5" fill="#A07EFF"/><circle cx="168" cy="96" r="4" fill="${YELLOW}"/>
+<circle data-part="r3" cx="118" cy="124" r="46" fill="${GLOW}" opacity="${g.r3}"/><circle data-part="r2" cx="118" cy="124" r="37" fill="${GLOW}" opacity="${g.r2}"/><circle data-part="r1" cx="118" cy="124" r="29" fill="${GLOW}" opacity="${g.r1}"/>
+<circle cx="118" cy="124" r="22" fill="${HIDE}" stroke="${OUT}" stroke-width="3.5"/><circle data-part="fill" cx="118" cy="124" r="20" fill="${GLOW}" opacity="${g.fill}"/>
+<ellipse cx="110" cy="116" rx="6" ry="3.6" fill="#FFFFFF" opacity=".85" transform="rotate(-35 110 116)"/>
+<g data-part="sp" opacity="${g.sp}">${star(150, 92)}${star(92, 150)}${star(146, 152)}</g>
+${spike("M34 70 Q35 47 51 62 Z")}${spike("M50 62 Q58 38 69 60 Z")}${spike("M68 62 Q82 42 85 69 Z")}
+<ellipse cx="26" cy="110" rx="24" ry="18" fill="none" stroke="${OUT}" stroke-width="8"/><circle cx="56" cy="98" r="40" fill="none" stroke="${OUT}" stroke-width="8"/>
+<ellipse cx="26" cy="110" rx="24" ry="18" fill="${HEAD}"/><circle cx="56" cy="98" r="40" fill="${HEAD}"/>
+<ellipse cx="10" cy="103" rx="2.6" ry="3.6" fill="${OUT}"/><ellipse cx="20" cy="100" rx="2.6" ry="3.6" fill="${OUT}"/>
+${eyes}
+${has("idle") ? `<g class="bn-closed"><circle cx="76" cy="104" r="6.5" fill="${PINK}" opacity=".85"/><path d="M8 114 Q44 150 88 112 Q48 130 8 114 Z" fill="${MOUTH}" stroke="${OUT}" stroke-width="3" stroke-linejoin="round"/><rect x="40" y="119.5" width="7.5" height="7" rx="2" fill="#FFFFFF" stroke="${OUT}" stroke-width="1.5"/><rect x="48.5" y="119.5" width="7.5" height="7" rx="2" fill="#FFFFFF" stroke="${OUT}" stroke-width="1.5"/></g>` : ""}
+${has("open") ? `<g class="bn-open"><path d="M6 104 Q46 92 90 106 Q86 158 50 160 Q12 156 6 104 Z" fill="${MOUTH}" stroke="${OUT}" stroke-width="3.5" stroke-linejoin="round"/><ellipse cx="48" cy="146" rx="22" ry="9" fill="${PINK}"/><rect x="38" y="97" width="8" height="8" rx="2" fill="#FFFFFF" stroke="${OUT}" stroke-width="1.5"/><rect x="50" y="98" width="8" height="8" rx="2" fill="#FFFFFF" stroke="${OUT}" stroke-width="1.5"/></g>` : ""}
+${has("chew") ? `<g class="bn-chew"><path d="M32 83 Q44 70 56 83 M60 81 Q72 68 84 81" fill="none" stroke="${OUT}" stroke-width="4.5" stroke-linecap="round"/><circle cx="78" cy="104" r="9.5" fill="${PINK}" opacity=".85"/><circle cx="14" cy="118" r="7" fill="${PINK}" opacity=".6"/><path d="M14 120 q6 7 12 0 q6 7 12 0 q6 7 12 0 q6 7 12 0 q6 7 12 0 q6 7 12 0" fill="none" stroke="${OUT}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>` : ""}
+${animated ? `<g class="bn-snack"><rect x="14" y="8" width="24" height="15" rx="3" fill="#E8457A" stroke="${OUT}" stroke-width="2"/><path d="M14 11 l-6 -4 v17 l6 -4 Z M38 11 l6 -4 v17 l-6 -4 Z" fill="#C92F63" stroke="${OUT}" stroke-width="1.5" stroke-linejoin="round"/></g>` : ""}`;
+  }
+
+  /* Maricota, the very tall woman of the play with long, swinging arms (a cameo in chapter 2), in a 100 × 250 box. */
+  function maricotaArt() {
+    const SKIN = "#C98559", DRESS = "#A07EFF";
+    let dots = ""; for (const [x, y] of [[44, 80], [56, 104], [40, 128], [58, 150], [36, 176], [62, 192], [48, 206]]) dots += `<circle cx="${x}" cy="${y}" r="3.6" fill="${HIDE}"/>`;
+    return `<ellipse cx="50" cy="244" rx="36" ry="5" fill="${NAVY}" opacity=".35"/>
+<path d="M42 226 V236 M58 226 V236" stroke="${OUT}" stroke-width="5" stroke-linecap="round"/>
+<ellipse cx="39" cy="238" rx="9" ry="5" fill="${PINK}" stroke="${OUT}" stroke-width="2.5"/><ellipse cx="61" cy="238" rx="9" ry="5" fill="${PINK}" stroke="${OUT}" stroke-width="2.5"/>
+<path d="M36 56 L64 56 L84 228 Q50 236 16 228 Z" fill="${DRESS}" stroke="${OUT}" stroke-width="4" stroke-linejoin="round"/>
+${dots}
+<path d="M19 214 Q50 222 81 214 L84 228 Q50 236 16 228 Z" fill="${YELLOW}" stroke="${OUT}" stroke-width="3" stroke-linejoin="round"/>
+${limb("M37 62 Q14 112 9 170", SKIN, 6)}<circle cx="9" cy="174" r="6" fill="${SKIN}" stroke="${OUT}" stroke-width="3"/>
+${limb("M63 62 Q90 106 93 166", SKIN, 6)}<circle cx="93" cy="170" r="6" fill="${SKIN}" stroke="${OUT}" stroke-width="3"/>
+<path d="M30 56 Q50 66 70 56 Q66 50 50 50 Q34 50 30 56 Z" fill="${YELLOW}" stroke="${OUT}" stroke-width="2.5" stroke-linejoin="round"/>
+<rect x="45" y="40" width="10" height="14" fill="${SKIN}" stroke="${OUT}" stroke-width="2.5"/>
+<circle cx="50" cy="8" r="8" fill="#3A2418" stroke="${OUT}" stroke-width="2.5"/>
+<circle cx="50" cy="28" r="17" fill="${SKIN}" stroke="${OUT}" stroke-width="3.5"/>
+<path d="M33 27 Q33 10 50 10 Q67 10 67 27 Q60 17 50 17 Q40 17 33 27 Z" fill="#3A2418"/>
+${flower(63, 12, 4, PINK)}
+<circle cx="44" cy="28" r="5.2" fill="#FFFFFF" stroke="${OUT}" stroke-width="2"/><circle cx="56" cy="28" r="5.2" fill="#FFFFFF" stroke="${OUT}" stroke-width="2"/><circle cx="44.6" cy="29" r="2.8" fill="${OUT}"/><circle cx="56.6" cy="29" r="2.8" fill="${OUT}"/>
+<circle cx="39" cy="35" r="3" fill="${PINK}" opacity=".6"/><circle cx="61" cy="35" r="3" fill="${PINK}" opacity=".6"/>
+<path d="M45 37 Q50 42 55 37" fill="none" stroke="${OUT}" stroke-width="2.5" stroke-linecap="round"/>`;
+  }
+
+  const boi = ({ pose = "wave", label = "", cls = "" } = {}) => `<svg class="${cls}" viewBox="0 0 200 220" ${aria(label)}>${boiArt(pose)}</svg>`;
+  const boiHead = ({ mood = "smile", label = "", cls = "" } = {}) => `<svg class="${cls}" viewBox="6 4 188 114" ${aria(label)}>${boiHeadArt(mood)}</svg>`;
+  const bernuncia = ({ state = "idle", fed = 0, animated = false, label = "", cls = "" } = {}) =>
+    `<svg class="bern s-${state}${cls ? " " + cls : ""}" viewBox="0 30 270 150" ${aria(label)}>${bernArt({ state, fed, animated })}</svg>`;
+  // The choice card: the Boi waving, with Bernúncia peeking in behind
+  const boiCard = (label = "") => `<svg viewBox="0 0 240 220" ${aria(label)}><g transform="translate(150 96) scale(.66)">${bernArt({})}</g><g transform="translate(-10 0)">${boiArt("wave")}</g></svg>`;
+  // Chapter 2: Maricota is very tall, but Eagle's legs reached the Moon first
+  const tallFriends = (label = "") => `<svg viewBox="0 0 300 250" ${aria(label)}><path d="M8 243 H292" stroke="${LAV}" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 8"/>
+<g transform="translate(40 0)">${maricotaArt()}</g><g transform="translate(150 104) scale(.64)">${eagleArt({ look: "center" })}</g></svg>`;
+
+  window.ART = { eagle, eagleHead, buddy, BUDDIES, patch, icon, play, scene, frame, bin, sparkles, map, milestone, stack, strip,
+    boi, boiHead, bernuncia, bernGlow, boiCard, tallFriends };
 })();

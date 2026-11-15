@@ -19,7 +19,7 @@
 
   /* ---------- Saving on this phone (if the browser blocks it, the game still works without saving) ---------- */
   const PREFIX = DEMO ? "debris.demo." : "debris.";
-  const KEYS = ["lang", "profile", "binned", "log", "pending", "lastNew", "introDone", "safetyDone", "finaleSeen", "jacketSeen", "tickets"];
+  const KEYS = ["lang", "profile", "binned", "log", "pending", "lastNew", "introDone", "safetyDone", "finaleSeen", "jacketSeen", "tickets", "teller", "tellerChosen"];
   const load = (k, d) => { try { const v = localStorage.getItem(PREFIX + k); return v == null ? d : JSON.parse(v); } catch { return d; } };
   const save = (k, v) => { try { localStorage.setItem(PREFIX + k, JSON.stringify(v)); } catch {} };
 
@@ -40,6 +40,9 @@
         toGo: { one: "1 patch to go", other: "{n} patches to go" }, allDone: "Every patch earned!", counter: "Kids everywhere have picked up {n} pieces of litter.", schools: "Bring debris to your school or your next beach cleanup!",
         scan: "Scan litter", holding: "You're holding: {item}", holdingSub: "Bin it to earn your next patch.", binNow: "Bin my litter", finale: "See the finale", finaleSub: "All 13 patches are on your jacket." },
       steps: { names: ["Scan", "Story", "Bin it", "Patch"], label: "Step {i} of 4: {name}" },
+      stepsBoi: ["Scan", "Bin it", "Wake up", "Story"],
+      teller: { chooseTitle: "Choose your storyteller", optionSpace: "Space Explorer", optionBoi: "Boi de Mamão", boiTag: "From Florianópolis", go: "Let's go!", settingLabel: "Storyteller",
+        credit: "Inspired by the boi de mamão tradition of Florianópolis and Santa Catarina." },
       scan: { close: "Close and go home", hint: "Fit one piece of litter inside the frame", shutter: "Take the photo", privacy: "No people or faces in the photo. We check it, then delete it.",
         looking: "Eagle is looking…", noCamera: "Tap the button to take a photo with your camera.", choose: "Choose a photo instead", starting: "Starting the camera…" },
       found: { back: "Back to the camera", safe: "Litter · safe to pick up", photoAlt: "Your photo",
@@ -71,7 +74,7 @@
       usage: { title: "Live usage", intro: "Real numbers from this app, counted as kids scan. They refresh on their own.", all: "Everyone, so far", today: "Today", total: "pieces found", players: "players", photos: "photos scanned", pieces: "pieces found", note: "Only numbers are counted: no names, no photos. A day is counted in UTC time.", demo: "Demo mode doesn't show live numbers. Open the app without ?demo to see them.", wait: "Getting the numbers…", fail: "The numbers aren't available right now." },
       explore: { title: "All the stories", hint: "For teachers, parents and judges: open any chapter without scanning. Your patches stay the same.", back: "Back to all the stories" },
       sources: { title: "Where the stories come from", intro: "Every chapter comes from the team's storyboard, “Abandoned but Not Forgotten”. These are the pages its facts come from." },
-      finale: { kicker: "You did it!", count: { one: "You picked up 1 piece of litter!", other: "You picked up {n} pieces of litter!" }, map: "Where they rest today", patches: "Your patches", home: "Back to home",
+      finale: { kicker: "You did it!", count: { one: "You picked up 1 piece of litter!", other: "You picked up {n} pieces of litter!" }, map: "Where they rest today", patches: "Your patches", home: "Back to home", impact: "See our impact",
         mapLabel: "A map of the 13 resting places: 4 on the Moon, 5 on Mars, and 4 more out in space." },
       impact: { title: "Our impact", pilot: "Pilot: Florianópolis", totalLabel: "pieces of litter picked up",
         moonBags: "That's more than all the bags astronauts left on the Moon!",
@@ -99,6 +102,9 @@
         toGo: { one: "Falta 1 parche", other: "Faltan {n} parches" }, allDone: "¡Tienes todos los parches!", counter: "Niños y niñas de todas partes han recogido {n} pedazos de basura.", schools: "¡Lleva debris a tu escuela o a tu próxima limpieza de playa!",
         scan: "Escanear basura", holding: "Tienes en la mano: {item}", holdingSub: "Échala en la caneca para ganar tu próximo parche.", binNow: "Botar mi basura", finale: "Ver el gran final", finaleSub: "Los 13 parches están en tu chaqueta." },
       steps: { names: ["Escanear", "Historia", "A la caneca", "Parche"], label: "Paso {i} de 4: {name}" },
+      stepsBoi: ["Escanear", "A la caneca", "Despertar", "Historia"],
+      teller: { chooseTitle: "Elige quién cuenta la historia", optionSpace: "Explorador espacial", optionBoi: "Boi de Mamão", boiTag: "De Florianópolis", go: "¡Vamos!", settingLabel: "Quién cuenta la historia",
+        credit: "Inspirado en la tradición del boi de mamão de Florianópolis y Santa Catarina." },
       scan: { close: "Cerrar e ir al inicio", hint: "Pon un pedazo de basura dentro del marco", shutter: "Tomar la foto", privacy: "Sin personas ni caras en la foto. La revisamos y luego la borramos.",
         looking: "Eagle está mirando…", noCamera: "Toca el botón para tomar una foto con tu cámara.", choose: "Mejor elegir una foto", starting: "Encendiendo la cámara…" },
       found: { back: "Volver a la cámara", safe: "Basura · se puede recoger", photoAlt: "Tu foto",
@@ -130,7 +136,7 @@
       usage: { title: "Uso en vivo", intro: "Números reales de esta app, contados mientras los niños escanean. Se actualizan solos.", all: "Entre todos, hasta ahora", today: "Hoy", total: "pedazos encontrados", players: "jugadores", photos: "fotos escaneadas", pieces: "pedazos encontrados", note: "Solo se cuentan números: sin nombres y sin fotos. El día se cuenta en hora UTC.", demo: "El modo demo no muestra números en vivo. Abre la app sin ?demo para verlos.", wait: "Buscando los números…", fail: "Los números no están disponibles ahora." },
       explore: { title: "Todas las historias", hint: "Para profes, familias y jurados: abre cualquier capítulo sin escanear. Tus parches no cambian.", back: "Volver a todas las historias" },
       sources: { title: "De dónde vienen las historias", intro: "Cada capítulo viene del guion del equipo, «Abandoned but Not Forgotten». Estas son las páginas de donde salen sus datos." },
-      finale: { kicker: "¡Lo lograste!", count: { one: "¡Recogiste 1 pedazo de basura!", other: "¡Recogiste {n} pedazos de basura!" }, map: "Dónde descansan hoy", patches: "Tus parches", home: "Volver al inicio",
+      finale: { kicker: "¡Lo lograste!", count: { one: "¡Recogiste 1 pedazo de basura!", other: "¡Recogiste {n} pedazos de basura!" }, map: "Dónde descansan hoy", patches: "Tus parches", home: "Volver al inicio", impact: "Ver nuestro impacto",
         mapLabel: "Un mapa de los 13 lugares de descanso: 4 en la Luna, 5 en Marte y 4 más en el espacio." },
       impact: { title: "Nuestro impacto", pilot: "Piloto: Florianópolis", totalLabel: "piezas de basura recogidas",
         moonBags: "¡Eso es más que todas las bolsas que los astronautas dejaron en la Luna!",
@@ -158,6 +164,9 @@
         toGo: { one: "Falta 1 emblema", other: "Faltam {n} emblemas" }, allDone: "Você ganhou todos os emblemas!", counter: "Crianças do mundo todo já recolheram {n} pedaços de lixo.", schools: "Leve o debris para a sua escola ou para o próximo mutirão de limpeza da praia!",
         scan: "Escanear lixo", holding: "Você está segurando: {item}", holdingSub: "Jogue na lixeira para ganhar seu próximo emblema.", binNow: "Jogar meu lixo fora", finale: "Ver o grande final", finaleSub: "Os 13 emblemas estão na sua jaqueta." },
       steps: { names: ["Escanear", "História", "Na lixeira", "Emblema"], label: "Passo {i} de 4: {name}" },
+      stepsBoi: ["Escanear", "Na lixeira", "Acordar", "História"],
+      teller: { chooseTitle: "Escolha quem conta a história", optionSpace: "Explorador Espacial", optionBoi: "Boi de Mamão", boiTag: "De Florianópolis", go: "Vamos lá!", settingLabel: "Quem conta a história",
+        credit: "Inspirado na tradição do boi de mamão de Florianópolis e Santa Catarina." },
       scan: { close: "Fechar e voltar ao início", hint: "Coloque um lixo dentro do quadro", shutter: "Tirar a foto", privacy: "Sem pessoas ou rostos na foto. A gente confere e depois apaga.",
         looking: "O Eagle está olhando…", noCamera: "Toque no botão para tirar uma foto com a câmera.", choose: "Escolher uma foto", starting: "Ligando a câmera…" },
       found: { back: "Voltar para a câmera", safe: "Lixo · pode recolher", photoAlt: "Sua foto",
@@ -189,7 +198,7 @@
       usage: { title: "Uso ao vivo", intro: "Números reais deste app, contados enquanto as crianças escaneiam. Eles se atualizam sozinhos.", all: "Todo mundo, até agora", today: "Hoje", total: "lixos encontrados", players: "jogadores", photos: "fotos escaneadas", pieces: "lixos encontrados", note: "Só números são contados: sem nomes e sem fotos. O dia é contado no horário UTC.", demo: "O modo demo não mostra números ao vivo. Abra o app sem ?demo para ver.", wait: "Buscando os números…", fail: "Os números não estão disponíveis agora." },
       explore: { title: "Todas as histórias", hint: "Para professores, famílias e jurados: abra qualquer capítulo sem escanear. Seus emblemas não mudam.", back: "Voltar para todas as histórias" },
       sources: { title: "De onde vêm as histórias", intro: "Cada capítulo vem do roteiro da equipe, “Abandoned but Not Forgotten”. Estas são as páginas de onde vêm os fatos." },
-      finale: { kicker: "Você conseguiu!", count: { one: "Você recolheu 1 pedaço de lixo!", other: "Você recolheu {n} pedaços de lixo!" }, map: "Onde elas estão hoje", patches: "Seus emblemas", home: "Voltar ao início",
+      finale: { kicker: "Você conseguiu!", count: { one: "Você recolheu 1 pedaço de lixo!", other: "Você recolheu {n} pedaços de lixo!" }, map: "Onde elas estão hoje", patches: "Seus emblemas", home: "Voltar ao início", impact: "Veja nosso impacto",
         mapLabel: "Um mapa dos 13 lugares de descanso: 4 na Lua, 5 em Marte e mais 4 no espaço." },
       impact: { title: "Nosso impacto", pilot: "Piloto: Florianópolis", totalLabel: "pedaços de lixo recolhidos",
         moonBags: "Isso é mais do que todos os sacos que os astronautas deixaram na Lua!",
@@ -216,6 +225,9 @@
     lastNew: int(load("lastNew", 0), 0, TOTAL),
     tickets: (Array.isArray(load("tickets", [])) ? load("tickets", []) : []).filter(x => typeof x === "string").slice(-50),   // pick-ups waiting to be counted on the server
     introDone: !!load("introDone", false), safetyDone: !!load("safetyDone", false), finaleSeen: !!load("finaleSeen", false),
+    teller: load("teller") === "boi" ? "boi" : "space",   // who tells the story: "space" (the storyboard) or "boi" (the Boi de Mamão)
+    tellerChosen: !!load("tellerChosen", false),
+    boi: null,        // the Boi's lines (boi.json); if they don't load, the app runs with the space story only
     content: null, counter: null, pickups: null, counterAt: 0, impact: null,   // counter: pieces found (Live usage); pickups: confirmed in the bin (Home, Impact)
     view: null,       // { name, params }
     scan: null,       // this round's photo and answer: { kind, image, result, message }. Never saved.
@@ -260,7 +272,7 @@
   const backBtn = (label, attrs) => h`<button type="button" class="circle-btn" aria-label="${label}" ${raw(attrs)}>${ico("back", { width: 2.6 })}</button>`;
   const goAttrs = (name, params = {}) => `data-go="${esc(name)}"` + (params.n ? ` data-n="${+params.n}"` : "") + (params.from ? ` data-from="${esc(params.from)}"` : "");
   function steps(i) {
-    const names = t("steps.names");
+    const names = isBoi() ? t("stepsBoi") : t("steps.names");
     return h`<div class="steps" role="img" aria-label="${t("steps.label", { i, name: names[i - 1] })}">${names.map((nm, k) =>
       k + 1 < i ? h`<span class="dot done"></span>` : k + 1 === i ? h`<span class="cur">${k + 1} ${nm}</span>` : h`<span class="dot"></span>`)}</div>`;
   }
@@ -275,6 +287,88 @@
   }
   const photo = (image, badge) => h`<div class="photo">${image ? h`<img src="${image}" alt="${t("found.photoAlt")}">` : raw(A.scene())}${badge || ""}</div>`;
   const binChip = (k, on) => { const [name, what] = t("bin.names." + k); return h`<div class="chip-bin${on ? " on" : ""}" role="listitem"><span class="swatch swatch-${k}"></span><b>${name}</b><span>${what}</span></div>`; };
+  const reducedMotion = () => !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+  /* ---------- The storyteller: the Space Explorer (the storyboard) or the Boi de Mamão (boi.json, the team's spec) ----------
+     The facts in every chapter are the same for both; only the narrator, the pick-up moment and a few lines change.
+     The Boi's lines are in English and Portuguese: Spanish players see the English lines until Spanish is written. */
+  const BERNUNCIA = "Bernúncia";   // the spelling the team agrees on ("Bernúncia" or "Bernunça"): change it here, and every Boi line follows
+  const NHAC = "Nhac!";
+  const isBoi = () => S.teller === "boi" && !!S.boi;
+  const boiLang = () => (S.lang === "pt" ? "pt" : "en");
+  const B = obj => (obj && (obj[boiLang()] || obj.en)) || "";
+  const boiAttr = () => (boiLang() !== S.lang ? raw(` lang="${boiLang()}"`) : "");   // a Spanish page marks the English Boi lines as English
+  const sayBoi = (text, boiWords = true) =>
+    h`<div class="say">${raw(A.boiHead({ mood: "talk", cls: "say-boi" }))}<p class="bubble"${boiWords ? boiAttr() : ""}>${text}</p></div>`;
+  // The Boi's line after Bernúncia eats: the four lines take turns (by chapter, so a reload says the same), {next} is the explorer waking up
+  function pickupLine(n) {
+    if (n >= TOTAL) return B(S.boi.allAwake);
+    const lines = B(S.boi.pickups), ch = chapter(n);
+    return fill(lines[(n - 1) % lines.length], { next: (ch[boiLang()] || ch.en).short });
+  }
+  function validBoi(b) {
+    const both = o => !!o && ["en", "pt"].every(k => o[k] != null && o[k].length > 0);
+    const ok = !!b && Array.isArray(b.chapters) && b.chapters.length === TOTAL && b.chapters.every((c, i) => c && c.n === i + 1 && both(c))
+      && both(b.verse) && both(b.opening) && both(b.firstPickup) && both(b.pickups) && both(b.allAwake) && both(b.finale)
+      && !!b.added && both(b.added.title) && both(b.added.found) && both(b.added.homeNext)
+      && ["en", "pt"].every(k => b.pickups[k].every(x => typeof x === "string" && x.includes("{next}")));
+    if (!ok) return null;
+    return BERNUNCIA === "Bernúncia" ? b : JSON.parse(JSON.stringify(b).replace(/Bernúncia/g, BERNUNCIA));
+  }
+
+  /* Sound for the Boi: "Nhac!" and a few seconds of festive music, made right here on the phone (an original tune, no recordings).
+     It only starts after a tap, stops when the screen changes and fails silently. A phone on silent may play nothing. */
+  const sound = (() => {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    let ctx = null, live = [];
+    const hz = m => 440 * Math.pow(2, (m - 69) / 12);
+    function unlock() {
+      try { if (!AC) return null; if (!ctx) ctx = new AC(); if (ctx.state === "suspended" && ctx.resume) ctx.resume().catch(() => {}); return ctx; } catch { return null; }
+    }
+    function keep(node) { live.push(node); node.onended = () => { live = live.filter(x => x !== node); }; }
+    function tone(c, out, { m, m2, at, dur, type = "triangle", vol = .2 }) {
+      const o = c.createOscillator(), g = c.createGain();
+      o.type = type; o.frequency.setValueAtTime(hz(m), at); if (m2 != null) o.frequency.exponentialRampToValueAtTime(hz(m2), at + dur);
+      g.gain.setValueAtTime(.0001, at); g.gain.exponentialRampToValueAtTime(vol, at + .012); g.gain.exponentialRampToValueAtTime(.0001, at + dur);
+      o.connect(g); g.connect(out); o.start(at); o.stop(at + dur + .02); keep(o);
+    }
+    function hiss(c, out, { at, dur, vol = .3, freq = 1500, q = 1 }) {
+      const n = Math.max(1, Math.floor(c.sampleRate * dur)), buf = c.createBuffer(1, n, c.sampleRate), d = buf.getChannelData(0);
+      for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 2);
+      const src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+      src.buffer = buf; f.type = "bandpass"; f.frequency.value = freq; f.Q.value = q; g.gain.value = vol;
+      src.connect(f); f.connect(g); g.connect(out); src.start(at); keep(src);
+    }
+    function play(score) {
+      const c = unlock(); if (!c) return;
+      try { const out = c.createGain(); out.gain.value = .5; out.connect(c.destination); score(c, out, c.currentTime + .03); } catch {}
+    }
+    return {
+      unlock,
+      // A big bite and two chews
+      nhac: () => play((c, out, t) => {
+        hiss(c, out, { at: t, dur: .09, vol: .9, freq: 1100, q: .8 });
+        tone(c, out, { m: 62, m2: 48, at: t + .01, dur: .15, type: "square", vol: .1 });
+        hiss(c, out, { at: t + .22, dur: .06, vol: .6, freq: 800 });
+        hiss(c, out, { at: t + .36, dur: .06, vol: .5, freq: 700 });
+      }),
+      // An explorer wakes up: four notes going up
+      wake: () => play((c, out, t) => [72, 76, 79, 84].forEach((m, i) => tone(c, out, { m, at: t + i * .1, dur: i === 3 ? .45 : .14, vol: .2 }))),
+      // About 4 seconds of festa: a tune, a bass, a drum on the beat and a triangle in between (written for this app)
+      festa: () => play((c, out, t) => {
+        const e = .17;
+        const tune = [[72, 1], [69, 1], [72, 1], [77, 2], [76, 1], [74, 1], [72, 1], [70, 1], [74, 1], [77, 1], [81, 2], [79, 1], [77, 1], [76, 1], [77, 1], [76, 1], [74, 1], [72, 1], [69, 1], [72, 1], [77, 2]];
+        let at = t;
+        for (const [m, d] of tune) { tone(c, out, { m, at, dur: d * e * .9, type: "square", vol: .06 }); tone(c, out, { m: m + 12, at, dur: d * e * .5, vol: .04 }); at += d * e; }
+        [53, 48, 53, 48, 46, 53, 46, 48, 53, 48, 53, 53].forEach((m, i) => tone(c, out, { m, at: t + i * 2 * e, dur: e * 1.6, vol: .2 }));
+        for (let i = 0; i < 24; i++) {
+          if (i % 2) hiss(c, out, { at: t + i * e, dur: .04, vol: .16, freq: 7000, q: 2 });
+          if (i % 4 === 0 || i % 4 === 3) tone(c, out, { m: 40, m2: 28, at: t + i * e, dur: .16, type: "sine", vol: .32 });
+        }
+      }),
+      stop: () => { live.forEach(n => { try { n.stop(); } catch {} }); live = []; }
+    };
+  })();
 
   /* ---------- Screens ---------- */
   const screens = {};
@@ -291,10 +385,49 @@
     <button type="button" class="btn btn-primary" data-act="start">${t("welcome.go")}</button>
     <button type="button" class="btn-link" data-go="grownups">${t("welcome.grownups")}</button>` });
 
+  /* Choose your storyteller: on first launch, right after "Let's go!". Space Explorer is chosen to start with. Later: Me → Storyteller. */
+  screens.storyteller = () => ({ theme: "t-blue", cls: "teller", html: h`
+    <form class="teller-form grow" data-form="teller" novalidate>
+      <h1 tabindex="-1">${t("teller.chooseTitle")}</h1>
+      <fieldset class="teller-cards"><legend class="sr-only">${t("teller.chooseTitle")}</legend>${["space", "boi"].map(k => h`
+        <label class="teller-card${k === S.teller ? " on" : ""}"><input type="radio" name="teller" value="${k}" ${k === S.teller ? raw("checked") : ""}>
+          <span class="teller-art">${raw(k === "boi" ? A.boiCard() : A.eagle())}</span>
+          <b>${t(k === "boi" ? "teller.optionBoi" : "teller.optionSpace")}</b>${k === "boi" ? h`<span class="teller-tag">${t("teller.boiTag")}</span>` : ""}
+        </label>`)}
+      </fieldset>
+      <p class="fine">${t("teller.credit")}</p>
+      <div class="grow"></div>
+      <button type="submit" class="btn btn-primary">${t("teller.go")}</button>
+    </form>` });
+
   screens.opening = ({ from }) => {
-    const i = L(S.content.intro), replay = from === "jacket" || from === "explore";
+    const replay = from === "jacket" || from === "explore";
+    const top = replay ? h`<div class="top">${backBtn(t("back"), goAttrs(from))}</div>` : "";
+    const end = replay ? h`<button type="button" class="btn btn-primary" ${raw(goAttrs(from))}>${from === "explore" ? t("explore.back") : t("story.toJacket")}</button>`
+      : h`<button type="button" class="btn btn-primary" data-act="openingDone">${t("opening.go")}</button>`;
+    if (isBoi()) {
+      // The Boi dances in while the verse appears (and plays), then talks to the child. The safety rules still come next.
+      const b = S.boi, la = boiAttr(), talk = B(b.opening);
+      return { theme: "t-blue", cls: "opening boi-opening", html: h`
+        ${top}
+        <span class="kicker">${t("opening.kicker")}</span>
+        <h1 tabindex="-1"${la}>${B(b.added.title)}</h1>
+        <div class="boi-stage">${raw(A.boi({ pose: "dance", cls: "boi-dance-in" }))}</div>
+        <div class="verse"><span class="verse-note" aria-hidden="true">♪</span>
+          <div class="verse-pt" lang="pt">${b.verse.pt.map(l => h`<p>${l}</p>`)}</div>
+          ${boiLang() !== "pt" ? h`<div class="verse-tr" lang="en">${b.verse.en.map(l => h`<p>${l}</p>`)}</div>` : ""}
+        </div>
+        ${listenBtn("intro")}
+        ${talk.slice(0, 2).map(p => h`<p class="script"${la}>${p}</p>`)}
+        <div class="boi-nap">${raw(A.boi({ pose: "sleep" }))}</div>
+        ${talk.slice(2).map(p => h`<p class="script"${la}>${p}</p>`)}
+        ${sayBoi(B(b.firstPickup))}
+        <div class="grow"></div>
+        ${end}`, after: () => { if (fromTap()) sound.festa(); } };
+    }
+    const i = L(S.content.intro);
     return { theme: "t-blue", cls: "opening", html: h`
-      ${replay ? h`<div class="top">${backBtn(t("back"), goAttrs(from))}</div>` : ""}
+      ${top}
       <span class="kicker">${t("opening.kicker")}</span>
       <h1 tabindex="-1">${i.title}</h1>
       ${listenBtn("intro")}
@@ -302,8 +435,7 @@
       <div class="hook-card"><b>${t("opening.hook")}</b><p>${i.hook}</p></div>
       ${say(i.pickup)}
       <div class="grow"></div>
-      ${replay ? h`<button type="button" class="btn btn-primary" ${raw(goAttrs(from))}>${from === "explore" ? t("explore.back") : t("story.toJacket")}</button>`
-        : h`<button type="button" class="btn btn-primary" data-act="openingDone">${t("opening.go")}</button>`}` };
+      ${end}` };
   };
 
   screens.safety = ({ from }) => {
@@ -342,8 +474,9 @@
   };
 
   screens.home = () => {
-    const n = S.binned, p = S.profile, pend = S.pending;
-    const greet = n === 0 ? L(S.content.intro).pickup : chText(n).pickup;
+    const n = S.binned, p = S.profile, pend = S.pending, boi = isBoi();
+    const greet = boi ? B(n === 0 ? S.boi.firstPickup : n >= TOTAL ? S.boi.allAwake : S.boi.added.homeNext)
+      : n === 0 ? L(S.content.intro).pickup : chText(n).pickup;
     refreshCounter();
     return { theme: "t-blue", cls: "home", html: h`
       <header class="home-top">
@@ -351,7 +484,7 @@
         <button type="button" class="count-pill" data-go="jacket" aria-label="${t("home.patchesLabel", { n, total: TOTAL })}"><span class="pill-dot" aria-hidden="true"></span>${t("home.patches", { n, total: TOTAL })}</button>
       </header>
       <h1 class="sr-only" tabindex="-1">${t("home.title")}</h1>
-      <div class="home-eagle">${raw(A.eagle({ label: "Eagle", look: "right", cls: "home-eagle-art" }))}<p class="bubble">${greet}</p></div>
+      <div class="home-eagle">${raw(boi ? A.boi({ pose: "talk", label: t("teller.optionBoi"), cls: "home-eagle-art" }) : A.eagle({ label: "Eagle", look: "right", cls: "home-eagle-art" }))}<p class="bubble"${boi ? boiAttr() : ""}>${greet}</p></div>
       ${pend ? h`<button type="button" class="card card-peach holding" data-go="bin">
           <span class="holding-text"><b>${t("home.holding", { item: cap(pend.item || t("types." + pend.type)) })}</b><span>${t("home.holdingSub")}</span></span>${ico("chevron", { width: 2.6 })}</button>` : ""}
       <button type="button" class="card card-navy jacket-card" data-go="jacket">
@@ -390,7 +523,7 @@
   };
 
   screens.found = () => {
-    const p = S.pending, next = S.binned + 1, extra = next > TOTAL;
+    const p = S.pending, next = S.binned + 1, extra = next > TOTAL, boi = isBoi();
     return { theme: "t-cream", cls: "found", html: h`
       <div class="top">${backBtn(t("found.back"), 'data-act="rescan"')}${steps(2)}</div>
       ${photo(S.scan.image, h`<span class="badge badge-green">${ico("check", { size: 18, width: 3 })}${t("found.safe")}</span>`)}
@@ -398,43 +531,50 @@
         <h1 tabindex="-1">${cap(p.item || t("types." + p.type))}</h1>
         <p class="bin-line"><span class="swatch swatch-${p.bin}"></span><span>${t("found.goes." + p.bin)}</span></p>
       </div>
-      <div class="grow say-end">${say(extra ? t("found.extra") : t("found.bubble." + chapter(next).body))}</div>
-      ${extra ? h`<button type="button" class="btn btn-primary" data-go="bin">${t("found.binIt")}</button>`
+      <div class="grow say-end">${boi ? (extra ? sayBoi(t("found.extra"), false) : sayBoi(B(S.boi.added.found))) : say(extra ? t("found.extra") : t("found.bubble." + chapter(next).body))}</div>
+      ${extra || boi ? h`<button type="button" class="btn btn-primary" data-go="bin">${t("found.binIt")}</button>`
         : h`<button type="button" class="btn btn-primary" ${raw(goAttrs("story", { n: next, from: "round" }))}>${t("found.hear")}</button>`}
       <button type="button" class="btn-link" data-act="rescan">${t("found.wrong")}</button>` };
   };
 
   screens.story = ({ n, from = "round" }) => {
-    const ch = chapter(n), c = L(ch), round = from === "round", img = safeImg(ch.image);
-    const back = round ? (S.scan && S.scan.kind === "found" ? backBtn(t("found.back"), goAttrs("found")) : backBtn(t("back"), goAttrs("home"))) : backBtn(t("back"), goAttrs(from));
+    const ch = chapter(n), c = L(ch), round = from === "round", boiRound = from === "boi", img = safeImg(ch.image);
+    const back = round ? (S.scan && S.scan.kind === "found" ? backBtn(t("found.back"), goAttrs("found")) : backBtn(t("back"), goAttrs("home")))
+      : boiRound ? backBtn(t("back"), goAttrs(S.earned && S.earned.n === n && isBoi() ? "feast" : "home")) : backBtn(t("back"), goAttrs(from));
+    const end = round ? h`<button type="button" class="btn btn-primary" data-go="bin">${t("story.binNow")}</button>`
+      : boiRound ? (n >= TOTAL ? h`<button type="button" class="btn btn-primary" data-go="finale">${t("unlocked.finale")}</button><button type="button" class="btn btn-outline" data-go="jacket">${t("unlocked.jacket")}</button>`
+        : h`<button type="button" class="btn btn-primary" data-go="scan">${t("unlocked.again")}</button><button type="button" class="btn btn-outline" data-go="jacket">${t("unlocked.jacket")}</button>`)
+      : h`<button type="button" class="btn btn-outline" ${raw(goAttrs(from))}>${from === "finale" ? t("story.toFinale") : from === "explore" ? t("explore.back") : t("story.toJacket")}</button>`;
     const section = sec => sec.k === "help"
       ? h`<div class="help-box">${ico("checkCircle", { size: 28, width: 2.6 })}<p><b>${t("story.sec.help")}:</b> ${sec.t}</p></div>`
       : h`<section class="sec"><h2>${t("story.sec." + sec.k)}</h2>${sec.list ? h`<ul>${sec.list.map(x => h`<li>${x}</li>`)}</ul>` : h`<p>${sec.t}</p>`}</section>`;
     return { theme: "t-cream", cls: "story", html: h`
       <div class="story-head">
-        <div class="top">${back}${round ? steps(2) : ""}</div>
+        <div class="top">${back}${round ? steps(2) : boiRound ? steps(4) : ""}</div>
         <div class="story-title">
           <div class="story-text"><span class="chip">${t("story.chapter", { n, tag: c.tag })}</span><h1 tabindex="-1">${c.title}</h1><span class="where">${c.place}</span></div>
           <div class="story-patch">${raw(A.patch(n, ch.body, t("story.patchAlt", { short: c.short })))}</div>
         </div>
       </div>
       <div class="story-body">
+        ${isBoi() ? h`<div class="boi-intro">${sayBoi(B(S.boi.chapters[n - 1]))}${n === 2 ? h`<div class="tall-friends">${raw(A.tallFriends())}</div>` : ""}</div>` : ""}
         ${img ? h`<figure class="story-photo"><img src="${img}" alt="${c.title}"><figcaption>${t("story.credit", { by: ch.credit || "NASA" })}</figcaption></figure>` : ""}
         ${listenBtn("chapter:" + n)}
         ${c.sections.map(section)}
-        <div class="hook-say">${say(h`<b>${t("story.hook")}</b> ${c.hook}`, { mood: "happy" })}</div>
+        <div class="hook-say">${isBoi() ? sayBoi(h`<b>${t("story.hook")}</b> ${c.hook}`, false) : say(h`<b>${t("story.hook")}</b> ${c.hook}`, { mood: "happy" })}</div>
         <p class="sources"><b>${t("story.sources")}:</b> ${ch.links.map((l, i) => h`${i ? ", " : ""}<a href="${safeUrl(l.url)}" target="_blank" rel="noopener noreferrer">${l.name}</a>`)}</p>
         <div class="grow"></div>
-        ${round ? h`<button type="button" class="btn btn-primary" data-go="bin">${t("story.binNow")}</button>`
-          : h`<button type="button" class="btn btn-outline" ${raw(goAttrs(from))}>${from === "finale" ? t("story.toFinale") : from === "explore" ? t("explore.back") : t("story.toJacket")}</button>`}
+        ${end}
       </div>` };
   };
 
   screens.bin = () => {
-    const p = S.pending, extra = S.binned >= TOTAL, inRound = S.scan && S.scan.kind === "found" && !extra;
+    const p = S.pending, extra = S.binned >= TOTAL, found = !!(S.scan && S.scan.kind === "found"), inRound = found && !extra, boi = isBoi();
     const color = t("bin.names." + p.bin)[0].toLowerCase();
+    const back = boi && found ? backBtn(t("back"), goAttrs("found"))
+      : inRound ? backBtn(t("bin.back"), goAttrs("story", { n: S.binned + 1, from: "round" })) : backBtn(t("back"), goAttrs("home"));
     return { theme: "t-cream", cls: "bin", html: h`
-      <div class="top">${inRound ? backBtn(t("bin.back"), goAttrs("story", { n: S.binned + 1, from: "round" })) : backBtn(t("back"), goAttrs("home"))}${steps(3)}</div>
+      <div class="top">${back}${steps(boi ? 2 : 3)}</div>
       <div class="titles"><h1 tabindex="-1">${t("bin.title." + p.bin)}</h1><p class="sub">${t("bin.meaning." + p.bin)} ${extra ? t("bin.thenTap") : t("bin.thenTapPatch")}</p></div>
       <div class="bin-art">${raw(A.bin(p.bin, t("bin.art", { color })))}</div>
       <div class="legend${p.bin === "special_dropoff" ? " four" : ""}" role="list" aria-label="${t("bin.legend")}">${["white", "green", "black"].map(k => binChip(k, k === p.bin))}${p.bin === "special_dropoff" ? binChip("special_dropoff", true) : ""}</div>
@@ -471,6 +611,53 @@
       after: confetti };
   };
 
+  /* The Boi's pick-up moment: Bernúncia gobbles the confirmed piece ("Nhac!"), her tummy glows a little brighter, the Boi says
+     his line and the next explorer wakes up with a little dance; then its chapter opens. It plays once per pick-up:
+     coming Back to this screen shows it settled, with no second "Nhac!". */
+  let feastTimers = [];
+  screens.feast = () => {
+    const e = S.earned, played = !!e.played, fed = Math.min(S.binned, TOTAL), cls = "feast" + (played ? " is-played" : "");
+    const stage = h`<div class="feast-stage${played ? " fed" : ""}" id="feastStage">${raw(A.bernuncia({ fed: played || e.extra ? fed : fed - 1, animated: !played, cls: "bern-big" }))}<h1 class="nhac" tabindex="-1">${NHAC}</h1></div>`;
+    if (e.extra) return { theme: "t-blue", cls, html: h`
+      ${stage}
+      <div class="feast-say">${sayBoi(tn("unlocked.extraLine", S.log.length), false)}</div>
+      <div class="grow"></div>
+      <button type="button" class="btn btn-primary" data-go="scan">${t("unlocked.again")}</button>
+      <button type="button" class="btn btn-outline" data-go="finale">${t("unlocked.finale")}</button>`, after: playFeast };
+    const n = e.n, ch = chapter(n), c = L(ch);
+    return { theme: "t-blue", cls, html: h`
+      <div class="top center">${steps(3)}</div>
+      ${stage}
+      <div class="feast-say">${sayBoi(pickupLine(n))}</div>
+      <div class="wake${played ? " awake" : ""}" id="wake">
+        <div class="wake-patch">${raw(A.patch(n, ch.body, t("story.patchAlt", { short: c.short })))}<span class="zzz" aria-hidden="true">z z z</span></div>
+        <b class="patch-name">${c.short}</b>
+        <div class="progress" role="img" aria-label="${t("unlocked.of", { n, total: TOTAL })}">
+          <span class="progress-dots">${range(TOTAL).map(i => h`<span class="${i < n ? "on" : i === n ? "on now" : ""}"></span>`)}</span>
+          <b>${t("home.patches", { n, total: TOTAL })}</b>
+        </div>
+      </div>
+      <div class="grow"></div>
+      <button type="button" class="btn btn-primary" ${raw(goAttrs("story", { n, from: "boi" }))}>${t("found.hear")}</button>`, after: playFeast };
+  };
+  function playFeast() {
+    const e = S.earned;
+    if (!e || e.played) return;
+    e.played = true;
+    const stage = document.getElementById("feastStage"), svg = stage && stage.querySelector(".bern"), wake = document.getElementById("wake");
+    const glow = A.bernGlow(Math.min(S.binned, TOTAL));
+    const mouth = st => { if (svg) { svg.classList.remove("s-idle", "s-open", "s-chew"); svg.classList.add("s-" + st); } };
+    const brighter = () => { if (svg) svg.querySelectorAll("[data-part]").forEach(el => { el.style.opacity = glow[el.dataset.part]; }); };
+    const ate = () => { if (stage) stage.classList.add("fed"); sound.nhac(); };
+    const awake = () => { if (wake) wake.classList.add("awake"); if (!e.extra) sound.wake(); };
+    if (reducedMotion()) { brighter(); ate(); if (wake) wake.classList.add("awake"); return; }
+    const at = (ms, fn) => feastTimers.push(setTimeout(fn, ms));
+    at(180, () => mouth("open"));
+    at(560, () => { mouth("chew"); ate(); });
+    at(1000, () => { mouth("idle"); brighter(); });
+    at(1250, awake);
+  }
+
   screens.danger = () => {
     const r = S.scan.result || {}, item = r.item ? lower(r.item) : t("danger.fallback");
     return { theme: "t-cream", cls: "danger", html: h`
@@ -495,12 +682,12 @@
   };
 
   screens.jacket = () => {
-    const n = S.binned;
+    const n = S.binned, boi = isBoi();
     const cards = range(TOTAL).map(i => {
       const ch = chapter(i), c = L(ch), isNew = i === S.lastNew;
       return i <= n
         ? h`<button type="button" class="patch-card${isNew ? " is-new" : ""}" ${raw(goAttrs("story", { n: i, from: "jacket" }))}>${raw(A.patch(i, ch.body))}<span>${c.short}${isNew ? h` <em>· ${t("jacket.newTag")}</em>` : ""}</span></button>`
-        : h`<div class="patch-card locked"><span class="q" aria-hidden="true">?</span><span>${t("jacket.locked", { place: t("bodies." + ch.body) })}</span></div>`;
+        : h`<div class="patch-card locked"><span class="q${boi ? " zz" : ""}" aria-hidden="true">${boi ? "zzz" : "?"}</span><span>${t("jacket.locked", { place: t("bodies." + ch.body) })}</span></div>`;
     });
     const cta = S.pending ? h`<button type="button" class="btn btn-primary" data-go="bin">${ico("check", { size: 28, width: 2.6 })}${t("home.binNow")}</button>`
       : n >= TOTAL ? h`<button type="button" class="btn btn-primary" data-go="finale">${t("home.finale")}</button>`
@@ -547,6 +734,10 @@
       ${from === "me" ? h`<button type="button" class="row-link quiet" data-act="reset">${t("me.reset")}</button>` : ""}
     </section>`;
 
+  const tellerPick = () => !S.boi ? "" : h`<section class="card teller-set" aria-labelledby="tellerLbl"><h2 id="tellerLbl">${t("teller.settingLabel")}</h2>
+      <div class="teller-pick">${["space", "boi"].map(k => h`<button type="button" id="teller-${k}" data-act="teller" data-teller="${k}" aria-pressed="${S.teller === k}">${raw(k === "boi" ? A.boiHead({ mood: "smile" }) : A.eagleHead({ mood: "smile" }))}<span><b>${t(k === "boi" ? "teller.optionBoi" : "teller.optionSpace")}</b>${k === "boi" ? h`<small>${t("teller.boiTag")}</small>` : ""}</span></button>`)}</div>
+      <p class="note">${t("teller.credit")}</p></section>`;
+
   screens.me = () => {
     const p = S.profile, count = type => S.log.filter(x => x.type === type).length;
     return { theme: "t-cream", cls: "me", html: h`
@@ -560,6 +751,7 @@
       </div></section>
       <section class="card row-between"><label for="lang"><b>${t("me.language")}</b></label>
         <select id="lang" class="select" data-change="lang">${LANGS.map(l => h`<option value="${l}" lang="${l}" ${l === S.lang ? raw("selected") : ""}>${UI[l].langName}</option>`)}</select></section>
+      ${tellerPick()}
       ${grownupsCard("me")}
       <div class="grow"></div>
       ${nav("me")}` };
@@ -589,6 +781,7 @@
       <div class="top">${backBtn(t("back"), goAttrs(from))}</div>
       <div class="row-between end"><h1 tabindex="-1">${t("explore.title")}</h1><span class="count">${TOTAL}</span></div>
       <p class="sub">${t("explore.hint")}</p>
+      ${tellerPick()}
       <div class="patches">${cards}</div>
       <section class="map-card"><h2>${t("finale.map")}</h2>${raw(A.map(TOTAL, t("map"), t("finale.mapLabel")))}</section>
       <button type="button" class="btn-link" ${raw(goAttrs("opening", { from: "explore" }))}>${t("jacket.opening")}</button>
@@ -632,25 +825,31 @@
     <div class="top">${backBtn(t("back"), goAttrs(from))}</div>
     <h1 tabindex="-1">${t("sources.title")}</h1>
     <p class="para">${t("sources.intro")}</p>
+    ${S.boi ? h`<p class="para">${t("teller.credit")}</p>` : ""}
     <ol class="src-list">${S.content.chapters.map(ch => h`<li><b>${L(ch).short}</b><span>${ch.links.map((l, i) =>
       h`${i ? " · " : ""}<a href="${safeUrl(l.url)}" target="_blank" rel="noopener noreferrer">${l.name}</a>`)}</span></li>`)}</ol>
     <button type="button" class="btn btn-outline" ${raw(goAttrs(from))}>${t("back")}</button>` });
 
   screens.finale = () => {
-    const f = L(S.content.finale), first = !S.finaleSeen;
+    const f = L(S.content.finale), first = !S.finaleSeen, boi = isBoi(), la = boiAttr();
     if (first) { S.finaleSeen = true; persist(); }
     return { theme: "t-blue", cls: "finale", html: h`
       <div class="top">${backBtn(t("finale.home"), goAttrs("home"))}</div>
       <span class="kicker">${t("finale.kicker")}</span>
       <h1 tabindex="-1">${f.title}</h1>
+      ${boi ? h`<div class="party" aria-hidden="true">
+        <div class="dance-row">${range(TOTAL).map(i => raw(A.patch(i, chapter(i).body)))}</div>
+        <div class="party-cast">${raw(A.boi({ pose: "dance", cls: "boi-dancing" }))}${raw(A.bernuncia({ fed: TOTAL, cls: "bern-party" }))}</div>
+      </div>` : ""}
       ${listenBtn("finale")}
-      ${f.script.map(p => h`<p class="script">${p}</p>`)}
+      ${boi ? B(S.boi.finale).map(p => h`<p class="script"${la}>${p}</p>`) : f.script.map(p => h`<p class="script">${p}</p>`)}
       <div class="card card-navy count-card">${tn("finale.count", S.log.length)}</div>
       <section class="map-card"><h2>${t("finale.map")}</h2>${raw(A.map(S.binned, t("map"), t("finale.mapLabel")))}</section>
       <section><h2>${t("finale.patches")}</h2><div class="badges">${range(TOTAL).map(i =>
         h`<button type="button" class="badge-btn" ${raw(goAttrs("story", { n: i, from: "finale" }))} aria-label="${chText(i).short}">${raw(A.patch(i, chapter(i).body))}</button>`)}</div></section>
-      <button type="button" class="btn btn-primary" data-go="home">${t("finale.home")}</button>`,
-      after: () => { if (first) confetti(); } };
+      ${boi ? h`<button type="button" class="btn btn-primary" data-go="impact">${t("finale.impact")}</button><button type="button" class="btn-link" data-go="home">${t("finale.home")}</button>`
+        : h`<button type="button" class="btn btn-primary" data-go="home">${t("finale.home")}</button>`}`,
+      after: () => { if (first) confetti(); if (boi && fromTap()) sound.festa(); } };
   };
 
   /* ---------- Impact: litter to the Moon (the team's spec) ---------- */
@@ -719,6 +918,7 @@
   const okRound = () => !!(S.scan && S.pending && S.scan.kind === "found");
   const GUARD = {
     welcome: () => true, grownups: () => true, photos: () => true, sources: () => true, safety: () => true, profile: () => true, opening: () => true,
+    storyteller: () => !!S.boi,
     home: () => !!S.profile, jacket: () => !!S.profile, me: () => !!S.profile,
     scan: () => !!S.profile && !(S.pending && S.pending.saved),
     found: okRound,
@@ -728,6 +928,7 @@
     explore: () => true, usage: () => true,
     bin: () => !!S.pending,
     unlocked: () => !!S.earned,
+    feast: () => !!S.earned && isBoi(),
     finale: () => S.binned >= TOTAL,
     impact: () => true
   };
@@ -735,11 +936,13 @@
   /* Screens an address like …/#jacket may open directly (a reload, a bookmark, a typed address). */
   const OPEN_BY_ADDRESS = ["home", "jacket", "impact", "me", "finale", "grownups", "photos", "sources", "explore", "usage"];
   let visit = 0;   // counts screen openings: the Impact screen reads a fresh total on each one
+  let tapVisit = -1;   // the last opening that came from a tap (not the phone's Back button): music only plays after a tap
+  const fromTap = () => tapVisit === visit;
   const fromAddress = () => { const name = location.hash.slice(1); return OPEN_BY_ADDRESS.includes(name) && GUARD[name]({}) ? name : fallback(); };
   function go(name, params = {}, { replace = false } = {}) {
     if (!screens[name] || !GUARD[name](params)) { name = fallback(); params = {}; replace = true; }
     leave();
-    visit++;
+    visit++; tapVisit = visit;
     S.view = { name, params };
     try { history[replace ? "replaceState" : "pushState"]({ name, params }, "", "#" + name); } catch {}
     render(true);
@@ -770,12 +973,17 @@
     else if (keep && document.getElementById(keep)) document.getElementById(keep).focus({ preventScroll: true });
     else if (keepHeading && h1) h1.focus({ preventScroll: true });
   }
-  function leave() { clearInterval(usageTimer); if (window.JACKET3D) window.JACKET3D.unmount(); stopCamera(); stopSpeech(); const c = document.getElementById("confetti"); if (c) c.textContent = ""; }
+  function leave() {
+    clearInterval(usageTimer); if (window.JACKET3D) window.JACKET3D.unmount(); stopCamera(); stopSpeech();
+    feastTimers.forEach(clearTimeout); feastTimers = []; sound.stop();
+    const c = document.getElementById("confetti"); if (c) c.textContent = "";
+  }
 
   /* ---------- Taps ---------- */
   app.addEventListener("click", e => {
     const el = e.target.closest("[data-go],[data-act]");
     if (!el || !app.contains(el)) return;
+    if (isBoi()) sound.unlock();
     if (el.dataset.go) {
       const params = {};
       if (el.dataset.n) params.n = +el.dataset.n;
@@ -787,6 +995,7 @@
     const el = e.target;
     if (el.matches("[data-change=lang]")) setLang(el.value);
     if (el.name === "buddy") app.querySelectorAll(".buddy").forEach(b => b.classList.toggle("on", b.contains(el)));
+    if (el.name === "teller") app.querySelectorAll(".teller-card").forEach(b => b.classList.toggle("on", b.contains(el)));
   });
   app.addEventListener("input", e => {
     if (e.target.id !== "nick") return;
@@ -794,6 +1003,14 @@
     e.target.removeAttribute("aria-invalid");
   });
   app.addEventListener("submit", e => {
+    const tf = e.target.closest("form[data-form=teller]");
+    if (tf) {
+      e.preventDefault();
+      const picked = tf.querySelector("input[name=teller]:checked");
+      S.teller = picked && picked.value === "boi" ? "boi" : "space"; S.tellerChosen = true; persist();
+      if (isBoi()) sound.unlock();
+      return go(nextOnboarding());
+    }
     const form = e.target.closest("form[data-form=profile]");
     if (!form) return;
     e.preventDefault();
@@ -805,12 +1022,19 @@
     go(form.dataset.from === "me" ? "me" : "home", {}, { replace: form.dataset.from === "me" });
   });
 
-  const nextOnboarding = () => (!S.introDone ? "opening" : !S.safetyDone ? "safety" : !S.profile ? "profile" : "home");
+  // First launch: choose the storyteller (if the Boi's lines loaded), the opening, the safety rules, the nickname. Players who
+  // already heard the opening never see the choice: they stay with the space story and can switch in Me.
+  const nextOnboarding = () => (!S.introDone ? (S.boi && !S.tellerChosen ? "storyteller" : "opening") : !S.safetyDone ? "safety" : !S.profile ? "profile" : "home");
   const ACT = {
     start: () => go(nextOnboarding()),
     openingDone: () => { S.introDone = true; persist(); go(nextOnboarding()); },
     safetyDone: () => { S.safetyDone = true; persist(); go(nextOnboarding()); },
     lang: el => setLang(el.dataset.lang),
+    teller: el => {
+      const k = el.dataset.teller === "boi" ? "boi" : "space";
+      if (k === S.teller) return;
+      S.teller = k; persist(); stopSpeech(); sound.stop(); render(false);   // patches, the cleanup log and the jacket stay as they are
+    },
     listen: el => toggleSpeech(el.dataset.key),
     shoot: () => shoot(),
     choose: () => { const f = document.getElementById("filePick"); if (f) f.click(); },
@@ -846,7 +1070,7 @@
     else S.earned = { extra: true };
     S.pending = null; S.scan = null;
     persist();
-    go("unlocked", {}, { replace: true });
+    go(isBoi() ? "feast" : "unlocked", {}, { replace: true });
     sendTickets();
   }
 
@@ -1016,20 +1240,26 @@
     return null;
   }
   function speechParts(key) {
-    if (key === "intro") { const i = L(S.content.intro); return [i.title, ...i.script, t("opening.hook"), i.hook, i.pickup]; }
-    if (key === "finale") { const f = L(S.content.finale); return [f.title, ...f.script]; }
-    const c = chText(+key.split(":")[1]);
-    return [c.title, ...c.sections.map(s => `${t("story.sec." + s.k)}. ${s.t || (s.list || []).join(" ")}`), t("story.hook"), c.hook];
+    const mine = text => ({ text, lang: S.lang }), boi = text => ({ text, lang: boiLang() });
+    if (key === "intro") {
+      if (!isBoi()) { const i = L(S.content.intro); return [i.title, ...i.script, t("opening.hook"), i.hook, i.pickup].map(mine); }
+      const b = S.boi;
+      return [boi(B(b.added.title)), ...b.verse.pt.map(text => ({ text, lang: "pt" })), ...(boiLang() === "pt" ? [] : b.verse.en.map(boi)), ...B(b.opening).map(boi), boi(B(b.firstPickup))];
+    }
+    if (key === "finale") { const f = L(S.content.finale); return [mine(f.title), ...(isBoi() ? B(S.boi.finale).map(boi) : f.script.map(mine))]; }
+    const n = +key.split(":")[1], c = chText(n);
+    return [...(isBoi() ? [boi(B(S.boi.chapters[n - 1]))] : []), mine(c.title),
+      ...c.sections.map(s => mine(`${t("story.sec." + s.k)}. ${s.t || (s.list || []).join(" ")}`)), mine(t("story.hook")), mine(c.hook)];
   }
   function toggleSpeech(key) {
     if (!canSpeak) return;
     if (speaking === key) return stopSpeech();
     speechSynthesis.cancel();
     speaking = key; paintListen();
-    const voice = voiceFor(S.lang), parts = speechParts(key).filter(Boolean);
-    parts.forEach((text, i) => {
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = VOICES[S.lang][0]; if (voice) u.voice = voice; u.rate = 0.95;
+    const parts = speechParts(key).filter(p => p.text);
+    parts.forEach(({ text, lang }, i) => {
+      const u = new SpeechSynthesisUtterance(text), voice = voiceFor(lang);
+      u.lang = VOICES[lang][0]; if (voice) u.voice = voice; u.rate = 0.95;
       if (i === parts.length - 1) u.onend = u.onerror = () => { if (speaking === key) { speaking = null; paintListen(); } };
       speechSynthesis.speak(u);
     });
@@ -1062,6 +1292,10 @@
   async function start() {
     document.documentElement.lang = S.lang;
     if (DEMO) { const b = document.getElementById("demo"); if (b) { b.hidden = false; b.textContent = t("demo"); } }
+    const boiLines = Promise.race([
+      fetch("boi.json", { cache: "no-cache" }).then(r => (r.ok ? r.json() : null)),
+      new Promise(ok => setTimeout(() => ok(null), 8000))
+    ]).then(validBoi).catch(() => null);
     try {
       const r = await fetch("content.json", { cache: "no-cache" });
       if (!r.ok) throw new Error("content");
@@ -1071,6 +1305,7 @@
       app.innerHTML = h`<div class="grow center-col"><h1>${t("errors.load")}</h1></div><button type="button" class="btn btn-primary" data-act="reload">${t("retry.again")}</button>`.s;
       return;
     }
+    S.boi = await boiLines;
     // A piece found before the page was closed is still in the child's hand: it waits on Home to be binned.
     if (S.pending && !S.pending.saved) { S.pending.saved = true; persist(); }
     sendTickets();   // pick-ups confirmed while offline are counted now
