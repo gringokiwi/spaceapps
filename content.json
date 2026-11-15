@@ -36,7 +36,7 @@
   {
    "n": 1,
    "body": "moon",
-   "image": "",
+   "image": "img/chapters/1.jpg", "credit": "NASA", "imageId": "as12-48-7121",
    "links": [
     {
      "name": "NASA Science, Surveyor 3",
@@ -155,7 +155,7 @@
   {
    "n": 2,
    "body": "moon",
-   "image": "",
+   "image": "img/chapters/2.jpg", "credit": "NASA", "imageId": "as11-40-5948",
    "links": [
     {
      "name": "NASA NSSDCA, Apollo 11 Lunar Module/EASEP",
@@ -294,7 +294,7 @@
   {
    "n": 3,
    "body": "moon",
-   "image": "",
+   "image": "img/chapters/3.jpg", "credit": "NASA", "imageId": "AS12-48-7134",
    "links": [
     {
      "name": "NASA NSSDCA, Apollo 12 Lunar Module/ALSEP",
@@ -425,7 +425,7 @@
   {
    "n": 4,
    "body": "moon",
-   "image": "",
+   "image": "img/chapters/4.jpg", "credit": "NASA", "imageId": "as15-86-11603",
    "links": [
     {
      "name": "NASA NSSDCA, Apollo 15 Lunar Module/ALSEP",
@@ -560,7 +560,7 @@
   {
    "n": 5,
    "body": "deep",
-   "image": "",
+   "image": "img/chapters/5.jpg", "credit": "NASA", "imageId": "ARC-1972-AC72-2135",
    "links": [
     {
      "name": "NASA Science, Pioneer 10",
@@ -679,7 +679,7 @@
   {
    "n": 6,
    "body": "mars",
-   "image": "",
+   "image": "img/chapters/6.jpg", "credit": "NASA/JPL", "imageId": "PIA00563",
    "links": [
     {
      "name": "NASA Science, Viking 1",
@@ -801,7 +801,7 @@
   {
    "n": 7,
    "body": "mars",
-   "image": "",
+   "image": "img/chapters/7.jpg", "credit": "NASA/JPL-Caltech", "imageId": "PIA04318",
    "links": [
     {
      "name": "NASA Science, Mars Pathfinder",
@@ -924,7 +924,7 @@
   {
    "n": 8,
    "body": "eros",
-   "image": "",
+   "image": "img/chapters/8.jpg", "credit": "NASA/JPL/JHUAPL", "imageId": "PIA02467",
    "links": [
     {
      "name": "NASA Science, NEAR Shoemaker",
@@ -1043,7 +1043,7 @@
   {
    "n": 9,
    "body": "mars",
-   "image": "",
+   "image": "img/chapters/9.jpg", "credit": "NASA/JPL-Caltech/Cornell Univ./Arizona State Univ.", "imageId": "PIA17759",
    "links": [
     {
      "name": "NASA Science, Spirit and Opportunity",
@@ -1174,7 +1174,7 @@
   {
    "n": 10,
    "body": "sun",
-   "image": "",
+   "image": "img/chapters/10.jpg", "credit": "NASA/JPL-Caltech/Ball Aerospace", "imageId": "PIA11188",
    "links": [
     {
      "name": "NASA Science, Kepler",
@@ -1293,7 +1293,7 @@
   {
    "n": 11,
    "body": "ceres",
-   "image": "",
+   "image": "img/chapters/11.jpg", "credit": "NASA/JPL-Caltech/UCLA/MPS/DLR/IDA", "imageId": "PIA21078",
    "links": [
     {
      "name": "NASA Science, Dawn",
@@ -1424,7 +1424,7 @@
   {
    "n": 12,
    "body": "mars",
-   "image": "",
+   "image": "img/chapters/12.jpg", "credit": "NASA/JPL-Caltech", "imageId": "PIA25287",
    "links": [
     {
      "name": "NASA Science, InSight",
@@ -1550,7 +1550,7 @@
   {
    "n": 13,
    "body": "mars",
-   "image": "",
+   "image": "img/chapters/13.jpg", "credit": "NASA/JPL-Caltech/MSSS", "imageId": "PIA24542",
    "links": [
     {
      "name": "NASA Science, Ingenuity Mars Helicopter",
