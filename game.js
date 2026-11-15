@@ -219,6 +219,7 @@
   /* ---------- State ---------- */
   const guessLang = () => { const l = String(navigator.language || "en").slice(0, 2).toLowerCase(); return LANGS.includes(l) ? l : "en"; };
   const int = (v, lo, hi) => Number.isInteger(v) ? Math.min(hi, Math.max(lo, v)) : lo;
+  const asTeller = v => (v === "boi" ? "boi" : "space");   // who tells the story: "space" (the storyboard) or "boi" (the Bull)
   // What is saved on this phone, checked as it is read (see docs/screens-and-state.md)
   function readSaved() {
     const profile = load("profile", null), pending = load("pending", null), log = load("log", []), tickets = load("tickets", []);
@@ -231,7 +232,7 @@
       lastNew: int(load("lastNew", 0), 0, TOTAL),
       tickets: (Array.isArray(tickets) ? tickets : []).filter(x => typeof x === "string").slice(-50),   // pick-ups waiting to be counted on the server
       introDone: !!load("introDone", false), safetyDone: !!load("safetyDone", false), finaleSeen: !!load("finaleSeen", false),
-      teller: load("teller") === "boi" ? "boi" : "space",   // who tells the story: "space" (the storyboard) or "boi" (the Bull)
+      teller: asTeller(load("teller")),
       tellerChosen: !!load("tellerChosen", false)
     };
   }
@@ -241,7 +242,7 @@
     content: null, pickups: null, counterAt: 0, impact: null,   // pickups: confirmed in the bin (Home, Impact)
     view: null,       // { name, params }
     scan: null,       // this round's photo and answer: { kind, image, result, message }. Never saved.
-    earned: null      // the newest pick-up moment: { n } (patch earned) or { extra } (pieces binned), and whether it has played
+    earned: null      // the newest pick-up moment, until it has played: { n } (patch earned) or { extra } (pieces binned)
   };
   let wiping = false;   // "Start over" is erasing this phone: nothing may be written back
   const persist = () => { if (!wiping) KEYS.forEach(k => { if (JSON.stringify(S[k]) !== written[k]) save(k, S[k]); }); };
@@ -293,8 +294,15 @@
     return h`<div class="steps" role="img" aria-label="${t("steps.label", { i, name: names[i - 1] })}">${names.map((nm, k) =>
       k + 1 < i ? h`<span class="dot done"></span>` : k + 1 === i ? h`<span class="cur">${k + 1} ${nm}</span>` : h`<span class="dot"></span>`)}</div>`;
   }
-  const say = (text, { mood = "happy", look = "right", label = "Eagle" } = {}) =>
-    h`<div class="say">${raw(A.eagleHead({ label, mood, look, cls: "say-eagle" }))}<p class="bubble">${text}</p></div>`;
+  const sayRow = (head, text, attr = "") => h`<div class="say">${raw(head)}<p class="bubble"${attr}>${text}</p></div>`;
+  const say = (text, { mood = "happy", look = "right", label = "Eagle" } = {}) => sayRow(A.eagleHead({ label, mood, look, cls: "say-eagle" }), text);
+  const btn = (go, label, kind = "primary") => h`<button type="button" class="btn btn-${kind}" data-go="${go}">${label}</button>`;
+  const patchOf = n => raw(A.patch(n, chapter(n).body, t("story.patchAlt", { short: chText(n).short })));
+  // The 13 dots, with the patch just earned ringed
+  const progress = n => h`<div class="progress" role="img" aria-label="${t("unlocked.of", { n, total: TOTAL })}">
+          <span class="progress-dots">${range(TOTAL).map(i => h`<span class="${i < n ? "on" : i === n ? "on now" : ""}"></span>`)}</span>
+          <b>${t("home.patches", { n, total: TOTAL })}</b>
+        </div>`;
   const nav = cur => h`<nav class="nav" aria-label="${t("menu")}">${["home", "jacket", "impact", "me"].map(k =>
     h`<button type="button" data-go="${k}" ${cur === k ? raw('aria-current="page"') : ""}>${ico(k)}<span>${t("nav." + k)}</span></button>`)}</nav>`;
   function listenBtn(key) {
@@ -315,19 +323,22 @@
   const boiLang = () => (S.lang === "pt" ? "pt" : "en");
   const B = obj => (obj && (obj[boiLang()] || obj.en)) || "";
   const boiAttr = () => (boiLang() !== S.lang ? raw(` lang="${boiLang()}"`) : "");   // a Spanish page marks the English Boi lines as English
-  const sayBoi = (text, boiWords = true) =>
-    h`<div class="say">${raw(A.boiHead({ mood: "talk", cls: "say-boi" }))}<p class="bubble"${boiWords ? boiAttr() : ""}>${text}</p></div>`;
+  const sayBoi = (text, boiWords = true) => sayRow(A.boiHead({ mood: "talk", cls: "say-boi" }), text, boiWords ? boiAttr() : "");
+  const narrate = (text, boiWords) => (isBoi() ? sayBoi(text, boiWords) : say(text));   // the storyteller says it: the Bull, or Eagle
+  const TELLERS = [
+    { k: "space", name: "teller.optionSpace", card: () => A.eagle(), head: () => A.eagleHead({ mood: "smile" }) },
+    { k: "boi", name: "teller.optionBoi", tag: "teller.boiTag", card: () => A.boiCard(), head: () => A.boiHead({ mood: "smile" }) }
+  ];
   // The Boi's line after Bernúncia eats: the four lines take turns (by chapter, so a reload says the same), {next} is the explorer waking up
   function pickupLine(n) {
     if (n >= TOTAL) return B(S.boi.allAwake);
     const lines = B(S.boi.pickups), ch = chapter(n);
-    return fill(lines[(n - 1) % lines.length], { next: (ch[boiLang()] || ch.en).short });
+    return fill(lines[(n - 1) % lines.length], { next: B(ch).short });
   }
   function validBoi(b) {
     const both = o => !!o && ["en", "pt"].every(k => o[k] != null && o[k].length > 0);
     const ok = !!b && Array.isArray(b.chapters) && b.chapters.length === TOTAL && b.chapters.every((c, i) => c && c.n === i + 1 && both(c))
-      && both(b.verse) && both(b.opening) && both(b.firstPickup) && both(b.pickups) && both(b.allAwake) && both(b.finale)
-      && both(b.sound) && !!b.added && both(b.added.title) && both(b.added.found) && both(b.added.homeNext)
+      && ["verse", "opening", "firstPickup", "pickups", "allAwake", "finale", "sound", "added.title", "added.found", "added.homeNext"].every(p => both(lookup(b, p)))
       && ["en", "pt"].every(k => b.pickups[k].every(x => typeof x === "string" && x.includes("{next}")));
     if (!ok) return null;
     return BERNUNCIA === "Bernúncia" ? b : JSON.parse(JSON.stringify(b).replace(/Bernúncia/g, BERNUNCIA));
@@ -404,12 +415,12 @@
 
   /* Choose your storyteller: on first launch, right after "Let's go!". Space Explorer is chosen to start with. Later: Me → Storyteller. */
   screens.storyteller = () => ({ theme: "t-blue", cls: "teller", html: h`
-    <form class="teller-form grow" data-form="teller" novalidate>
+    <form class="stack teller-form grow" data-form="teller" novalidate>
       <h1 tabindex="-1">${t("teller.chooseTitle")}</h1>
-      <fieldset class="teller-cards"><legend class="sr-only">${t("teller.chooseTitle")}</legend>${["space", "boi"].map(k => h`
-        <label class="teller-card${k === S.teller ? " on" : ""}"><input type="radio" name="teller" value="${k}" ${k === S.teller ? raw("checked") : ""}>
-          <span class="teller-art">${raw(k === "boi" ? A.boiCard() : A.eagle())}</span>
-          <b>${t(k === "boi" ? "teller.optionBoi" : "teller.optionSpace")}</b>${k === "boi" ? h`<span class="teller-tag">${t("teller.boiTag")}</span>` : ""}
+      <fieldset class="teller-cards"><legend class="sr-only">${t("teller.chooseTitle")}</legend>${TELLERS.map(o => h`
+        <label class="teller-card${o.k === S.teller ? " on" : ""}"><input type="radio" name="teller" value="${o.k}" ${o.k === S.teller ? raw("checked") : ""}>
+          <span class="teller-art">${raw(o.card())}</span>
+          <b>${t(o.name)}</b>${o.tag ? h`<span class="teller-tag">${t(o.tag)}</span>` : ""}
         </label>`)}
       </fieldset>
       <p class="fine">${t("teller.credit")}</p>
@@ -548,7 +559,7 @@
         <h1 tabindex="-1">${cap(p.item || t("types." + p.type))}</h1>
         <p class="bin-line"><span class="swatch swatch-${p.bin}"></span><span>${t("found.goes." + p.bin)}</span></p>
       </div>
-      <div class="grow say-end">${boi ? (extra ? sayBoi(t("found.extra"), false) : sayBoi(B(S.boi.added.found))) : say(extra ? t("found.extra") : t("found.bubble." + chapter(next).body))}</div>
+      <div class="grow say-end">${narrate(extra ? t("found.extra") : boi ? B(S.boi.added.found) : t("found.bubble." + chapter(next).body), boi && !extra)}</div>
       ${extra || boi ? h`<button type="button" class="btn btn-primary" data-go="bin">${t("found.binIt")}</button>`
         : h`<button type="button" class="btn btn-primary" ${raw(goAttrs("story", { n: next, from: "round" }))}>${t("found.hear")}</button>`}
       <button type="button" class="btn-link" data-act="wrong">${t("found.wrong")}</button>` };
@@ -557,11 +568,10 @@
   screens.story = ({ n, from = "round" }) => {
     if (from === "round" && !(S.pending && n === S.binned + 1)) from = "jacket";   // Back after the piece was binned: just the chapter
     const ch = chapter(n), c = L(ch), round = from === "round", boiRound = from === "boi", img = safeImg(ch.image);
-    const back = round ? (S.scan && S.scan.kind === "found" ? backBtn(t("found.back"), goAttrs("found")) : backBtn(t("back"), goAttrs("home")))
-      : boiRound ? backBtn(t("back"), isBoi() ? goAttrs("feast", { n }) : goAttrs("home")) : backBtn(t("back"), goAttrs(from));
-    const end = round ? h`<button type="button" class="btn btn-primary" data-go="bin">${t("story.binNow")}</button>`
-      : boiRound ? (n >= TOTAL ? h`<button type="button" class="btn btn-primary" data-go="finale">${t("unlocked.finale")}</button><button type="button" class="btn btn-outline" data-go="jacket">${t("unlocked.jacket")}</button>`
-        : h`<button type="button" class="btn btn-primary" data-go="scan">${t("unlocked.again")}</button><button type="button" class="btn btn-outline" data-go="jacket">${t("unlocked.jacket")}</button>`)
+    const backTo = round ? (S.scan && S.scan.kind === "found" ? "found" : "home") : boiRound ? (isBoi() ? "feast" : "home") : from;
+    const back = backBtn(t(backTo === "found" ? "found.back" : "back"), goAttrs(backTo, backTo === "feast" ? { n } : {}));
+    const end = round ? btn("bin", t("story.binNow"))
+      : boiRound ? h`${n >= TOTAL ? btn("finale", t("unlocked.finale")) : btn("scan", t("unlocked.again"))}${btn("jacket", t("unlocked.jacket"), "outline")}`
       : h`<button type="button" class="btn btn-outline" ${raw(goAttrs(from))}>${from === "finale" ? t("story.toFinale") : from === "explore" ? t("explore.back") : t("story.toJacket")}</button>`;
     const section = sec => sec.k === "help"
       ? h`<div class="help-box">${ico("checkCircle", { size: 28, width: 2.6 })}<p><b>${t("story.sec.help")}:</b> ${sec.t}</p></div>`
@@ -571,7 +581,7 @@
         <div class="top">${back}${round || boiRound ? steps("story") : ""}</div>
         <div class="story-title">
           <div class="story-text"><span class="chip">${t("story.chapter", { n, tag: c.tag })}</span><h1 tabindex="-1">${c.title}</h1><span class="where">${c.place}</span></div>
-          <div class="story-patch">${raw(A.patch(n, ch.body, t("story.patchAlt", { short: c.short })))}</div>
+          <div class="story-patch">${patchOf(n)}</div>
         </div>
       </div>
       <div class="story-body">
@@ -579,7 +589,7 @@
         ${img ? h`<figure class="story-photo"><img src="${img}" alt="${c.title}"><figcaption>${t("story.credit", { by: ch.credit || "NASA" })}</figcaption></figure>` : ""}
         ${listenBtn("chapter:" + n)}
         ${c.sections.map(section)}
-        <div class="hook-say">${isBoi() ? sayBoi(h`<b>${t("story.hook")}</b> ${c.hook}`, false) : say(h`<b>${t("story.hook")}</b> ${c.hook}`, { mood: "happy" })}</div>
+        <div class="hook-say">${narrate(h`<b>${t("story.hook")}</b> ${c.hook}`, false)}</div>
         <p class="sources"><b>${t("story.sources")}:</b> ${ch.links.map((l, i) => h`${i ? ", " : ""}<a href="${safeUrl(l.url)}" target="_blank" rel="noopener noreferrer">${l.name}</a>`)}</p>
         <div class="grow"></div>
         ${end}
@@ -605,34 +615,29 @@
   /* The moment a piece goes in the bin. Each one is its own history entry, { n } (the patch it earned) or { extra } (a piece
      after all 13), so Back always shows the right one. It plays (confetti, or the Dragon eating) only the first time. */
   const earnedOk = p => (Number.isInteger(p.n) && p.n >= 1 && p.n <= S.binned) || (Number.isInteger(p.extra) && p.extra > TOTAL && p.extra <= S.log.length);
-  const fresh = p => !!S.earned && !S.earned.played && S.earned.n === p.n && S.earned.extra === p.extra;
-  const playedNow = () => { if (S.earned) S.earned.played = true; };
+  const fresh = p => !!S.earned && S.earned.n === p.n && S.earned.extra === p.extra;
+  const playedNow = () => { S.earned = null; };
 
   screens.unlocked = ({ n, extra }) => {
     const after = fresh({ n, extra }) ? () => { playedNow(); confetti(); } : null;
     if (extra) return { theme: "t-blue", cls: "unlocked", html: h`
       ${raw(A.sparkles())}
       <div class="grow center-col">${raw(A.eagle({ label: "Eagle", cls: "mid-eagle" }))}<h1 tabindex="-1">${t("unlocked.extraTitle")}</h1><p class="line">${tn("unlocked.extraLine", extra)}</p></div>
-      <button type="button" class="btn btn-primary" data-go="scan">${t("unlocked.again")}</button>
-      <button type="button" class="btn btn-outline" data-go="finale">${t("unlocked.finale")}</button>`, after };
-    const ch = chapter(n), c = L(ch), last = n >= TOTAL;
+      ${btn("scan", t("unlocked.again"))}${btn("finale", t("unlocked.finale"), "outline")}`, after };
+    const c = chText(n), last = n >= TOTAL;
     return { theme: "t-blue", cls: "unlocked", html: h`
       ${raw(A.sparkles())}
       <div class="top center">${steps("unlocked")}</div>
       <div class="center-col">
-        <div class="big-patch">${raw(A.patch(n, ch.body, t("story.patchAlt", { short: c.short })))}</div>
+        <div class="big-patch">${patchOf(n)}</div>
         <h1 tabindex="-1">${t("unlocked.title")}</h1>
         <p class="patch-name">${c.short}</p>
         <p class="line">${t("unlocked.line")}</p>
-        <div class="progress" role="img" aria-label="${t("unlocked.of", { n, total: TOTAL })}">
-          <span class="progress-dots">${range(TOTAL).map(i => h`<span class="${i < n ? "on" : i === n ? "on now" : ""}"></span>`)}</span>
-          <b>${t("home.patches", { n, total: TOTAL })}</b>
-        </div>
+        ${progress(n)}
       </div>
       ${say(c.pickup)}
       <div class="grow"></div>
-      ${last ? h`<button type="button" class="btn btn-primary" data-go="finale">${t("unlocked.finale")}</button><button type="button" class="btn btn-outline" data-go="jacket">${t("unlocked.jacket")}</button>`
-        : h`<button type="button" class="btn btn-primary" data-go="jacket">${t("unlocked.jacket")}</button><button type="button" class="btn btn-outline" data-go="scan">${t("unlocked.again")}</button>`}`,
+      ${last ? h`${btn("finale", t("unlocked.finale"))}${btn("jacket", t("unlocked.jacket"), "outline")}` : h`${btn("jacket", t("unlocked.jacket"))}${btn("scan", t("unlocked.again"), "outline")}`}`,
       after };
   };
 
@@ -648,20 +653,16 @@
       ${stage}
       <div class="feast-say">${sayBoi(tn("unlocked.extraLine", extra), false)}</div>
       <div class="grow"></div>
-      <button type="button" class="btn btn-primary" data-go="scan">${t("unlocked.again")}</button>
-      <button type="button" class="btn btn-outline" data-go="finale">${t("unlocked.finale")}</button>`, after };
-    const ch = chapter(n), c = L(ch);
+      ${btn("scan", t("unlocked.again"))}${btn("finale", t("unlocked.finale"), "outline")}`, after };
+    const c = chText(n);
     return { theme: "t-blue", cls, html: h`
       <div class="top center">${steps("feast")}</div>
       ${stage}
       <div class="feast-say">${sayBoi(pickupLine(n))}</div>
       <div class="wake${first ? "" : " awake"}" id="wake">
-        <div class="wake-patch">${raw(A.patch(n, ch.body, t("story.patchAlt", { short: c.short })))}<span class="zzz" aria-hidden="true">z z z</span></div>
+        <div class="wake-patch">${patchOf(n)}<span class="zzz" aria-hidden="true">z z z</span></div>
         <b class="patch-name">${c.short}</b>
-        <div class="progress" role="img" aria-label="${t("unlocked.of", { n, total: TOTAL })}">
-          <span class="progress-dots">${range(TOTAL).map(i => h`<span class="${i < n ? "on" : i === n ? "on now" : ""}"></span>`)}</span>
-          <b>${t("home.patches", { n, total: TOTAL })}</b>
-        </div>
+        ${progress(n)}
       </div>
       <div class="grow"></div>
       <button type="button" class="btn btn-primary" ${raw(goAttrs("story", { n, from: "boi" }))}>${t("found.hear")}</button>`, after };
@@ -742,7 +743,7 @@
     jacket3dScript.then(() => {
       if (!el.isConnected || !window.JACKET3D) return;
       const n = S.binned, seen = int(load("jacketSeen", Math.max(0, n - 1)), 0, n);
-      const reduced = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+      const reduced = reducedMotion();
       return window.JACKET3D.mount(el, { earned: n, fresh: range(n).filter(i => i > seen), reduced,
         patchSvg: i => A.patch(i, chapter(i).body), onStuck: i => save("jacketSeen", Math.max(i, int(load("jacketSeen", 0), 0, TOTAL))) });
     }).then(ok => { const hint = document.getElementById("jacket3dHint"); if (ok && hint) hint.hidden = false; }).catch(() => {});
@@ -759,7 +760,7 @@
     </section>`;
 
   const tellerPick = () => !S.boi ? "" : h`<section class="card teller-set" aria-labelledby="tellerLbl"><h2 id="tellerLbl">${t("teller.settingLabel")}</h2>
-      <div class="teller-pick">${["space", "boi"].map(k => h`<button type="button" id="teller-${k}" data-act="teller" data-teller="${k}" aria-pressed="${S.teller === k}">${raw(k === "boi" ? A.boiHead({ mood: "smile" }) : A.eagleHead({ mood: "smile" }))}<span><b>${t(k === "boi" ? "teller.optionBoi" : "teller.optionSpace")}</b>${k === "boi" ? h`<small>${t("teller.boiTag")}</small>` : ""}</span></button>`)}</div>
+      <div class="teller-pick">${TELLERS.map(o => h`<button type="button" id="teller-${o.k}" data-act="teller" data-teller="${o.k}" aria-pressed="${S.teller === o.k}">${raw(o.head())}<span><b>${t(o.name)}</b>${o.tag ? h`<small>${t(o.tag)}</small>` : ""}</span></button>`)}</div>
       <p class="note">${t("teller.credit")}</p></section>`;
 
   screens.me = () => {
@@ -854,7 +855,7 @@
     <button type="button" class="btn btn-outline" ${raw(goAttrs(from))}>${t("back")}</button>` });
 
   screens.finale = () => {
-    const f = L(S.content.finale), first = !S.finaleSeen, boi = isBoi(), la = boiAttr();
+    const f = L(S.content.finale), first = !S.finaleSeen, boi = isBoi(), la = boi ? boiAttr() : "";
     if (first) { S.finaleSeen = true; persist(); }
     return { theme: "t-blue", cls: "finale", html: h`
       <div class="top">${backBtn(t("finale.home"), goAttrs("home"))}</div>
@@ -865,13 +866,12 @@
         <div class="party-cast">${raw(A.boi({ pose: "dance", cls: "boi-dancing" }))}${raw(A.bernuncia({ fed: TOTAL, mirror: true, cls: "bern-party" }))}</div>
       </div>` : ""}
       ${listenBtn("finale")}
-      ${boi ? B(S.boi.finale).map(p => h`<p class="script"${la}>${p}</p>`) : f.script.map(p => h`<p class="script">${p}</p>`)}
+      ${(boi ? B(S.boi.finale) : f.script).map(p => h`<p class="script"${la}>${p}</p>`)}
       <div class="card card-navy count-card">${tn("finale.count", S.log.length)}</div>
       <section class="map-card"><h2>${t("finale.map")}</h2>${raw(A.map(S.binned, t("map"), t("finale.mapLabel")))}</section>
       <section><h2>${t("finale.patches")}</h2><div class="badges">${range(TOTAL).map(i =>
         h`<button type="button" class="badge-btn" ${raw(goAttrs("story", { n: i, from: "finale" }))} aria-label="${chText(i).short}">${raw(A.patch(i, chapter(i).body))}</button>`)}</div></section>
-      ${boi ? h`<button type="button" class="btn btn-primary" data-go="impact">${t("finale.impact")}</button><button type="button" class="btn-link" data-go="home">${t("finale.home")}</button>`
-        : h`<button type="button" class="btn btn-primary" data-go="home">${t("finale.home")}</button>`}`,
+      ${boi ? h`${btn("impact", t("finale.impact"))}<button type="button" class="btn-link" data-go="home">${t("finale.home")}</button>` : btn("home", t("finale.home"))}`,
       after: () => { if (first) confetti(); if (boi && fromTap()) sound.festa(); } };
   };
 
@@ -910,7 +910,7 @@
   /* The big number counts up from 0 in about 1.5 s, or shows at once when the phone asks for less motion. */
   function countUp(el, to) {
     if (!el) return;
-    if (!(to > 0) || (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) { el.textContent = fmt(to); return; }
+    if (!(to > 0) || reducedMotion()) { el.textContent = fmt(to); return; }
     const start = performance.now(), ms = 1500;
     const step = now => {
       if (!el.isConnected) return;
@@ -959,13 +959,13 @@
   /* Screens an address like …/#jacket may open directly (a reload, a bookmark, a typed address). */
   const OPEN_BY_ADDRESS = ["home", "jacket", "impact", "me", "finale", "grownups", "photos", "sources", "explore", "usage"];
   let visit = 0;   // counts screen openings: the Impact screen reads a fresh total on each one
-  let tapVisit = -1;   // the last opening that came from a tap (not the phone's Back button): music only plays after a tap
-  const fromTap = () => tapVisit === visit;
+  let byTap = false;   // the screen on show was opened by a tap, not the phone's Back button: music only plays after a tap
+  const fromTap = () => byTap;
   const fromAddress = () => { const name = location.hash.slice(1); return OPEN_BY_ADDRESS.includes(name) && GUARD[name]({}) ? name : fallback(); };
   function go(name, params = {}, { replace = false } = {}) {
     if (!screens[name] || !GUARD[name](params)) { name = fallback(); params = {}; replace = true; }
     leave();
-    visit++; tapVisit = visit;
+    visit++; byTap = true;
     S.view = { name, params };
     try { history[replace ? "replaceState" : "pushState"]({ name, params }, "", "#" + name); } catch {}
     render(true);
@@ -977,7 +977,7 @@
     if (!GUARD[name](params)) { name = fallback(); params = {}; }
     if (!known || name !== e.state.name) { try { history.replaceState({ name, params }, "", "#" + name); } catch {} }
     leave();
-    visit++;
+    visit++; byTap = false;
     S.view = { name, params };
     render(true);
   });
@@ -1021,8 +1021,7 @@
   app.addEventListener("change", e => {
     const el = e.target;
     if (el.matches("[data-change=lang]")) setLang(el.value);
-    if (el.name === "buddy") app.querySelectorAll(".buddy").forEach(b => b.classList.toggle("on", b.contains(el)));
-    if (el.name === "teller") app.querySelectorAll(".teller-card").forEach(b => b.classList.toggle("on", b.contains(el)));
+    if (el.type === "radio") el.closest("label").parentElement.querySelectorAll("label").forEach(b => b.classList.toggle("on", b.contains(el)));   // radio cards: mark the chosen one
   });
   app.addEventListener("input", e => {
     if (e.target.id !== "nick") return;
@@ -1035,7 +1034,7 @@
     if (tf) {
       e.preventDefault();
       const picked = tf.querySelector("input[name=teller]:checked");
-      S.teller = picked && picked.value === "boi" ? "boi" : "space"; S.tellerChosen = true; persist();
+      S.teller = asTeller(picked && picked.value); S.tellerChosen = true; persist();
       if (isBoi()) sound.unlock();
       return go(nextOnboarding());
     }
@@ -1059,15 +1058,15 @@
     safetyDone: () => { S.safetyDone = true; persist(); go(nextOnboarding()); },
     lang: el => setLang(el.dataset.lang),
     teller: el => {
-      const k = el.dataset.teller === "boi" ? "boi" : "space";
+      const k = asTeller(el.dataset.teller);
       if (k === S.teller) return;
-      S.teller = k; persist(); stopSpeech(); sound.stop(); render(false);   // patches, the cleanup log and the jacket stay as they are
+      S.teller = k; persist(); stopSpeech(); render(false);   // patches, the cleanup log and the jacket stay as they are
     },
     listen: el => toggleSpeech(el.dataset.key),
     shoot: () => shoot(),
     choose: () => { const f = document.getElementById("filePick"); if (f) f.click(); },
     rescan: () => { if (S.pending && !S.pending.saved) S.pending = null; S.scan = null; persist(); go("scan", {}, { replace: true }); },
-    wrong: () => { S.pending = null; S.scan = null; persist(); go("scan", {}, { replace: true }); },   // "That's not right": the piece on show is dropped, even one saved for later
+    wrong: () => { S.pending = null; ACT.rescan(); },   // "That's not right": the piece in hand is dropped, even one saved for later
     binned: () => binIt(),
     later: () => { if (S.pending) { S.pending.saved = true; persist(); } go("home"); },
     reset: () => {
@@ -1096,11 +1095,11 @@
     if (DEMO) { demoTotal += 1; S.pickups = demoTotal; }
     else if (p.ticket) S.tickets = S.tickets.concat(p.ticket).slice(-50);
     if (S.log.length > 2000) S.log = S.log.slice(-2000);
-    const earned = S.binned < TOTAL ? { n: (S.lastNew = ++S.binned) } : { extra: S.log.length };
-    S.earned = { ...earned, played: false };
+    if (S.binned < TOTAL) { S.binned += 1; S.lastNew = S.binned; S.earned = { n: S.binned }; }
+    else S.earned = { extra: S.log.length };
     S.pending = null; S.scan = null;
     persist();
-    go(isBoi() ? "feast" : "unlocked", earned, { replace: true });
+    go(isBoi() ? "feast" : "unlocked", S.earned, { replace: true });
     sendTickets();
   }
 
@@ -1287,9 +1286,9 @@
     if (speaking === key) return stopSpeech();
     speechSynthesis.cancel();
     speaking = key; paintListen();
-    const parts = speechParts(key).filter(p => p.text);
+    const parts = speechParts(key).filter(p => p.text), voices = {};
     parts.forEach(({ text, lang }, i) => {
-      const u = new SpeechSynthesisUtterance(text), voice = voiceFor(lang);
+      const u = new SpeechSynthesisUtterance(text), voice = lang in voices ? voices[lang] : (voices[lang] = voiceFor(lang));
       u.lang = VOICES[lang][0]; if (voice) u.voice = voice; u.rate = 0.95;
       if (i === parts.length - 1) u.onend = u.onerror = () => { if (speaking === key) { speaking = null; paintListen(); } };
       speechSynthesis.speak(u);
@@ -1307,7 +1306,7 @@
   /* ---------- Confetti ---------- */
   let confettiTimer = 0;
   function confetti() {
-    if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (reducedMotion()) return;
     const box = document.getElementById("confetti"), colors = ["#FF7A1A", "#FFC98F", "#FFF4E8", "#2F9E73", "#FF7A9C", "#A07EFF"];
     if (!box) return;
     box.textContent = "";

@@ -85,7 +85,8 @@ async function file(req, res, pathname) {
   if (!st.isFile()) return send(res, 404, "Not found.");
   // A file the phone already has comes back as "304 Not Modified" (no body), so a repeat visit doesn't download it again
   const etag = `W/"${st.size.toString(36)}-${Math.floor(st.mtimeMs).toString(36)}"`;
-  const headers = { "Content-Type": TYPES[path.extname(full).toLowerCase()] || "application/octet-stream", "Cache-Control": "no-cache", ETag: etag, "Last-Modified": st.mtime.toUTCString(), ...SECURITY };
+  // The font never changes (a new one gets a new name), so phones keep it for a year; everything else is checked on each visit
+  const headers = { "Content-Type": TYPES[path.extname(full).toLowerCase()] || "application/octet-stream", "Cache-Control": rel.startsWith("fonts/") ? "public, max-age=31536000, immutable" : "no-cache", ETag: etag, ...SECURITY };
   if (String(req.headers["if-none-match"] || "").split(/\s*,\s*/).includes(etag)) { res.writeHead(304, headers); return res.end(); }
   res.writeHead(200, { ...headers, "Content-Length": st.size });
   if (req.method === "HEAD") return res.end();

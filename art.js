@@ -237,8 +237,8 @@ ${dots.map(d => `<circle cx="${X(d.pos)}" cy="30" r="4.5" fill="${d.passed ? ORA
   /* ---------- The Boi de Mamão storyteller (boi.json, from the team's spec) ----------
      Original characters in the app's cartoony style (flat colours, thick outlines, big friendly eyes), inspired by the
      boi de mamão tradition of Florianópolis and Santa Catarina. They are not copied from any group's costumes.
-     No ids or gradients, so any number of them can share a page. */
-  const OUT = INK, FABRIC = "#E0553B", HIDE = "#FFF4E8", SPOT = "#A0603E", MUZZLE = "#FFA3B8", HORN = "#FFE3B0", SHOE = "#5A3A2E", YELLOW = "#F2B33D", PINK = "#FF7A9C", LAV = "#8FA3EA";
+     No gradients; the one id (Bernúncia's stripe clip path) is made fresh for each drawing, so any number can share a page. */
+  const OUT = INK, FABRIC = "#E0553B", HIDE = CREAM, SPOT = "#A0603E", MUZZLE = "#FFA3B8", HORN = "#FFE3B0", SHOE = "#5A3A2E", YELLOW = "#F2B33D", PINK = "#FF7A9C", LAV = "#8FA3EA";
   const RIBBON = ["#C9D3FA", "#D9673A", NAVY];   // from the Boi's horns: Moon grey, Mars red, deep-space blue
   const r1 = n => +n.toFixed(1);
   // A chita-style flower and leaf for the Boi's fabric
@@ -248,7 +248,8 @@ ${dots.map(d => `<circle cx="${X(d.pos)}" cy="30" r="4.5" fill="${d.passed ? ORA
     return s + `<circle cx="${x}" cy="${y}" r="${r1(r * .52)}" fill="${YELLOW}" stroke="${OUT}" stroke-width="1.5"/>`;
   }
   const leaf = (x, y, rot) => `<ellipse cx="${x}" cy="${y}" rx="7" ry="3.2" fill="#2F9E73" transform="rotate(${rot} ${x} ${y})"/>`;
-  const limb = (d, color, w = 10) => `<path d="${d}" fill="none" stroke="${OUT}" stroke-width="${w + 7}" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${color}" stroke-width="${w}" stroke-linecap="round"/>`;
+  const limb = (d, color, w = 10, edge = 7) => `<path d="${d}" fill="none" stroke="${OUT}" stroke-width="${w + edge}" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${color}" stroke-width="${w}" stroke-linecap="round"/>`;
+  const mirrored = svg => `<g transform="matrix(-1 0 0 1 300 0)">${svg}</g>`;   // Bernúncia facing left, towards the Bull
   const hoof = (x, y) => `<ellipse cx="${x}" cy="${y}" rx="8" ry="7" fill="${SHOE}" stroke="${OUT}" stroke-width="3"/>`;
   const zzz = (x, y, s) => `<path d="M${x} ${y} h${s} l-${s} ${r1(s * 1.15)} h${s}" fill="none" stroke="${LAV}" stroke-width="${r1(Math.max(2.5, s / 5))}" stroke-linecap="round" stroke-linejoin="round"/>`;
   const note = (x, y, c) => `<g fill="${c}" stroke="${c}"><ellipse cx="${x}" cy="${y}" rx="6" ry="4.6" transform="rotate(-20 ${x} ${y})" stroke="none"/><path d="M${x + 5} ${y - 1} V${y - 24} q8 4 10 12" fill="none" stroke-width="3" stroke-linecap="round"/></g>`;
@@ -256,10 +257,9 @@ ${dots.map(d => `<circle cx="${X(d.pos)}" cy="30" r="4.5" fill="${d.passed ? ORA
   /* The Boi's head, centred near (100, 66) in a 200 × 220 box. Moods: smile, talk, sleep. */
   function boiHeadArt(mood = "smile") {
     // Three ribbons tied to each horn tip, fluttering out and down (outlined, so each shows on any background)
-    const ribbons = (x, y, d) => [[-12, 4, -8, 22, -22, 30], [-16, -2, -22, 14, -30, 14], [-4, 12, 2, 28, -8, 42]].map(([a, b, c, e, f, g], i) => {
-      const path = `M${x} ${y} c${d * a} ${b} ${d * c} ${e} ${d * f} ${g}`;
-      return `<path d="${path}" fill="none" stroke="${OUT}" stroke-width="8.5" stroke-linecap="round"/><path d="${path}" fill="none" stroke="${RIBBON[i]}" stroke-width="5" stroke-linecap="round"/>`;
-    }).join("") + `<circle cx="${x}" cy="${y}" r="4.5" fill="${YELLOW}" stroke="${OUT}" stroke-width="2.5"/>`;
+    const ribbons = (x, y, d) => [[-12, 4, -8, 22, -22, 30], [-16, -2, -22, 14, -30, 14], [-4, 12, 2, 28, -8, 42]]
+      .map(([a, b, c, e, f, g], i) => limb(`M${x} ${y} c${d * a} ${b} ${d * c} ${e} ${d * f} ${g}`, RIBBON[i], 5, 3.5)).join("")
+      + `<circle cx="${x}" cy="${y}" r="4.5" fill="${YELLOW}" stroke="${OUT}" stroke-width="2.5"/>`;
     const eyes = mood === "sleep"
       ? `<path d="M77 63 Q86 70 95 63 M105 63 Q114 70 123 63" fill="none" stroke="${OUT}" stroke-width="4" stroke-linecap="round"/>`
       : `<circle cx="86" cy="62" r="10.5" fill="#FFFFFF" stroke="${OUT}" stroke-width="3"/><circle cx="114" cy="62" r="10.5" fill="#FFFFFF" stroke="${OUT}" stroke-width="3"/>
@@ -325,7 +325,9 @@ ${boiHeadArt(pose === "talk" ? "talk" : "smile")}`;
   }
   let bernIds = 0;   // each drawing gets its own clip-path id, so two Bernúncias on a page never share one
   function bernArt({ state = "idle", fed = 0, animated = false } = {}) {
-    const g = bernGlow(fed), has = s => animated || state === s, id = "bn" + (++bernIds);
+    const g = bernGlow(fed), id = "bn" + (++bernIds);
+    // Mouth states: [state, class, how far the lower jaw opens]. A still drawing has one; an animated one has all three
+    const states = [["idle", "bn-closed", 4], ["open", "bn-open", 36], ["chew", "bn-chew", -8]].filter(([st]) => animated || st === state);
     const GOLD = "#F5C13A", GLOW = "#FFF1A6", MOUTH = "#FFFFFF";
     // The body and the upper jaw are one shape, as in the picture; the lower jaw hinges under the eye
     const BODY = "M8 118 C9 92 34 70 92 64 C150 57 214 57 250 58 C266 58 284 54 294 56 C301 57 301 66 293 67 L246 80 C245 92 242 102 234 110 C220 120 150 124 96 124 C60 125 30 124 8 118 Z";
@@ -350,12 +352,12 @@ ${boiHeadArt(pose === "talk" ? "talk" : "smile")}`;
 <ellipse data-part="r3" cx="140" cy="104" rx="136" ry="52" fill="${GLOW}" opacity="${g.r3}"/><ellipse data-part="r2" cx="140" cy="106" rx="124" ry="42" fill="${GLOW}" opacity="${g.r2}"/>
 <ellipse data-part="r1" cx="140" cy="108" rx="112" ry="32" fill="${GLOW}" opacity="${g.r1}"/><ellipse data-part="fill" cx="140" cy="112" rx="96" ry="20" fill="${GLOW}" opacity="${g.fill}"/>
 ${legs}
-${has("idle") ? mouth("bn-closed", 4) : ""}${has("open") ? mouth("bn-open", 36) : ""}${has("chew") ? mouth("bn-chew", -8) : ""}
+${states.map(([, cls, deg]) => mouth(cls, deg)).join("")}
 <clipPath id="${id}"><path d="${BODY}"/></clipPath>
 <path d="${BODY}" fill="${GOLD}"/>
 <g clip-path="url(#${id})" fill="none" stroke="${OUT}" stroke-width="7.5" stroke-linecap="round">${stripes}</g>
 <path d="${BODY}" fill="none" stroke="${OUT}" stroke-width="4.5" stroke-linejoin="round"/>
-${has("idle") ? eye("bn-closed", false) : ""}${has("open") ? eye("bn-open", false) : ""}${has("chew") ? eye("bn-chew", true) : ""}
+${states.map(([st, cls]) => eye(cls, st === "chew")).join("")}
 <g data-part="sp" opacity="${g.sp}">${star(40, 60)}${star(176, 40)}${star(272, 112)}</g>
 ${animated ? `<g class="bn-snack"><rect x="263" y="-4" width="24" height="15" rx="3" fill="#E8457A" stroke="${OUT}" stroke-width="2"/><path d="M263 -1 l-6 -4 v17 l6 -4 Z M287 -1 l6 -4 v17 l-6 -4 Z" fill="#C92F63" stroke="${OUT}" stroke-width="1.5" stroke-linejoin="round"/></g>` : ""}`;
   }
@@ -387,9 +389,9 @@ ${flower(63, 12, 4, PINK)}
   const boiHead = ({ mood = "smile", label = "", cls = "" } = {}) => `<svg class="${cls}" viewBox="6 4 188 114" ${aria(label)}>${boiHeadArt(mood)}</svg>`;
   // mirror: facing left instead (towards the Bull, on the choice card and in the finale)
   const bernuncia = ({ state = "idle", fed = 0, animated = false, mirror = false, label = "", cls = "" } = {}) =>
-    `<svg class="bern s-${state}${cls ? " " + cls : ""}" viewBox="0 20 300 160" ${aria(label)}>${mirror ? `<g transform="matrix(-1 0 0 1 300 0)">` : ""}${bernArt({ state, fed, animated })}${mirror ? "</g>" : ""}</svg>`;
+    `<svg class="bern s-${state}${cls ? " " + cls : ""}" viewBox="0 20 300 160" ${aria(label)}>${(mirror ? mirrored : x => x)(bernArt({ state, fed, animated }))}</svg>`;
   // The choice card: the Bull waving, with Bernúncia peeking in behind him
-  const boiCard = (label = "") => `<svg viewBox="0 0 240 220" ${aria(label)}><g transform="translate(146 88) scale(.62)"><g transform="matrix(-1 0 0 1 300 0)">${bernArt({})}</g></g><g transform="translate(-6 14) scale(.9)">${boiArt("wave")}</g></svg>`;
+  const boiCard = (label = "") => `<svg viewBox="0 0 240 220" ${aria(label)}><g transform="translate(146 88) scale(.62)">${mirrored(bernArt({}))}</g><g transform="translate(-6 14) scale(.9)">${boiArt("wave")}</g></svg>`;
   // Chapter 2: Maricota is very tall, but Eagle's legs reached the Moon first
   const tallFriends = (label = "") => `<svg viewBox="0 0 300 250" ${aria(label)}><path d="M8 243 H292" stroke="${LAV}" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 8"/>
 <g transform="translate(40 0)">${maricotaArt()}</g><g transform="translate(150 104) scale(.64)">${eagleArt({ look: "center" })}</g></svg>`;
