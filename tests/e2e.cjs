@@ -793,6 +793,26 @@ async function layoutOk(page, label) {
     assert.ok(/\d/.test(await ps.locator(".total-card .sr-only").textContent()));
     await ps.context().close();
   });
+  await check("A chapter from the other storyteller's round, reached with Back after a switch, is just a chapter (both ways)", async () => {
+    const pw = await newPage(noCam, { camera: false });
+    const plain = async label => {
+      await pw.waitForSelector(".story"); assert.equal(await h1(pw), CONTENT.chapters[0].en.title, label);
+      assert.equal(await pw.locator(".steps").count(), 0, label + ": no step pill from the old round");
+      assert.deepEqual((await pw.locator(".story-body .btn").allTextContents()).map(x => x.trim()), ["Back to my jacket"], label);
+      assert.equal(await pw.locator(".story-head .circle-btn").getAttribute("data-go"), "jacket", label + ": Back goes to the jacket");
+    };
+    const switchTo = async k => { await pw.goto(URL0 + "?demo#me"); await pw.waitForSelector(".teller-set"); await pw.locator("#teller-" + k).click(); await pw.goBack(); };
+    await pw.goto(URL0 + "?demo"); await pw.waitForSelector(".wordmark");
+    for (const b of ["Let's go!", "Let's go!", "I'm ready!", "Got it!", "Ready!"]) await tapText(pw, b);
+    await tapText(pw, "Scan litter"); await pw.locator(".shutter").click(); await pw.waitForSelector(".found", { timeout: 8000 });
+    await tapText(pw, "Hear the story"); await pw.waitForSelector(".story .steps");   // Space: the chapter comes before the bin
+    await switchTo("boi"); await plain("a Space round's chapter, then the Bull");
+    await pw.goto(URL0 + "?demo#home"); await pw.locator(".holding").first().click(); await tapText(pw, "It's in the bin!");
+    await pw.waitForSelector(".feast"); await tapText(pw, "Hear the story"); await pw.waitForSelector(".story .steps");   // the Bull: the chapter comes after Chomp!
+    await switchTo("space"); await plain("the Bull's chapter, then Space");
+    assert.equal(await demoLs(pw, "binned"), 1); assert.deepEqual(pw.errors, []);
+    await pw.context().close();
+  });
 
   /* ---------- D: desktop width ---------- */
   const p4 = await newPage(cam, { width: 1280, height: 860 });
