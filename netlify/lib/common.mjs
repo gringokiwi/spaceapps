@@ -49,7 +49,7 @@ export function fileStore(file) {
   function flush() {
     if (timer) { clearTimeout(timer); timer = null; }
     const keep = new Set([today(), new Date(Date.now() - 86400000).toISOString().slice(0, 10)]);
-    for (const k of Object.keys(data)) { const m = /^photos\/(\d{4}-\d{2}-\d{2})/.exec(k); if (m && !keep.has(m[1])) delete data[k]; }
+    for (const k of Object.keys(data)) { const m = /^(?:photos|players|items)\/(\d{4}-\d{2}-\d{2})/.exec(k); if (m && !keep.has(m[1])) delete data[k]; }
     try { mkdirSync(dirname(file), { recursive: true }); writeFileSync(file + ".tmp", JSON.stringify(data)); renameSync(file + ".tmp", file); }
     catch (e) { console.error("Couldn't save the counters:", e.message); }
   }

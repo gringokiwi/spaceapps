@@ -36,7 +36,7 @@ export default async (req, context) => {
   if (all >= PHOTOS_PER_DAY()) return err(429, t.day, "daily_limit");
   if (mine >= PHOTOS_PER_PLAYER_PER_DAY()) return err(429, t.mine, "player_limit");
   // Count the photo before calling the AI: the limit protects the real bill.
-  await Promise.all([add(`photos/${day}`), add(`photos/${day}/${me}`)]).catch(() => {});
+  await Promise.all([add(`photos/${day}`), add(`photos/${day}/${me}`), mine === 0 ? add(`players/${day}`) : null]).catch(() => {});
 
   let r;
   try { r = await scan(m[2], m[1], lang); }
@@ -45,7 +45,11 @@ export default async (req, context) => {
   if (r.photo_problem !== "none") return json(200, { result: { ...r, message: t[r.photo_problem] }, counts: false, retake: true });
   const counts = r.is_trash === "yes";
   let total = null;
-  if (counts) total = await add("counter/items").catch(() => null);
+  if (counts) {
+    total = await add("counter/items").catch(() => null);
+    // For the Live usage screen: pieces found today and by type. Only numbers, nothing about who.
+    await Promise.all([add(`items/${day}`), add(`types/${r.type}`)]).catch(() => {});
+  }
   return json(200, { result: r, counts, retake: false, total });
 };
 

@@ -57,7 +57,7 @@
       retry: { no: "That's not litter", unsure: "Hmm, I'm not sure", photo: "Let's try another photo", error: "Something went wrong", again: "Try again", home: "Back to home" },
       jacket: { title: "My explorer jacket", hint: "Tap a patch to hear its story again.", spin: "Drag the jacket to spin it!", locked: "{place} · locked", newTag: "new", scan: "Scan to unlock the next one", opening: "Hear the opening story again" },
       me: { buddy: "Crew buddy: {name}", change: "Change", log: "My cleanup log", binned: "binned", plastic: "plastic", paper: "paper", cans: "cans", language: "Language",
-        grownups: "For grown-ups", safety: "Safety rules", photos: "How photos are handled", sources: "Where the stories come from", explore: "Explore all the stories", privacy: "No accounts, no payments, no ads. Nothing here is stored with a child's name.",
+        grownups: "For grown-ups", safety: "Safety rules", photos: "How photos are handled", sources: "Where the stories come from", explore: "Explore all the stories", usage: "Live usage", privacy: "No accounts, no payments, no ads. Nothing here is stored with a child's name.",
         reset: "Start over on this phone", resetConfirm: "Start over? This clears the nickname, patches and cleanup log on this phone." },
       photos: { title: "How photos are handled", body: [
         "When a child takes a photo, the phone makes it smaller and sends it once to our scanner. The scanner asks Claude, an AI made by Anthropic, whether the photo shows litter and which bin it goes in.",
@@ -65,6 +65,7 @@
         "Photos of people, faces or screens don't count. Eagle asks for another photo instead.",
         "The nickname, crew buddy, patches and cleanup log stay on this phone. There are no accounts, payments or ads.",
         "To keep the AI affordable, each phone can send a limited number of photos a day. The server keeps only counts, never the photo or the address it came from."] },
+      usage: { title: "Live usage", intro: "Real numbers from this app, counted as kids scan. They refresh on their own.", all: "Everyone, so far", today: "Today", total: "pieces found", players: "players", photos: "photos scanned", pieces: "pieces found", note: "Only numbers are counted: no names, no photos. A day is counted in UTC time.", demo: "Demo mode doesn't show live numbers. Open the app without ?demo to see them.", wait: "Getting the numbers…", fail: "The numbers aren't available right now." },
       explore: { title: "All the stories", hint: "For teachers, parents and judges: open any chapter without scanning. Your patches stay the same.", back: "Back to all the stories" },
       sources: { title: "Where the stories come from", intro: "Every chapter comes from the team's storyboard, “Abandoned but Not Forgotten”. These are the pages its facts come from." },
       finale: { kicker: "You did it!", count: { one: "You picked up 1 piece of litter!", other: "You picked up {n} pieces of litter!" }, map: "Where they rest today", patches: "Your patches", home: "Back to home",
@@ -109,7 +110,7 @@
       retry: { no: "Eso no es basura", unsure: "Mmm, no estoy seguro", photo: "Probemos con otra foto", error: "Algo falló", again: "Intentar otra vez", home: "Volver al inicio" },
       jacket: { title: "Mi chaqueta de exploración", hint: "Toca un parche para escuchar su historia otra vez.", spin: "¡Arrastra la chaqueta para girarla!", locked: "{place} · bloqueado", newTag: "nuevo", scan: "Escanea para desbloquear el siguiente", opening: "Escuchar otra vez el comienzo" },
       me: { buddy: "Viaja contigo: {name}", change: "Cambiar", log: "Mi registro de limpieza", binned: "botados", plastic: "plástico", paper: "papel", cans: "latas", language: "Idioma",
-        grownups: "Para adultos", safety: "Reglas de seguridad", photos: "Qué pasa con las fotos", sources: "De dónde vienen las historias", explore: "Explorar todas las historias", privacy: "Sin cuentas, sin pagos, sin anuncios. Nada se guarda con el nombre de un niño o una niña.",
+        grownups: "Para adultos", safety: "Reglas de seguridad", photos: "Qué pasa con las fotos", sources: "De dónde vienen las historias", explore: "Explorar todas las historias", usage: "Uso en vivo", privacy: "Sin cuentas, sin pagos, sin anuncios. Nada se guarda con el nombre de un niño o una niña.",
         reset: "Empezar de nuevo en este teléfono", resetConfirm: "¿Empezar de nuevo? Esto borra el apodo, los parches y el registro de este teléfono." },
       photos: { title: "Qué pasa con las fotos", body: [
         "Cuando un niño o una niña toma una foto, el teléfono la achica y la envía una sola vez a nuestro escáner. El escáner le pregunta a Claude, una IA hecha por Anthropic, si la foto muestra basura y en qué caneca va.",
@@ -117,6 +118,7 @@
         "Las fotos de personas, caras o pantallas no cuentan. Eagle pide otra foto.",
         "El apodo, quien viaja contigo, los parches y el registro de limpieza se quedan en este teléfono. No hay cuentas, pagos ni anuncios.",
         "Para que la IA no cueste demasiado, cada teléfono puede enviar un número limitado de fotos al día. El servidor solo guarda conteos, nunca la foto ni la dirección de donde vino."] },
+      usage: { title: "Uso en vivo", intro: "Números reales de esta app, contados mientras los niños escanean. Se actualizan solos.", all: "Entre todos, hasta ahora", today: "Hoy", total: "pedazos encontrados", players: "jugadores", photos: "fotos escaneadas", pieces: "pedazos encontrados", note: "Solo se cuentan números: sin nombres y sin fotos. El día se cuenta en hora UTC.", demo: "El modo demo no muestra números en vivo. Abre la app sin ?demo para verlos.", wait: "Buscando los números…", fail: "Los números no están disponibles ahora." },
       explore: { title: "Todas las historias", hint: "Para profes, familias y jurados: abre cualquier capítulo sin escanear. Tus parches no cambian.", back: "Volver a todas las historias" },
       sources: { title: "De dónde vienen las historias", intro: "Cada capítulo viene del guion del equipo, «Abandoned but Not Forgotten». Estas son las páginas de donde salen sus datos." },
       finale: { kicker: "¡Lo lograste!", count: { one: "¡Recogiste 1 pedazo de basura!", other: "¡Recogiste {n} pedazos de basura!" }, map: "Dónde descansan hoy", patches: "Tus parches", home: "Volver al inicio",
@@ -161,7 +163,7 @@
       retry: { no: "Isso não é lixo", unsure: "Hmm, não tenho certeza", photo: "Vamos tentar outra foto", error: "Algo deu errado", again: "Tentar de novo", home: "Voltar ao início" },
       jacket: { title: "Minha jaqueta de exploração", hint: "Toque num emblema para ouvir a história de novo.", spin: "Arraste a jaqueta para girar!", locked: "{place} · bloqueado", newTag: "novo", scan: "Escaneie para desbloquear o próximo", opening: "Ouvir o começo de novo" },
       me: { buddy: "Viaja com você: {name}", change: "Mudar", log: "Meu registro de limpeza", binned: "na lixeira", plastic: "plástico", paper: "papel", cans: "latas", language: "Idioma",
-        grownups: "Para adultos", safety: "Regras de segurança", photos: "O que acontece com as fotos", sources: "De onde vêm as histórias", explore: "Explorar todas as histórias", privacy: "Sem contas, sem pagamentos, sem anúncios. Nada fica guardado com o nome de uma criança.",
+        grownups: "Para adultos", safety: "Regras de segurança", photos: "O que acontece com as fotos", sources: "De onde vêm as histórias", explore: "Explorar todas as histórias", usage: "Uso ao vivo", privacy: "Sem contas, sem pagamentos, sem anúncios. Nada fica guardado com o nome de uma criança.",
         reset: "Começar de novo neste celular", resetConfirm: "Começar de novo? Isso apaga o apelido, os emblemas e o registro deste celular." },
       photos: { title: "O que acontece com as fotos", body: [
         "Quando uma criança tira uma foto, o celular diminui a imagem e a envia uma única vez para o nosso scanner. O scanner pergunta ao Claude, uma IA feita pela Anthropic, se a foto mostra lixo e em qual lixeira ele vai.",
@@ -169,6 +171,7 @@
         "Fotos de pessoas, rostos ou telas não contam. O Eagle pede outra foto.",
         "O apelido, quem viaja com você, os emblemas e o registro de limpeza ficam neste celular. Não há contas, pagamentos nem anúncios.",
         "Para a IA não custar caro demais, cada celular pode enviar um número limitado de fotos por dia. O servidor guarda só contagens, nunca a foto nem o endereço de onde ela veio."] },
+      usage: { title: "Uso ao vivo", intro: "Números reais deste app, contados enquanto as crianças escaneiam. Eles se atualizam sozinhos.", all: "Todo mundo, até agora", today: "Hoje", total: "lixos encontrados", players: "jogadores", photos: "fotos escaneadas", pieces: "lixos encontrados", note: "Só números são contados: sem nomes e sem fotos. O dia é contado no horário UTC.", demo: "O modo demo não mostra números ao vivo. Abra o app sem ?demo para ver.", wait: "Buscando os números…", fail: "Os números não estão disponíveis agora." },
       explore: { title: "Todas as histórias", hint: "Para professores, famílias e jurados: abra qualquer capítulo sem escanear. Seus emblemas não mudam.", back: "Voltar para todas as histórias" },
       sources: { title: "De onde vêm as histórias", intro: "Cada capítulo vem do roteiro da equipe, “Abandoned but Not Forgotten”. Estas são as páginas de onde vêm os fatos." },
       finale: { kicker: "Você conseguiu!", count: { one: "Você recolheu 1 pedaço de lixo!", other: "Você recolheu {n} pedaços de lixo!" }, map: "Onde elas estão hoje", patches: "Seus emblemas", home: "Voltar ao início",
@@ -516,6 +519,7 @@
       <button type="button" class="row-link" ${raw(goAttrs("safety", { from }))}>${t("me.safety")}${ico("chevron", { size: 20, width: 2.6 })}</button>
       <button type="button" class="row-link" ${raw(goAttrs("photos", { from }))}>${t("me.photos")}${ico("chevron", { size: 20, width: 2.6 })}</button>
       <button type="button" class="row-link" ${raw(goAttrs("explore", { from }))}>${t("me.explore")}${ico("chevron", { size: 20, width: 2.6 })}</button>
+      <button type="button" class="row-link" ${raw(goAttrs("usage", { from }))}>${t("me.usage")}${ico("chevron", { size: 20, width: 2.6 })}</button>
       <button type="button" class="row-link" ${raw(goAttrs("sources", { from }))}>${t("me.sources")}${ico("chevron", { size: 20, width: 2.6 })}</button>
       <p class="fine">${t("me.privacy")}</p>
       ${from === "me" ? h`<button type="button" class="row-link quiet" data-act="reset">${t("me.reset")}</button>` : ""}
@@ -569,6 +573,39 @@
       <div class="grow"></div>` };
   };
 
+  /* Live usage: real numbers from /api/counter, refreshed every 15 seconds while the screen is open. */
+  let usageTimer = null;
+  const usageTiles = j => {
+    const n = v => fmt(Number(v) || 0), ty = (j.live && j.live.types) || {}, d = j.live || {};
+    return h`<section class="card"><h2>${t("usage.all")}</h2><div class="tiles three">
+        <div class="tile strong wide"><b>${n(j.total)}</b><span>${t("usage.total")}</span></div>
+        <div class="tile"><b>${n(ty.plastic)}</b><span>${t("me.plastic")}</span></div>
+        <div class="tile"><b>${n(ty.paper_cardboard)}</b><span>${t("me.paper")}</span></div>
+        <div class="tile"><b>${n(ty.can)}</b><span>${t("me.cans")}</span></div>
+      </div></section>
+      <section class="card"><h2>${t("usage.today")}</h2><div class="tiles three">
+        <div class="tile"><b>${n(d.players)}</b><span>${t("usage.players")}</span></div>
+        <div class="tile"><b>${n(d.photos)}</b><span>${t("usage.photos")}</span></div>
+        <div class="tile"><b>${n(d.pieces)}</b><span>${t("usage.pieces")}</span></div>
+      </div></section>`;
+  };
+  function loadUsage() {
+    const box = document.getElementById("usage"); if (!box || DEMO) return;
+    fetch("/api/counter").then(r => (r.ok ? r.json() : Promise.reject())).then(j => {
+      if (!document.getElementById("usage") || typeof j.total !== "number") return;
+      box.innerHTML = usageTiles(j).s;
+    }).catch(() => { if (document.getElementById("usage") && !box.querySelector(".tiles")) box.innerHTML = h`<p class="para">${t("usage.fail")}</p>`.s; });
+  }
+  screens.usage = ({ from = S.profile ? "me" : "grownups" }) => ({ theme: "t-cream", cls: "info", html: h`
+    <div class="top">${backBtn(t("back"), goAttrs(from))}</div>
+    <h1 tabindex="-1">${t("usage.title")}</h1>
+    <p class="para">${t("usage.intro")}</p>
+    <div id="usage" aria-live="polite"><p class="para">${DEMO ? t("usage.demo") : t("usage.wait")}</p></div>
+    <p class="para">${t("usage.note")}</p>
+    <div class="grow"></div>
+    <button type="button" class="btn btn-outline" ${raw(goAttrs(from))}>${t("back")}</button>`,
+    after: () => { loadUsage(); clearInterval(usageTimer); usageTimer = setInterval(loadUsage, 15000); } });
+
   screens.sources = ({ from = "me" }) => ({ theme: "t-cream", cls: "info", html: h`
     <div class="top">${backBtn(t("back"), goAttrs(from))}</div>
     <h1 tabindex="-1">${t("sources.title")}</h1>
@@ -604,14 +641,14 @@
     danger: () => !!(S.scan && S.scan.kind === "danger"),
     retry: () => !!(S.scan && ["no", "unsure", "photo", "error"].includes(S.scan.kind)),
     story: p => Number.isInteger(p.n) && p.n >= 1 && p.n <= TOTAL && (p.from === "explore" || p.n <= S.binned || (!!S.pending && p.n === S.binned + 1)),
-    explore: () => true,
+    explore: () => true, usage: () => true,
     bin: () => !!S.pending,
     unlocked: () => !!S.earned,
     finale: () => S.binned >= TOTAL
   };
   const fallback = () => (S.profile ? "home" : "welcome");
   /* Screens an address like …/#jacket may open directly (a reload, a bookmark, a typed address). */
-  const OPEN_BY_ADDRESS = ["home", "jacket", "me", "finale", "grownups", "photos", "sources", "explore"];
+  const OPEN_BY_ADDRESS = ["home", "jacket", "me", "finale", "grownups", "photos", "sources", "explore", "usage"];
   const fromAddress = () => { const name = location.hash.slice(1); return OPEN_BY_ADDRESS.includes(name) && GUARD[name]({}) ? name : fallback(); };
   function go(name, params = {}, { replace = false } = {}) {
     if (!screens[name] || !GUARD[name](params)) { name = fallback(); params = {}; replace = true; }
@@ -644,7 +681,7 @@
     if (focus && h1) h1.focus({ preventScroll: true });
     else if (keep && document.getElementById(keep)) document.getElementById(keep).focus({ preventScroll: true });
   }
-  function leave() { if (window.JACKET3D) window.JACKET3D.unmount(); stopCamera(); stopSpeech(); const c = document.getElementById("confetti"); if (c) c.textContent = ""; }
+  function leave() { clearInterval(usageTimer); if (window.JACKET3D) window.JACKET3D.unmount(); stopCamera(); stopSpeech(); const c = document.getElementById("confetti"); if (c) c.textContent = ""; }
 
   /* ---------- Taps ---------- */
   app.addEventListener("click", e => {
