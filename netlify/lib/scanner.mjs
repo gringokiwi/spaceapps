@@ -17,7 +17,7 @@ export const PHOTO_PROBLEMS = ["none", "screen", "people", "blurry"];
 export const LANGS = { en: "English", es: "Spanish (Latin American)", pt: "Brazilian Portuguese" };
 
 export const ScanSchema = z.object({
-  photo_problem: z.enum(PHOTO_PROBLEMS).describe("'screen' if the photo shows a screen (phone, computer, TV, tablet); 'people' if a person or face is in the foreground; 'blurry' if nothing can be seen clearly; otherwise 'none'"),
+  photo_problem: z.enum(PHOTO_PROBLEMS).describe("'screen' only if the photo is a picture OF a screen, so the object is being shown on a phone, computer, TV or tablet (a real object with a screen somewhere in the background is fine); 'people' if a person or face is in the foreground; 'blurry' if nothing can be seen clearly; otherwise 'none'"),
   is_trash: z.enum(["yes", "no", "unsure"]).describe("Is the main object in the photo trash that should be picked up?"),
   type: z.enum(TYPES).describe("Type of the main object; 'none' if there is no object or it is not trash"),
   bin: z.enum(BINS).describe("Where it goes: white (clean plastic, cans, paper, cardboard, glass), green (food scraps, peels), black (dirty napkins, dirty wrappers, cigarette butts), special_dropoff (batteries, electronics, chemicals, needles, broken glass), none if it is not trash"),
@@ -29,7 +29,7 @@ export const ScanSchema = z.object({
 const SYSTEM = `You are Eagle, a friendly lander who helps children aged 7 to 12 clean up their neighbourhood in a game called debris.
 The child takes a photo of ONE object they found. You say whether it is trash, what type it is, and which bin it goes in.
 Rules:
-- If the photo shows a screen (phone, computer, TV, tablet), set photo_problem = "screen".
+- Set photo_problem = "screen" only when the object itself is being shown on a screen (a photo of a phone, computer, TV or tablet displaying it). A real object on a desk with a laptop, monitor or phone somewhere around it is fine: judge the real object and keep photo_problem = "none".
 - If a person or a face is in the foreground, set photo_problem = "people". Never describe people.
 - If the photo is so blurry or dark that the object can't be seen, set photo_problem = "blurry".
 - Natural things (leaves, stones, sticks, flowers, animals) are not trash. Things in use (a toy, a backpack, a phone on a table) are not trash either.

@@ -34,7 +34,7 @@
       profile: { title: "What should we call you?", sub: "Pick a space nickname. Don't use your real name.", nick: "Nickname", nickMissing: "Type a nickname first.", buddy: "Choose your crew buddy", privacy: "Your nickname and buddy stay on this phone. No account, no email.", go: "Ready!",
         names: ["MoonWalker", "StarHopper", "CometKid", "RocketFox", "OrbitRider", "Stardust"] },
       home: { title: "Home", patches: "{n} of {total}", patchesLabel: "{n} of {total} patches. Open my jacket", meLabel: "My profile: {nick}", jacket: "My explorer jacket",
-        toGo: { one: "1 patch to go", other: "{n} patches to go" }, allDone: "Every patch earned!", counter: "Kids everywhere have found {n} pieces of litter.",
+        toGo: { one: "1 patch to go", other: "{n} patches to go" }, allDone: "Every patch earned!", counter: "Kids everywhere have found {n} pieces of litter.", schools: "Bring debris to your school or your next beach cleanup!",
         scan: "Scan litter", holding: "You're holding: {item}", holdingSub: "Bin it to earn your next patch.", binNow: "Bin my litter", finale: "See the finale", finaleSub: "All 13 patches are on your jacket." },
       steps: { names: ["Scan", "Story", "Bin it", "Patch"], label: "Step {i} of 4: {name}" },
       scan: { close: "Close and go home", hint: "Fit one piece of litter inside the frame", shutter: "Take the photo", privacy: "No people or faces in the photo. We check it, then delete it.",
@@ -86,7 +86,7 @@
       profile: { title: "¿Cómo te llamamos?", sub: "Elige un apodo espacial. No uses tu nombre real.", nick: "Apodo", nickMissing: "Primero escribe un apodo.", buddy: "Elige quién viaja contigo", privacy: "Tu apodo y tu elección se quedan en este teléfono. Sin cuenta, sin correo.", go: "¡Listo!",
         names: ["CaminaLunas", "SaltaEstrellas", "Cometa", "ZorroCohete", "Órbita", "PolvoEstelar"] },
       home: { title: "Inicio", patches: "{n} de {total}", patchesLabel: "{n} de {total} parches. Abrir mi chaqueta", meLabel: "Mi perfil: {nick}", jacket: "Mi chaqueta de exploración",
-        toGo: { one: "Falta 1 parche", other: "Faltan {n} parches" }, allDone: "¡Tienes todos los parches!", counter: "Niños y niñas de todas partes han encontrado {n} pedazos de basura.",
+        toGo: { one: "Falta 1 parche", other: "Faltan {n} parches" }, allDone: "¡Tienes todos los parches!", counter: "Niños y niñas de todas partes han encontrado {n} pedazos de basura.", schools: "¡Lleva debris a tu escuela o a tu próxima limpieza de playa!",
         scan: "Escanear basura", holding: "Tienes en la mano: {item}", holdingSub: "Échala en la caneca para ganar tu próximo parche.", binNow: "Botar mi basura", finale: "Ver el gran final", finaleSub: "Los 13 parches están en tu chaqueta." },
       steps: { names: ["Escanear", "Historia", "A la caneca", "Parche"], label: "Paso {i} de 4: {name}" },
       scan: { close: "Cerrar e ir al inicio", hint: "Pon un pedazo de basura dentro del marco", shutter: "Tomar la foto", privacy: "Sin personas ni caras en la foto. La revisamos y luego la borramos.",
@@ -138,7 +138,7 @@
       profile: { title: "Como vamos te chamar?", sub: "Escolha um apelido espacial. Não use seu nome de verdade.", nick: "Apelido", nickMissing: "Escreva um apelido primeiro.", buddy: "Escolha quem viaja com você", privacy: "Seu apelido e sua escolha ficam neste celular. Sem conta, sem e-mail.", go: "Pronto!",
         names: ["AndaLua", "PulaEstrela", "Cometa", "RaposaFoguete", "Órbita", "PoeiraEstelar"] },
       home: { title: "Início", patches: "{n} de {total}", patchesLabel: "{n} de {total} emblemas. Abrir minha jaqueta", meLabel: "Meu perfil: {nick}", jacket: "Minha jaqueta de exploração",
-        toGo: { one: "Falta 1 emblema", other: "Faltam {n} emblemas" }, allDone: "Você ganhou todos os emblemas!", counter: "Crianças do mundo todo já encontraram {n} pedaços de lixo.",
+        toGo: { one: "Falta 1 emblema", other: "Faltam {n} emblemas" }, allDone: "Você ganhou todos os emblemas!", counter: "Crianças do mundo todo já encontraram {n} pedaços de lixo.", schools: "Leve o debris para a sua escola ou para o próximo mutirão de limpeza da praia!",
         scan: "Escanear lixo", holding: "Você está segurando: {item}", holdingSub: "Jogue na lixeira para ganhar seu próximo emblema.", binNow: "Jogar meu lixo fora", finale: "Ver o grande final", finaleSub: "Os 13 emblemas estão na sua jaqueta." },
       steps: { names: ["Escanear", "História", "Na lixeira", "Emblema"], label: "Passo {i} de 4: {name}" },
       scan: { close: "Fechar e voltar ao início", hint: "Coloque um lixo dentro do quadro", shutter: "Tirar a foto", privacy: "Sem pessoas ou rostos na foto. A gente confere e depois apaga.",
@@ -333,14 +333,14 @@
         <span class="row-between"><b>${t("home.jacket")}</b><span class="peach">${n >= TOTAL ? t("home.allDone") : tn("home.toGo", TOTAL - n)}</span></span>
         <span class="dots13" aria-hidden="true">${range(TOTAL).map(i => h`<span class="${i <= n ? "on" : ""}"></span>`)}</span>
       </button>
-      <div class="card card-blue2 counter" id="counter" ${S.counter > 0 ? "" : raw("hidden")}>${ico("globe", { size: 30, width: 2.2 })}<p>${counterText()}</p></div>
+      <div class="card card-blue2 counter" id="counter">${ico("globe", { size: 30, width: 2.2 })}<p>${counterText()}</p></div>
       ${n >= TOTAL ? h`<button type="button" class="card card-peach holding" data-go="finale"><span class="holding-text"><b>${t("home.finale")}</b><span>${t("home.finaleSub")}</span></span>${ico("chevron", { width: 2.6 })}</button>` : ""}
       <div class="grow"></div>
       ${pend ? h`<button type="button" class="btn btn-primary btn-big" data-go="bin">${ico("check", { size: 30, width: 2.6 })}${t("home.binNow")}</button>`
         : h`<button type="button" class="btn btn-primary btn-big" data-go="scan">${ico("camera", { size: 30, width: 2.4 })}${t("home.scan")}</button>`}
       ${nav("home")}` };
   };
-  const counterText = () => S.counter > 0 ? splitBold(t("home.counter"), "n", fmt(S.counter)) : "";
+  const counterText = () => S.counter > 0 ? h`${splitBold(t("home.counter"), "n", fmt(S.counter))} ${t("home.schools")}` : h`${t("home.schools")}`;
 
   screens.scan = () => {
     if (S.pending && !S.pending.saved) { S.pending = null; persist(); }   // an unconfirmed find is dropped when the camera opens again
@@ -486,6 +486,7 @@
       <p class="sub jacket3d-hint" id="jacket3dHint" hidden>${t("jacket.spin")}</p>
       <p class="sub">${t("jacket.hint")}</p>
       <div class="patches">${cards}</div>
+      <section class="map-card"><h2>${t("finale.map")}</h2>${raw(A.map(n, t("map"), t("finale.mapLabel")))}</section>
       <button type="button" class="btn-link" ${raw(goAttrs("opening", { from: "jacket" }))}>${t("jacket.opening")}</button>
       <div class="grow"></div>
       ${cta}
@@ -563,6 +564,7 @@
       <div class="row-between end"><h1 tabindex="-1">${t("explore.title")}</h1><span class="count">${TOTAL}</span></div>
       <p class="sub">${t("explore.hint")}</p>
       <div class="patches">${cards}</div>
+      <section class="map-card"><h2>${t("finale.map")}</h2>${raw(A.map(TOTAL, t("map"), t("finale.mapLabel")))}</section>
       <button type="button" class="btn-link" ${raw(goAttrs("opening", { from: "explore" }))}>${t("jacket.opening")}</button>
       <div class="grow"></div>` };
   };
@@ -822,7 +824,7 @@
       if (!j || typeof j.total !== "number") return;
       S.counter = j.total;
       const el = document.getElementById("counter");
-      if (el && S.counter > 0) { el.hidden = false; el.querySelector("p").innerHTML = counterText().s; }
+      if (el) el.querySelector("p").innerHTML = counterText().s;
     }).catch(() => {});
   }
 
